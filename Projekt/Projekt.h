@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "BasisApplication.h"
+#include "SceneManager.h"
 
 using namespace std;
 
@@ -15,6 +16,7 @@ class Projekt : public BasisApplication
 
 	//---------------MEMBER VARIABLES---------------------
 	protected:
+		SceneManager mSceneManager;
 
 	//---------------MEMBER FUNCTIONS---------------------
 	private:
