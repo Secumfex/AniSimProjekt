@@ -24,5 +24,7 @@ class Projekt : public BasisApplication
 		virtual void init(void);
 		virtual void update(float d_t);
 		virtual void draw(void);
+
+		virtual void keyPressed(int key);
 };
 #endif

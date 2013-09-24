@@ -3,20 +3,23 @@
 
 void SceneManager::update(float d_t){
 /// ----Applying global forces...;
-//	applyGlobalForces(d_t);
+	applyGlobalForces(d_t);
 
 //	----Applying forces...
-//	for (unsigned int i = 0; i < mForceObjects.size();i++){
-//		mForceObjects[i]->apply_fun(d_t);
-//	}
+	for (unsigned int i = 0; i < mForceObjects.size();i++){
+		mForceObjects[i]->apply_fun(d_t);
+	}
 
-// ----Updating all Objects
+//TODO// ----Updating all Objects
+	for (unsigned int i = 0; i < mSimulationObjects.size(); i ++){
+		mSimulationObjects[i]->update(d_t);
+	}
 }
 
 inline void SceneManager:: initRocketSimulation(){
-//TODO/////////////Globale Kräfte/////////////////////////////////////////////////////////////////////////
-//			SimpleForce* gravity = new SimpleForce(Vector3(0.0,-1,0.0));
-//			mGlobalForceObjects.push_back(gravity);
+///////////////Globale Kräfte/////////////////////////////////////////////////////////////////////////
+			SimpleForce* gravity = new SimpleForce(Vector3(0.0,-1,0.0));
+			mGlobalForceObjects.push_back(gravity);
 
 }
 
@@ -32,15 +35,19 @@ ObjectFactory Referenzen setzen*/
 		break;
 	}
 	
-//TODO///////////////////////////////////////////////////////////////////////////////////////
-//	//Alle Objekte bei GlobalForces Anmelden
-//	for (unsigned int i = 0; i < mPhysicsObjects.size(); i ++){
-//		for (unsigned int j = 0; j < mGlobalForceObjects.size();j++){
-//			mGlobalForceObjects[j]->addInfluencedPhysics(mPhysicsObjects[i]);
-//		}
-//	}
+/////////////////////////////////////////////////////////////////////////////////////////
+	//Alle Objekte bei GlobalForces Anmelden
+	for (unsigned int i = 0; i < mPhysicsObjects.size(); i ++){
+		for (unsigned int j = 0; j < mGlobalForceObjects.size();j++){
+			mGlobalForceObjects[j]->addInfluencedPhysics(mPhysicsObjects[i]);
+		}
+	}
 }
-
+void SceneManager::drawSimulationObjects(){
+	for (unsigned int i = 0; i < mSimulationObjects.size(); i++){
+		mSimulationObjects[i]->draw();
+	}
+}
 void SceneManager::drawWorldConstraints(){
 	glPointSize(5.0);
 	float currentColor[4];
@@ -61,11 +68,11 @@ void SceneManager::drawWorldConstraints(){
 
 void SceneManager::draw(){
 	drawWorldConstraints();
-	//TODO mObjectFactory.drawAllObjects();
+	drawSimulationObjects();
 }
 
-//void SceneManager::applyGlobalForces(float d_t){
-//	for (unsigned int i = 0; i < mGlobalForceObjects.size(); i++){
-//		mGlobalForceObjects[i]->apply_fun(d_t);
-//	}
-//}
+void SceneManager::applyGlobalForces(float d_t){
+	for (unsigned int i = 0; i < mGlobalForceObjects.size(); i++){
+		mGlobalForceObjects[i]->apply_fun(d_t);
+	}
+}

@@ -2,7 +2,9 @@
 #define SCENEMANAGER_H
 
 #include "SceneConstraints.h"
+#include "SimulationObjects.h"
 #include "Physics.h"
+#include "Forces.h"
 #include <vector>
 
 using namespace std;
@@ -15,14 +17,15 @@ using namespace std;
 class SceneManager{
 private:
 	vector<Physics* > mPhysicsObjects;
+	vector<SimulationObject* > mSimulationObjects;
+ 	vector<Force* > mForceObjects;
+	vector<Force* > mGlobalForceObjects;
 /**TODO
- * 	vector<Force* > mForceObjects;
- *	vector<Force* > mGlobalForceObjects;
- *	ObjectFactory mObjectFactory;
- */
+*	ObjectFactory mObjectFactory;
+*/
 
 //TODO/* Wendet Globale Kräfte an (z.B. Erdanziehung, Drag)*/
-//void applyGlobalForces(float d_t);
+void applyGlobalForces(float d_t);
 
 	//Laden der Raketensimulation
 	inline void initRocketSimulation();
@@ -40,6 +43,8 @@ public:
 	void initObjects();
 	/*Zeichnet die Kanten des Raumes*/
 	void drawWorldConstraints();
+	/*Zeichnet alle Simulations Objekte*/
+	void drawSimulationObjects();
 
 
 };
