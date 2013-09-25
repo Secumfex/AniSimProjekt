@@ -97,6 +97,11 @@ void Physics::applyAccumulatedForce(){
 	setImpulse(impulse+mForceAccumulator);
 	mForceAccumulator = Vector3(0,0,0);
 }
+/*Akkumulator wird genullt*/
+void Physics::clearAccumulatedForce(){
+	mForceAccumulator = Vector3(0,0,0);
+}
+
 /*Force wird akkumuliert, es sei denn:
  *Masse = 0 --> nix passiert
  */void Physics::applyForce(Vector3 force){

@@ -2,8 +2,10 @@
 #include <iostream>
 using namespace std;
 
+static int test;
+
 SimulationObject::SimulationObject(float mass, Vector3 velocity, Vector3 position){
-setPhysicsMembers(mass,velocity,position);
+	setPhysicsMembers(mass,velocity,position);
 }
 
 Physics* SimulationObject::getPhysics(){
@@ -19,8 +21,8 @@ void SimulationObject::draw(){
 	glPushMatrix();
 		Vector3 pos = mPhysics.getPosition();
 		glTranslatef(pos.getX(),pos.getY(),pos.getZ());
-		glColor3f(1.0,0.0,0.0);
-		glutWireSphere(0.5,5,10);
+			glColor3f(1.0,0.0,0.0);
+			glutWireSphere(0.2,5,10);
 	glPopMatrix();
 }
 
@@ -34,16 +36,14 @@ Rocket::Rocket(float fuel, float fuelPower, Vector3 direction, Vector3 position)
 	direction.normalize();
 	mDirection = direction;
 	mMode = PRELAUNCH;
-	mPhysics.setPosition(position);
+    setPhysicsMembers(mFuel+10.0,Vector3(0,0,0),position);
 }
 
 //Launch Rocket --> nur, wenn noch nicht gelaunched
 void Rocket::launch(){
 	if (mMode == PRELAUNCH){
 		mMode = LAUNCHED;
-		cout<<"LAUNCHED!"<<endl;
-		mPhysics.applyForce(mDirection*mFuelPower);
-
+		mPhysics.clearAccumulatedForce(); //Das ist nötig weil Gravity vorm Launch angewendet wird
 	}
 }
 
@@ -56,21 +56,25 @@ void Rocket::update(float d_t){
 		//Solange Treibstoff vorhanden
 		if (mFuel > 0.0){
 			//Beschleunigungskraft abängig von FuelPower-Faktor
-			Vector3 accelerationForce = mDirection*mFuelPower*d_t;
-			mPhysics.applyForce(accelerationForce);
+			Vector3 accelerationForce = mDirection*mFuelPower;
+			mPhysics.applyForce(accelerationForce*d_t);
+
+			if (test <= 5){
+				test++;
+			}
 
 			//Verbrennung: 1 Unit / Sekunde oder so
 			mFuel -= d_t;
 		}
 
-	//Massepunkt aktualisieren
-	SimulationObject::update(d_t);
+		//Massepunkt aktualisieren
+		SimulationObject::update(d_t);
 
-	//Falls In Bewegung: Richtung der Rakete an Bewegung anpassen
-	mDirection = mPhysics.getImpulse();
-	mDirection.normalize();
-
-	//cout<<"fuel: " <<mFuel<<endl;
+		//Sehr problematisch: Ab wann soll sich die Rakete der Bewegungsrichtung angleichen? Zu früh -> Rakete fällt in Boden
+		if(mPhysics.getVelocity().length() > 2.0){
+			mDirection = mPhysics.getVelocity();
+			mDirection.normalize();
+		}
 
 	}
 }
@@ -82,11 +86,41 @@ void Rocket::draw(){
 	SimulationObject::draw();
 
 	glPushMatrix();
+
+	//Richtung aka Nase
 		Vector3 pos = mPhysics.getPosition();
 		glColor3f(0.0,0.0,1.0);
+
+		glTranslatef(pos.getX(),pos.getY(),pos.getZ());
 		glBegin(GL_LINES);
-			glVertex3f(pos.getX(), pos.getY(), pos.getZ());
-			glVertex3f(pos.getX() + mDirection.getX(),pos.getY() + mDirection.getY(),pos.getZ() + mDirection.getZ());
+			glVertex3f(0.0, 0.0, 0.0);
+			glVertex3f(mDirection.getX(), mDirection.getY(),mDirection.getZ());
 		glEnd();
+
+	//Raketenschweif
+		if(mFuel > 0 && mMode == LAUNCHED){
+			glColor3f(1.0,0.7,0.4);
+			glTranslatef(-mDirection.getX()*0.2,-mDirection.getY()*0.2,- mDirection.getZ()*0.2);
+			glutWireSphere(0.1,4,5);
+		}
 	glPopMatrix();
+}
+
+void BlackHole::draw(){
+	glPushMatrix();
+		Vector3 pos = mPhysics.getPosition();
+		glTranslatef(pos.getX(),pos.getY(),pos.getZ());
+			glColor3f(0.0,0.0,0.0);
+			glutSolidSphere(0.2,5,10);
+			glutWireSphere(0.3,10,15);
+	glPopMatrix();
+}
+
+void BlackHole::update(float d_t){
+	//Tue nichts, bleib wie du bist
+	mPhysics.clearAccumulatedForce();
+}
+
+BlackHole::BlackHole(float mass,Vector3 position){
+	setPhysicsMembers(mass,Vector3(0,0,0),position);
 }

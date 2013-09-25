@@ -29,5 +29,8 @@ void Projekt::keyPressed(int key){
 			mSceneManager.getPlayerRocket()->launch();
 		}
 	}
+	if(key == 'r'){
+		mSceneManager.reset();
+	}
 }
 

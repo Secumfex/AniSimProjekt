@@ -42,6 +42,8 @@ class Physics{
 	void applyForce(Vector3 force);
 	//Anwenden des akkumulierten Kraftvektors auf Impuls
 	void applyAccumulatedForce();
+	//Nullen des Akkumulators
+	void clearAccumulatedForce();
 
 	//Setter
 	void setImpulse(Vector3 impulse);

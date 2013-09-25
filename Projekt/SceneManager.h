@@ -39,6 +39,9 @@ public:
 
 	/*Init der Szene*/
 	void init();
+	/*Reset der Szene*/
+	void reset();
+
 	/*Zeichnen der gesamten Szene */
 	void draw();
 	/*Update der gesamten Szene, dh. aller Objekte darin*/

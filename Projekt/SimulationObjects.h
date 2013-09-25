@@ -34,8 +34,8 @@ public:
  * fuelpower:	Power-Faktor, guter Treibstoff bringt stärkere Beschleunigung
  * mode: 		Modus der Rakete:
  * 					PRELAUNCH	:  Ausrichtung Möglich
- * 					LAUNCHED	:  Rakete beschleunigt bis fuel verbrannt, keine Ausrichtungen mehr möglich
- */class Rocket : public SimulationObject{
+ * 					LAUNCHED	:  Rakete beschleunigt bis fuel verbrannt, keine Ausrichtungen mehr möglich*/
+class Rocket : public SimulationObject{
 	 enum mode{PRELAUNCH,LAUNCHED};
  private:
 	 Vector3 mDirection;
@@ -51,5 +51,17 @@ public:
 	 void launch();
 	 float getFuel();
  };
+
+/*
+ * Klasse BlackHole
+ * Objekt, das eine sehr, sehr hohe Masse besitzt aber sich nicht bewegt
+ */
+class BlackHole : public SimulationObject{
+public:
+	virtual void draw();
+	virtual void update(float d_t);
+
+	BlackHole(float mass = 1000.0, Vector3 position = Vector3(0,0,0));
+};
 
 #endif
