@@ -24,13 +24,18 @@ private:
 *	ObjectFactory mObjectFactory;
 */
 
-//TODO/* Wendet Globale Kräfte an (z.B. Erdanziehung, Drag)*/
+//TODO das würde ich lieber anders lösen KA
+
+	Rocket* mPlayerRocket;
+
 void applyGlobalForces(float d_t);
 
 	//Laden der Raketensimulation
 	inline void initRocketSimulation();
 
 public:
+
+	Rocket* getPlayerRocket();
 
 	/*Init der Szene*/
 	void init();
@@ -45,7 +50,6 @@ public:
 	void drawWorldConstraints();
 	/*Zeichnet alle Simulations Objekte*/
 	void drawSimulationObjects();
-
 
 };
 

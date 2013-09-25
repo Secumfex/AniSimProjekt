@@ -32,7 +32,6 @@ class Physics{
 
 	public:
 	//Konstruktor
-	Physics();
 	Physics(float mass = 0.0, Vector3 velocity = Vector3(0,0,0), Vector3 position = Vector3(0,0,0));
 	~Physics();
 

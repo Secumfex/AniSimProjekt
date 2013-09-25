@@ -22,4 +22,12 @@ void Projekt::update(float d_t){
 	mSceneManager.update(d_t);
 }
 
+//TODO anders
+void Projekt::keyPressed(int key){
+	if (key == ' '){
+		if(mSceneManager.getPlayerRocket() != NULL){
+			mSceneManager.getPlayerRocket()->launch();
+		}
+	}
+}
 

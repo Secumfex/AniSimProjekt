@@ -1,17 +1,5 @@
 #include "Physics.h"
 
-/*Konstruktor*/
-Physics::Physics(){
-	mMass = 1.0;
-	i_Mass = 1.0;
-	mPosition.setX(0.0);
-	mPosition.setY(0.0);
-	mPosition.setZ(0.0);
-	mVelocity.setX(0.0);
-	mVelocity.setY(0.0);
-	mVelocity.setZ(0.0);
-	recomputeImpulse();
-}
 	//Masse 0 -> solid
 Physics::Physics(float mass, Vector3 velocity, Vector3 position){
 	setMass(mass);

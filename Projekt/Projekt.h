@@ -20,7 +20,9 @@ class Projekt : public BasisApplication
 
 	//---------------MEMBER FUNCTIONS---------------------
 	private:
+
 	public:
+
 		virtual void init(void);
 		virtual void update(float d_t);
 		virtual void draw(void);

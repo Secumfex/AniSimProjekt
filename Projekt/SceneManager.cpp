@@ -17,9 +17,17 @@ void SceneManager::update(float d_t){
 }
 
 inline void SceneManager:: initRocketSimulation(){
-///////////////Globale Kräfte/////////////////////////////////////////////////////////////////////////
-			SimpleForce* gravity = new SimpleForce(Vector3(0.0,-1,0.0));
-			mGlobalForceObjects.push_back(gravity);
+/////////////// Globale Kräfte     /////////////////////////////////////////////////////////////////////////
+
+		SimpleForce* gravity = new SimpleForce(Vector3(0.0,-2.0,0.0));
+		mGlobalForceObjects.push_back(gravity);
+
+/////////////// Simulations Objekte ////////////////////////////////////////////////////////////////////
+		//TODO ObjectFactory bauen
+
+		mPlayerRocket = new Rocket(1.0,10.0,Vector3(1.0,3.0,1.0));
+		mPlayerRocket->setPhysicsMembers(5.0,Vector3(0,0,0),Vector3(0,0,0));
+		mSimulationObjects.push_back(mPlayerRocket);
 
 }
 
@@ -36,18 +44,15 @@ ObjectFactory Referenzen setzen*/
 	}
 	
 /////////////////////////////////////////////////////////////////////////////////////////
-	//Alle Objekte bei GlobalForces Anmelden
-	for (unsigned int i = 0; i < mPhysicsObjects.size(); i ++){
+//Alle Objekte bei GlobalForces Anmelden
+	for (unsigned int i = 0; i < mSimulationObjects.size(); i ++){
 		for (unsigned int j = 0; j < mGlobalForceObjects.size();j++){
-			mGlobalForceObjects[j]->addInfluencedPhysics(mPhysicsObjects[i]);
+			mGlobalForceObjects[j]->addInfluencedPhysics(mSimulationObjects[i]->getPhysics());
 		}
 	}
 }
-void SceneManager::drawSimulationObjects(){
-	for (unsigned int i = 0; i < mSimulationObjects.size(); i++){
-		mSimulationObjects[i]->draw();
-	}
-}
+
+
 void SceneManager::drawWorldConstraints(){
 	glPointSize(5.0);
 	float currentColor[4];
@@ -71,8 +76,19 @@ void SceneManager::draw(){
 	drawSimulationObjects();
 }
 
+void SceneManager::drawSimulationObjects(){
+	for (unsigned int i = 0; i < mSimulationObjects.size(); i++){
+		mSimulationObjects[i]->draw();
+	}
+}
+
 void SceneManager::applyGlobalForces(float d_t){
 	for (unsigned int i = 0; i < mGlobalForceObjects.size(); i++){
 		mGlobalForceObjects[i]->apply_fun(d_t);
 	}
+}
+
+//Das is doof
+Rocket* SceneManager::getPlayerRocket(){
+	return mPlayerRocket;
 }
