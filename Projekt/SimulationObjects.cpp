@@ -2,8 +2,6 @@
 #include <iostream>
 using namespace std;
 
-static int test;
-
 SimulationObject::SimulationObject(float mass, Vector3 velocity, Vector3 position){
 	setPhysicsMembers(mass,velocity,position);
 }
@@ -22,7 +20,7 @@ void SimulationObject::draw(){
 		Vector3 pos = mPhysics.getPosition();
 		glTranslatef(pos.getX(),pos.getY(),pos.getZ());
 			glColor3f(1.0,0.0,0.0);
-			glutWireSphere(0.2,5,10);
+			glutWireSphere(0.25,5,10);
 	glPopMatrix();
 }
 
@@ -36,6 +34,7 @@ Rocket::Rocket(float fuel, float fuelPower, Vector3 direction, Vector3 position)
 	direction.normalize();
 	mDirection = direction;
 	mMode = PRELAUNCH;
+					//Rakete ist schwerer je mehr Treibstoff sie besitzt
     setPhysicsMembers(mFuel+10.0,Vector3(0,0,0),position);
 }
 
@@ -43,7 +42,7 @@ Rocket::Rocket(float fuel, float fuelPower, Vector3 direction, Vector3 position)
 void Rocket::launch(){
 	if (mMode == PRELAUNCH){
 		mMode = LAUNCHED;
-		mPhysics.clearAccumulatedForce(); //Das ist nötig weil Gravity vorm Launch angewendet wird
+		mPhysics.clearAccumulatedForce(); //Das ist nötig falls Erdanziehungskraft vorhanden
 	}
 }
 
@@ -59,25 +58,35 @@ void Rocket::update(float d_t){
 			Vector3 accelerationForce = mDirection*mFuelPower;
 			mPhysics.applyForce(accelerationForce*d_t);
 
-			if (test <= 5){
-				test++;
-			}
-
 			//Verbrennung: 1 Unit / Sekunde oder so
 			mFuel -= d_t;
+				//Rakete verliert dadurch an Masse
+			mPhysics.setMass(mPhysics.getMass()- d_t);
 		}
 
 		//Massepunkt aktualisieren
 		SimulationObject::update(d_t);
 
-		//Sehr problematisch: Ab wann soll sich die Rakete der Bewegungsrichtung angleichen? Zu früh -> Rakete fällt in Boden
-		if(mPhysics.getVelocity().length() > 2.0){
+		//TODO Sehr problematisch: Ab wann soll sich die Rakete der Bewegungsrichtung angleichen? Zu früh -> Rakete fällt in Boden
+		if(mPhysics.getVelocity().length() > 5.0){
 			mDirection = mPhysics.getVelocity();
 			mDirection.normalize();
 		}
 
 	}
 }
+
+void Rocket::setFuel(float fuel){
+	mFuel = fuel;
+}
+void Rocket::setFuelPower(float fuelPower){
+	mFuelPower = fuelPower;
+}
+void Rocket::setDirection(Vector3 direction){
+	direction.normalize();
+	mDirection = direction;
+}
+
 
 //Solange nix besseres: Default draw methode + Richtung
 void Rocket::draw(){
@@ -99,7 +108,7 @@ void Rocket::draw(){
 
 	//Raketenschweif
 		if(mFuel > 0 && mMode == LAUNCHED){
-			glColor3f(1.0,0.7,0.4);
+			glColor3f(1.0,0.7,0.0);
 			glTranslatef(-mDirection.getX()*0.2,-mDirection.getY()*0.2,- mDirection.getZ()*0.2);
 			glutWireSphere(0.1,4,5);
 		}

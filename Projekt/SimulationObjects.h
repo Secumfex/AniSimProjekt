@@ -50,6 +50,11 @@ class Rocket : public SimulationObject{
 
 	 void launch();
 	 float getFuel();
+
+	 void setDirection(Vector3 direction);
+	 void setFuel(float fuel);
+	 void setFuelPower(float fuelPower);
+
  };
 
 /*

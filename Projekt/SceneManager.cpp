@@ -23,27 +23,30 @@ inline void SceneManager:: initRocketSimulation(){
 //		SimpleForce* gravity = new SimpleForce(Vector3(0.0,-10.0,0.0));
 //		mGlobalForceObjects.push_back(gravity);
 		//Anziehungskraft untereinander
-		GravitationalForce* gravitation = new GravitationalForce(100.0,0.0,2.0);
+		GravitationalForce* gravitation = new GravitationalForce(100.0,0.0,5.0);
 		mGlobalForceObjects.push_back(gravitation);
 
 
 /////////////// Simulations Objekte ////////////////////////////////////////////////////////////////////
 		//TODO ObjectFactory bauen
 
-		mPlayerRocket = new Rocket(10.0,30.0,Vector3(1.0,0.0,0.0));
+		mPlayerRocket = new Rocket(10.0,50.0,Vector3(1.0,-0.5,0.0));
 		mSimulationObjects.push_back(mPlayerRocket);
 
-		SimulationObject* black_hole1 = new BlackHole(1000.0,Vector3(5.0,8.0,5.0));
+		SimulationObject* black_hole1 = new BlackHole(1000.0,Vector3(5.0,8.0,0.0));
 		mSimulationObjects.push_back(black_hole1);
 
 		SimulationObject* black_hole2 = new BlackHole(1000.0,Vector3(-5.0,12.0,0.0));
 		mSimulationObjects.push_back(black_hole2);
 
+		SimulationObject* black_hole3 = new BlackHole(1000.0,Vector3(-5.0,-12.0,0.0));
+		mSimulationObjects.push_back(black_hole3);
+
 }
 
 void SceneManager::init(){
 /*TODO Referenzen setzen
-ObjectFactory Referenzen setzen*/
+ObjectFactory  einfügen*/
 
 	int simulation_index = 1;
 

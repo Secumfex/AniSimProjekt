@@ -1,7 +1,10 @@
 #include "Projekt.h"
 
 Projekt::Projekt(){
-	
+	cout<<"keyboard settings: "<<endl<<
+	      "  SPACE : launch missile"<<endl<<
+		  "  r     : reset"<<endl<<
+		  "  m     : switch integration mode"<<endl;
 }
 
 Projekt::~Projekt(){
@@ -31,6 +34,9 @@ void Projekt::keyPressed(int key){
 	}
 	if(key == 'r'){
 		mSceneManager.reset();
+	}
+	if(key == 'm'){
+		mSceneManager.getPlayerRocket()->getPhysics()->switchIntegrationMode();
 	}
 }
 

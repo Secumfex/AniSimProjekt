@@ -29,6 +29,18 @@ class Physics{
 	float mMass;  //masse == 0 --> statisches Objekt
 	float i_Mass; //inverted Mass
 
+	//Je nachdem was man in update() möchte
+	int mIntegrationMode;
+	void eulerStep(float d_t);
+	void rungeKutta(float d_t);
+
+	//Anwenden des akkumulierten Kraftvektors auf Impuls
+	void applyAccumulatedForce();
+
+	//Ableitung bei Zeitschritt d_t (ausgehend von übergebenen Werten)
+	Vector3 derivePosition(Vector3 pos, Vector3 p_dot, float d_t);
+	//Ableitung bei Zeitschritt d_t (ausgehend von übergebenen Werten)
+	Vector3 deriveImpulse(Vector3 imp, Vector3 i_dot, float d_t);
 
 	public:
 	//Konstruktor
@@ -38,10 +50,14 @@ class Physics{
 	//Kraft Anwenden und anschließend Position aktualisieren
 	void update(float d_t);
 
+	//Umschalten zwischen Euler und Runge-Kutta
+	void switchIntegrationMode();
+
 	//Anwenden eines Kraftvektors force, wird in ForceAkkumulator gespeist
 	void applyForce(Vector3 force);
-	//Anwenden des akkumulierten Kraftvektors auf Impuls
-	void applyAccumulatedForce();
+
+
+
 	//Nullen des Akkumulators
 	void clearAccumulatedForce();
 
