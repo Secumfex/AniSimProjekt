@@ -70,6 +70,8 @@ public:
 };
 
 static void drawTracer(PointTracer* tracer){
+	glPointSize(2.0);
+	glColor3f(0.5,0.5,0.5);
 	glBegin(GL_POINTS);
 	vector<Vector3>* trace = tracer->getPointsPointer();
 	for (unsigned int i = 0; i < trace->size();i++){

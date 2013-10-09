@@ -6,8 +6,6 @@ Projekt::Projekt(){
 		  "  r     : reset"<<endl<<
 		  "  m     : switch integration mode"<<endl<<
 	  	  "  t     : show rocket trace"<<endl;
-
-	drawTrace = false;
 }
 
 Projekt::~Projekt(){

@@ -21,7 +21,6 @@ class Projekt : public BasisApplication
 	//---------------MEMBER FUNCTIONS---------------------
 	private:
 		TimedPointTracer* rocketTracer;
-		bool drawTrace;
 	public:
 
 		virtual void init(void);
