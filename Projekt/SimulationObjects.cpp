@@ -1,3 +1,4 @@
+#include <windows.h>
 #include "SimulationObjects.h"
 #include <iostream>
 using namespace std;

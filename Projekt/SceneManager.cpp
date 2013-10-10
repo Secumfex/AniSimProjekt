@@ -1,3 +1,4 @@
+#include <windows.h>
 #include "SceneManager.h"
 #include <GL/glut.h>
 
