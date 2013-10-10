@@ -1,5 +1,7 @@
+#include <windows.h>
 #include "Camera.h"
 #include "GL/glut.h"
+
 
 Camera::Camera(void)
 {
