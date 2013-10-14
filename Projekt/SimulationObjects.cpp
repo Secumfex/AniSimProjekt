@@ -1,6 +1,8 @@
 #include <windows.h>
 #include "SimulationObjects.h"
 #include <iostream>
+#include <algorithm>
+#include <math.h>
 using namespace std;
 
 SimulationObject::SimulationObject(float mass, Vector3 velocity, Vector3 position){
@@ -61,6 +63,8 @@ void Rocket::update(float d_t){
 
 			//Verbrennung: 1 Unit / Sekunde oder so
 			mFuel -= d_t;
+				//Hier verhindere ich dass weniger als 0 Treibstoff da ist
+			mFuel = (mFuel<0.0)? 0.0 : mFuel;
 				//Rakete verliert dadurch an Masse
 			mPhysics.setMass(mPhysics.getMass()- d_t);
 		}
@@ -93,27 +97,62 @@ void Rocket::setDirection(Vector3 direction){
 void Rocket::draw(){
 
 	//TODO hier stattdessen Modell zeichnen
-	SimulationObject::draw();
+	// SimulationObject::draw();
 
 	glPushMatrix();
 
 	//Richtung aka Nase
 		Vector3 pos = mPhysics.getPosition();
+		Vector3 cross = mDirection.cross(Vector3(0, 1, 0));
+		float angle = -acos((mDirection * Vector3(0, 1, 0))) * 180.0 / M_PI ;
+
 		glColor3f(0.0,0.0,1.0);
 
 		glTranslatef(pos.getX(),pos.getY(),pos.getZ());
-		glBegin(GL_LINES);
-			glVertex3f(0.0, 0.0, 0.0);
-			glVertex3f(mDirection.getX(), mDirection.getY(),mDirection.getZ());
-		glEnd();
+
+		glRotatef (angle, cross.getX(), cross.getY(), cross.getZ());
+
+
+
+		drawRocket();
+
+		//glBegin(GL_LINES);
+		//	glVertex3f(0.0, 0.0, 0.0);
+		//	glVertex3f(mDirection.getX(), mDirection.getY(),mDirection.getZ());
+		//glEnd();
+
 
 	//Raketenschweif
 		if(mFuel > 0 && mMode == LAUNCHED){
-			glColor3f(1.0,0.7,0.0);
-			glTranslatef(-mDirection.getX()*0.2,-mDirection.getY()*0.2,- mDirection.getZ()*0.2);
-			glutWireSphere(0.1,4,5);
+			drawTail();
+//			glColor3f(1.0,0.7,0.0);
+//			glTranslatef(-mDirection.getX()*0.2,-mDirection.getY()*0.2,- mDirection.getZ()*0.2);
+//			glutWireSphere(0.1,4,5);
 		}
 	glPopMatrix();
+}
+
+//TODO: Male/Importiere Rakete
+void Rocket::drawRocket(){
+glBegin(GL_TRIANGLE_STRIP);
+glColor3f(0.0, 1.0, 0.0);
+glVertex3f(-0.25, 0.0, 0.0);
+glVertex3f(0.25, 0.0, 0.0);
+glVertex3f(0.0, 1.0, 0.0);
+glColor3f(1.0, 0.0, 0.0);
+glVertex3f(0.0, 0.0, -0.25);
+glVertex3f(0.0, 0.0, 0.25);
+glVertex3f(0.0, 1.0, 0.0);
+glEnd();
+
+}
+
+void Rocket::drawTail(){
+	glColor3f(1.0, 1.0, 0.0);
+	glTranslatef(0.0, -0.5, 0.0);
+
+	glutWireSphere(0.1, 4, 5);
+
 }
 
 void BlackHole::draw(){
