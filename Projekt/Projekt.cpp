@@ -13,7 +13,8 @@ Projekt::~Projekt(){
 
 void Projekt::init(){
 	mSceneManager.init();
-
+	//Sonst potentielle NULL-Pointer Exception beim update
+	rocketTracer = NULL;
 
 
 }
