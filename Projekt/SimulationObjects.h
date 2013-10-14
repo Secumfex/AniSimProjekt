@@ -13,6 +13,7 @@
  * Physics: Massepunkt des Simulationsobjekts, sollte besser was anderes sein...
  */
 class SimulationObject{
+
 protected:
 	Physics mPhysics;
 public:
@@ -42,6 +43,8 @@ class Rocket : public SimulationObject{
 	 float mFuel;
 	 float mFuelPower;
 	 mode mMode;
+	 void drawRocket();
+	 void drawTail();
  public:
 	 //Default Direction : negative Z-Achse
 	 Rocket(float fuel = 1.0,float fuelPower = 1.0, Vector3 direction = Vector3(0.0,0.0,-1.0), Vector3 position = Vector3(0,0,0));
