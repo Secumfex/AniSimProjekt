@@ -46,8 +46,8 @@ float gMatSpec [] = {1.0, 1.0, 1.0, 1.0};
 
 //timing
 clock_t t;
-int t_start, t_stop;
-float d_t = 0.016667;
+double d_t = 0.016667;
+double t_accumulator = 0.0; //time accumulator
 
 
 BasisApplication *gApplication;
@@ -83,43 +83,63 @@ void initGL(void){
 	reshape(wnd_width, wnd_height);
 }
 
+/*Aus Weihnachtsvorlesung geklaut*/
+void print(char *string, float x, float y, float z){
+	char *s;
+	glColor3f(0.2,0.2,0.2);
+	glRasterPos3f(x,y,z);
+	for(s = string; *s; s++){
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12,*s);
+	}
+}
+
+void drawFPS(float frametime){
+	float fps = 0.0;
+	if ( frametime > 0.0){
+		fps = 1.0 / frametime;
+	}
+	char string[20];
+	sprintf(string, "FPS: %2.2f", fps);
+	print(string, 0.08, 0.12, -0.5);
+}
+
 
 //--------------------GLUT callback functions------------------------------------
 void display(void){
 	
 	
 	//-------------start taking time ---------------------
-	t_start = glutGet(GLUT_ELAPSED_TIME);
+	/*CPU Clocks are used instead of GLUT_ELAPSED_TIME*/
 	t = clock();
 	
-		
+	/*
+	 * FPS <= 100 FPS: call only whenever at least 0.01 seconds passed
+	 */
+	if(t_accumulator >= 0.01){
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
 
+		glLoadIdentity();
+		gCamera.look();
 	
-
-	glLoadIdentity();
-	gCamera.look();
-
+		//Constant time steps
+		gApplication->update(t_accumulator);
+		gApplication->draw();
 	
-	gApplication->update(d_t);
-	gApplication->draw();
+		//FPS zeichnen
+		drawFPS(t_accumulator);
 
-	
-	glutSwapBuffers();
-
-	
+		glutSwapBuffers();
+		t_accumulator = 0.0;
+	}
+	else{	/*If t_acc < 0.01: praktisch keine Zeit vergangen, t wäre 0*/
+		/*deshalb Sleep für eine hundertstel millisekunde*/
+		Sleep(0.00001);
+	}
 	//-------------stop taking time ---------------------
-	t_stop = glutGet(GLUT_ELAPSED_TIME);
 	
 	t = clock()-t;
-	d_t = (float) t / CLOCKS_PER_SEC;
-	
-	//d_t = (((float)(t_stop - t_start)) / 1000.0);
-	/*if (d_t != 0.0){
-		cout<<d_t<<endl;
-	}*/
-
+	d_t = (double) t / CLOCKS_PER_SEC;
+	t_accumulator += d_t;
 
 }
 
@@ -267,6 +287,5 @@ int main(int argc, char* argv[])
 	
 	return 0;
 }
-
 
 
