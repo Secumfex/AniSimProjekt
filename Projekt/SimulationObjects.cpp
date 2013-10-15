@@ -182,7 +182,7 @@ void drawAccumulatedForce(SimulationObject* pSim){
 		glTranslatef(pos.getX(),pos.getY(),pos.getZ());
 		glBegin(GL_LINES);
 			glVertex3f(0,0,0);
-			glVertex3f(forceAcc.getX()*10.0,forceAcc.getY()*10.0,forceAcc.getZ()*10.0);
+			glVertex3f(forceAcc.getX(),forceAcc.getY(),forceAcc.getZ());
 		glEnd();
 	glPopMatrix();
 }
