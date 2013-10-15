@@ -177,6 +177,17 @@ Quaternion Quaternion::scale(float s){
 	return Quaternion(w*s, x*s, y*s, z*s);
 }
 
+Quaternion Quaternion::normalized(){
+	float f;
+	if(x != 0.0 || y != 0.0 || z != 0.0 || w != 0.0){
+    	 f = 1 / std::sqrt(x * x + y * y + z * z + w * w);
+    }
+    else{
+    	f = 1.0;
+    }
+	return scale(f);
+}
+
 Quaternion Quaternion::inverse(){
 	return conjugate().scale(1/norm());
 }

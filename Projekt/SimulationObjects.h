@@ -5,6 +5,7 @@
  * Diese Datei enthält alle Deklarationen von SimulationObject-Klassen
  */
 
+#include "RigidBody.h"
 #include "Physics.h"
 #include <GL/glut.h>
 
@@ -70,6 +71,22 @@ public:
 	virtual void update(float d_t);
 
 	BlackHole(float mass = 1000.0, Vector3 position = Vector3(0,0,0));
+};
+
+class InterstellarerZiegelstein: public SimulationObject{
+protected:
+	RigidBlock mRigidBody;
+	float mA,mB,mC;
+public:
+
+	InterstellarerZiegelstein(float a = 1.0, float b = 1.0, float c = 1.0,
+			Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
+			Quaternion rotation = Quaternion(0,0,0,1), Vector3 angularMomentum = Vector3(0,0,0));
+
+	RigidBody* getRigidBodyPointer();
+
+	virtual void update(float d_t);
+	virtual void draw();
 };
 
 /*Verwandte Funktionen*/

@@ -186,3 +186,54 @@ void drawAccumulatedForce(SimulationObject* pSim){
 		glEnd();
 	glPopMatrix();
 }
+
+void InterstellarerZiegelstein::draw(){
+		float x = mA;
+		float y = mB;
+		float z = mC;
+
+		glLineWidth(2.0);
+		float currentColor[4];
+		glGetFloatv(GL_CURRENT_COLOR,currentColor);
+		glColor3f(0.8,0.2,0.3);
+		//cout<<"I DONT KNOW WHY"<<endl;
+		Vector3 pos = mRigidBody.getPosition();
+		Quaternion rot = mRigidBody.getRotationQuaternion();
+		//cout<<"Rotation: "<<r.getW() <<" , "<< r.getX() <<" , "<<  r.getY()<<" , "<<  r.getZ()<<endl;
+
+		glPushMatrix();
+			glTranslatef(pos.getX(),pos.getY(),pos.getZ());
+			glRotatef(rot.getAngle(),rot.getX(),rot.getY(),rot.getZ());
+			glScalef(x,y,z);
+			glutWireCube(1.0);
+		glPopMatrix();
+		glColor4f(currentColor[0],currentColor[1],currentColor[2],currentColor[3]);
+
+}
+
+void InterstellarerZiegelstein::update(float d_t){
+	mRigidBody.update(d_t);
+}
+
+InterstellarerZiegelstein::InterstellarerZiegelstein(float a, float b, float c,
+	Vector3 position, Vector3 velocity,
+	Quaternion rotation, Vector3 angularMomentum){
+		mA = a;
+		mB = b;
+		mC = c;
+
+		//Status setzen
+		mRigidBody.setPosition(position);
+		mRigidBody.setRotation(rotation);
+
+		//Trägheitstensor berechnen
+		mRigidBody.setDimensions(a,b,c);
+
+		mRigidBody.setVelocity(velocity);
+		mRigidBody.setAngularMomentum(angularMomentum);
+
+}
+
+RigidBody* InterstellarerZiegelstein::getRigidBodyPointer(){
+	return &mRigidBody;
+}

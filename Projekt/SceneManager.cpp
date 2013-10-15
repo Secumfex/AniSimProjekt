@@ -2,28 +2,13 @@
 #include "SceneManager.h"
 #include <GL/glut.h>
 
-void SceneManager::update(float d_t){
-/// ----Applying global forces...;
-	applyGlobalForces(d_t);
-
-//	----Applying forces...
-	for (unsigned int i = 0; i < mForceObjects.size();i++){
-		mForceObjects[i]->apply_fun(d_t);
-	}
-
-//TODO// ----Updating all Objects
-	for (unsigned int i = 0; i < mSimulationObjects.size(); i ++){
-		drawAccumulatedForce(mSimulationObjects[i]);
-		mSimulationObjects[i]->update(d_t);
-	}
-}
-
-inline void SceneManager:: initRocketSimulation(){
+inline void SceneManager::initRocketSimulation(){
 /////////////// Globale KrÃ¤fte     /////////////////////////////////////////////////////////////////////////
 
 		//Erdanziehungskraft
 //		SimpleForce* gravity = new SimpleForce(Vector3(0.0,-10.0,0.0));
 //		mGlobalForceObjects.push_back(gravity);
+
 		//Anziehungskraft untereinander
 		GravitationalForce* gravitation = new GravitationalForce(100.0,0.0,5.0);
 		mGlobalForceObjects.push_back(gravitation);
@@ -50,15 +35,26 @@ inline void SceneManager:: initRocketSimulation(){
 
 }
 
+inline void SceneManager::initInterstellareZiegelsteinSimulation(){
+	InterstellarerZiegelstein* ziegelstein = new InterstellarerZiegelstein(2.0,0.5,1.0,Vector3(0,1.0,0.0));
+	mSimulationObjects.push_back(ziegelstein);
+
+	ziegelstein->getRigidBodyPointer()->setImpulse(Vector3(0.0,0.0,0.0));
+	ziegelstein->getRigidBodyPointer()->setAngularMomentum(Vector3(0.2,0.0,0.0));
+}
+
 void SceneManager::init(){
 /*TODO Referenzen setzen
 ObjectFactory  einfügen*/
 
-	int simulation_index = 1;
+	int simulation_index = 2;
 
 	switch(simulation_index){
 	case 1:
 		initRocketSimulation();
+		break;
+	case 2:
+		initInterstellareZiegelsteinSimulation();
 		break;
 	}
 	
@@ -130,6 +126,22 @@ void SceneManager::draw(){
 void SceneManager::drawSimulationObjects(){
 	for (unsigned int i = 0; i < mSimulationObjects.size(); i++){
 		mSimulationObjects[i]->draw();
+	}
+}
+
+void SceneManager::update(float d_t){
+/// ----Applying global forces...;
+	applyGlobalForces(d_t);
+
+//	----Applying forces...
+	for (unsigned int i = 0; i < mForceObjects.size();i++){
+		mForceObjects[i]->apply_fun(d_t);
+	}
+
+//TODO// ----Updating all Objects
+	for (unsigned int i = 0; i < mSimulationObjects.size(); i ++){
+		drawAccumulatedForce(mSimulationObjects[i]);
+		mSimulationObjects[i]->update(d_t);
 	}
 }
 

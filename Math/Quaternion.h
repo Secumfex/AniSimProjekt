@@ -81,6 +81,7 @@ class Quaternion
 		float magnitude();
 		Quaternion scale(float s);
 		Quaternion inverse();
+		Quaternion normalized();
 		Quaternion conjugate();
 		Quaternion unitQuaternion();
 		Quaternion getRotationQuaternion(Vector3 axis, float angle);

@@ -57,15 +57,21 @@ void Projekt::keyPressed(int key){
 		}
 	}
 	if(key == 'm'){
-		mSceneManager.getPlayerRocket()->getPhysics()->switchIntegrationMode();
+		if(mSceneManager.getPlayerRocket() != NULL){
+			mSceneManager.getPlayerRocket()->getPhysics()->switchIntegrationMode();
+		}
 	}
 	if(key == 't'){
-		rocketTracer = new TimedPointTracer(mSceneManager.getPlayerRocket()->getPhysics()->getPositionPointer(),1000);
+		if(mSceneManager.getPlayerRocket() != NULL){
+			rocketTracer = new TimedPointTracer(mSceneManager.getPlayerRocket()->getPhysics()->getPositionPointer(),1000);
+		}
 	}
 	if(key == 'c'){
 		if (mCamera != NULL){
-			Vector3* rocketPos = mSceneManager.getPlayerRocket()->getPhysics()->getPositionPointer();
-			mCamera->setLookAtPointer(rocketPos);
+			if(mSceneManager.getPlayerRocket() != NULL){
+				Vector3* rocketPos = mSceneManager.getPlayerRocket()->getPhysics()->getPositionPointer();
+				mCamera->setLookAtPointer(rocketPos);
+			}
 		}
 	}
 	if(key == 'b'){

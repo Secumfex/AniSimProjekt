@@ -32,6 +32,7 @@ void applyGlobalForces(float d_t);
 
 	//Laden der Raketensimulation
 	inline void initRocketSimulation();
+	inline void initInterstellareZiegelsteinSimulation();
 
 public:
 
