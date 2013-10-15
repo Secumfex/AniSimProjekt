@@ -77,6 +77,9 @@ Vector3 Physics::getVelocity() const{
 Vector3 Physics::getImpulse() const{
 	return mImpulse;
 }
+Vector3 Physics::getAccumulatedForce() const{
+	return mForceAccumulator;
+}
 
 /*Kinematische Richtungsänderung ohne Impulserhaltungssatz
  *Richtungsvektor nach Anwendung genau an Normale normal reflektiert*/

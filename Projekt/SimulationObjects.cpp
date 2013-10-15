@@ -96,11 +96,11 @@ void Rocket::setDirection(Vector3 direction){
 //Solange nix besseres: Default draw methode + Richtung
 void Rocket::draw(){
 
-	//TODO hier stattdessen Modell zeichnen
 	// SimulationObject::draw();
 
 	glPushMatrix();
 
+	//TODO: Quaternionen benutzen
 	//Richtung aka Nase
 		Vector3 pos = mPhysics.getPosition();
 		Vector3 cross = mDirection.cross(Vector3(0, 1, 0));
@@ -172,4 +172,17 @@ void BlackHole::update(float d_t){
 
 BlackHole::BlackHole(float mass,Vector3 position){
 	setPhysicsMembers(mass,Vector3(0,0,0),position);
+}
+
+void drawAccumulatedForce(SimulationObject* pSim){
+	Vector3 pos = pSim->getPhysics()->getPosition();
+	Vector3 forceAcc = pSim->getPhysics()->getAccumulatedForce();
+	glPushMatrix();
+		glColor3f(0.7,0.5,0.5);
+		glTranslatef(pos.getX(),pos.getY(),pos.getZ());
+		glBegin(GL_LINES);
+			glVertex3f(0,0,0);
+			glVertex3f(forceAcc.getX()*10.0,forceAcc.getY()*10.0,forceAcc.getZ()*10.0);
+		glEnd();
+	glPopMatrix();
 }

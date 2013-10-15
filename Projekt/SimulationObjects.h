@@ -72,4 +72,7 @@ public:
 	BlackHole(float mass = 1000.0, Vector3 position = Vector3(0,0,0));
 };
 
+/*Verwandte Funktionen*/
+void drawAccumulatedForce(SimulationObject* pSim);
+
 #endif

@@ -13,6 +13,7 @@ void SceneManager::update(float d_t){
 
 //TODO// ----Updating all Objects
 	for (unsigned int i = 0; i < mSimulationObjects.size(); i ++){
+		drawAccumulatedForce(mSimulationObjects[i]);
 		mSimulationObjects[i]->update(d_t);
 	}
 }
