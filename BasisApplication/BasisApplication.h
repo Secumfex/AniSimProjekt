@@ -6,6 +6,7 @@ using std::string;
 
 #include <stdlib.h>
 #include "GL/glut.h"
+#include "Camera.h"
 
 class BasisApplication
 {
@@ -17,6 +18,7 @@ class BasisApplication
 	//---------------MEMBER VARIABLES---------------------
 	protected:
 		string mAppTitle;
+		Camera* mCamera;
 
 	//---------------MEMBER FUNCTIONS---------------------
 	private:
@@ -30,6 +32,7 @@ class BasisApplication
 
 		inline void setAppTitle(string t){mAppTitle = t;}
 		inline string getAppTitle(void){return mAppTitle;}
+		inline void setCameraPointer(Camera* c){mCamera = c;}
 
 		virtual void keyPressed(int key){}
 

@@ -16,6 +16,7 @@ class Camera
 		Vector3 mPosition;
 		Vector3 mDirection;
 		Vector3 mLookAt;
+		Vector3* mLookAtPointer;
 		Vector3 mUpVector;
 
 	//---------------MEMBER FUNCTIONS-----------------

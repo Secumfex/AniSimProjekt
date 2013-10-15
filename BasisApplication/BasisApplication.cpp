@@ -5,6 +5,7 @@
 BasisApplication::BasisApplication(void)
 {
 	mAppTitle = "AnSim SS 2010 Demo Framework";
+	mCamera = NULL;
 }
 
 
