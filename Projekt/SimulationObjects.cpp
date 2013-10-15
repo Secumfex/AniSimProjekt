@@ -151,7 +151,7 @@ void Rocket::drawTail(){
 	glColor3f(1.0, 1.0, 0.0);
 	glTranslatef(0.0, -0.5, 0.0);
 
-	glutWireSphere(0.1, 4, 5);
+	glutWireSphere(0.3, 4, 5);
 
 }
 

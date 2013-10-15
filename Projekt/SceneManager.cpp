@@ -32,17 +32,21 @@ inline void SceneManager:: initRocketSimulation(){
 /////////////// Simulations Objekte ////////////////////////////////////////////////////////////////////
 		//TODO ObjectFactory bauen
 
-		mPlayerRocket = new Rocket(10.0,50.0,Vector3(1.0,-0.5,0.0));
+		mPlayerRocket = new Rocket(10.0,5.0,Vector3(0.0,1.0,0.0),Vector3(-5.0,0.0,0.0));
 		mSimulationObjects.push_back(mPlayerRocket);
+		mPlayerRocket->getPhysics()->setVelocity(Vector3(0,6.0,0.0));
 
-		SimulationObject* black_hole1 = new BlackHole(1000.0,Vector3(5.0,8.0,0.0));
-		mSimulationObjects.push_back(black_hole1);
+		SimulationObject* black_hole0 = new BlackHole(1000.0,Vector3(0.0,0.0,0.0));
+		mSimulationObjects.push_back(black_hole0);
 
-		SimulationObject* black_hole2 = new BlackHole(1000.0,Vector3(-5.0,12.0,0.0));
-		mSimulationObjects.push_back(black_hole2);
+//		SimulationObject* black_hole1 = new BlackHole(1000.0,Vector3(5.0,8.0,0.0));
+//		mSimulationObjects.push_back(black_hole1);
 
-		SimulationObject* black_hole3 = new BlackHole(1000.0,Vector3(-5.0,-12.0,0.0));
-		mSimulationObjects.push_back(black_hole3);
+//		SimulationObject* black_hole2 = new BlackHole(1000.0,Vector3(-5.0,12.0,0.0));
+//		mSimulationObjects.push_back(black_hole2);
+
+//		SimulationObject* black_hole3 = new BlackHole(1000.0,Vector3(-5.0,-12.0,0.0));
+//		mSimulationObjects.push_back(black_hole3);
 
 }
 

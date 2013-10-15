@@ -19,8 +19,6 @@
 
 using namespace std;
 
-
-
 //---------------GLOBAL VARIABLES----------------------------------------
 int wnd_width = 1024;
 int wnd_height = 768;
