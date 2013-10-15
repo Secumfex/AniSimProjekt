@@ -45,8 +45,8 @@ float gMatSpec [] = {1.0, 1.0, 1.0, 1.0};
 //timing
 clock_t t;
 double d_t = 0.016667;
-double t_accumulator = 0.0; //time accumulator
-
+double t_accumulator = 0.0; //simulation time accumulator
+double t_frame_accumulator = 0.0;
 
 BasisApplication *gApplication;
 Camera gCamera;
@@ -111,7 +111,7 @@ void display(void){
 	t = clock();
 	
 	/*
-	 * FPS <= 100 FPS: call only whenever at least 0.01 seconds passed
+	 * Genug Zeit vergangen für einen Zeitschritt
 	 */
 	if(t_accumulator >= 0.01){
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -119,25 +119,27 @@ void display(void){
 		glLoadIdentity();
 		gCamera.look();
 	
-		//Constant time steps
 		gApplication->update(t_accumulator);
 		gApplication->draw();
-	
-		//FPS zeichnen
-		drawFPS(t_accumulator);
-
-		glutSwapBuffers();
-		t_accumulator = 0.0;
+		t_accumulator -= 0.01;
 	}
-	else{	/*If t_acc < 0.01: praktisch keine Zeit vergangen, t wäre 0*/
-		/*deshalb Sleep für eine hundertstel millisekunde*/
-		Sleep(0.00001);
+	else{
+		Sleep(0.0001);
 	}
 	//-------------stop taking time ---------------------
-	
 	t = clock()-t;
 	d_t = (double) t / CLOCKS_PER_SEC;
+	//Bis jetzt vergangene Zeit
+
 	t_accumulator += d_t;
+	t_frame_accumulator += d_t;
+
+	if(t_frame_accumulator >= 0.01){
+		drawFPS(t_frame_accumulator);
+		glutSwapBuffers();
+		t_frame_accumulator -= 0.01;
+	}
+
 
 }
 
@@ -225,7 +227,7 @@ void mouseMotion(int x, int y){
 	if(gMouseLButtonPressed){
 		gMouseOrbitAngle += dX * 0.1f * sensitivity;
 		
-		Vector3 p = gCamera.getLookAt() - gCamera.getPosition();
+		Vector3 p = gCamera.getPosition();
 		p.setY(0.0f);
 
 		float r = p.length();
@@ -248,9 +250,6 @@ int main(int argc, char* argv[])
 	//******************************************************
 	//Hier werden die entsprechenden Übungen eingebunden. 
 
-	//gApplication = new Uebung1();
-	//gApplication = new Uebung2();
-	//gApplication = new Uebung3();
 	gApplication = new Projekt();
 	gApplication->setCameraPointer(&gCamera);
 	

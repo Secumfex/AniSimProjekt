@@ -15,8 +15,7 @@ class Camera
 	private:
 		Vector3 mPosition;
 		Vector3 mDirection;
-		Vector3 mLookAt;
-		Vector3* mLookAtPointer;
+		Vector3* mLookAt;
 		Vector3 mUpVector;
 
 	//---------------MEMBER FUNCTIONS-----------------
@@ -24,7 +23,7 @@ class Camera
 
 		inline void setPosition(Vector3 p){
 			mPosition = p;
-			mDirection = (mLookAt - mPosition);
+			mDirection = (-1.0) * mPosition;
 			mDirection.normalize();
 		}
 		inline void setDirection(Vector3 d){
@@ -33,14 +32,14 @@ class Camera
 		}
 
 		inline void setLookAt(Vector3 l){
-			mLookAt = l;
-			mDirection = (mLookAt - mPosition);
-			mDirection.normalize();
+			mLookAt = new Vector3(l.getX(), l.getY(), l.getZ());
 		}
-
+		inline void setLookAtPointer(Vector3* l){
+			mLookAt = l;
+		}
 		inline Vector3 getPosition(void){return mPosition;}
 		inline Vector3 getDirection(void){return mDirection;}
-		inline Vector3 getLookAt(void){return mLookAt;}
+		inline Vector3 getLookAt(void){return *mLookAt;}
 		
 
 		void look(void);
