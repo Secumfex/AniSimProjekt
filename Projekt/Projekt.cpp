@@ -49,11 +49,11 @@ void Projekt::keyPressed(int key){
 		mSceneManager.reset();
 		if(rocketTracer!= NULL){
 			rocketTracer = NULL;
-			if (mCamera != NULL){
-					mCamera->setLookAt(Vector3(0,0,0));
-					mCamera->setPosition(Vector3(0.0, 5.0, 5.0));
-					mCamera->setDirection(Vector3(0.0, 0.0, -1.0));
-			}
+		}
+		if (mCamera != NULL){
+			mCamera->setLookAt(Vector3(0,0,0));
+			mCamera->setPosition(Vector3(0.0, 5.0, 5.0));
+			mCamera->setDirection(Vector3(0.0, 0.0, -1.0));
 		}
 	}
 	if(key == 'm'){
