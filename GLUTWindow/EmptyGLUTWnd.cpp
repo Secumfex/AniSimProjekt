@@ -98,7 +98,7 @@ void drawFPS(float frametime){
 	}
 	char string[20];
 	sprintf(string, "FPS: %2.2f", fps);
-	print(string, 0.08, 0.12, -0.5);
+	print(string, 1.0, 0.0, 0.0);
 }
 
 
@@ -252,6 +252,7 @@ int main(int argc, char* argv[])
 	//gApplication = new Uebung2();
 	//gApplication = new Uebung3();
 	gApplication = new Projekt();
+	gApplication->setCameraPointer(&gCamera);
 	
 	
 	//setup a GLUT window

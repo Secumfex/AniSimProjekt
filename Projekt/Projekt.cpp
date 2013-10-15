@@ -57,5 +57,10 @@ void Projekt::keyPressed(int key){
 	if(key == 't'){
 		rocketTracer = new TimedPointTracer(mSceneManager.getPlayerRocket()->getPhysics()->getPositionPointer(),1000);
 	}
+	if(key == 'c'){
+		if (mCamera != NULL){
+			mCamera->setLookAtPointer(*mSceneManager.getPlayerRocket()->getPhysics()->getPositionPointer());
+		}
+	}
 }
 
