@@ -72,6 +72,7 @@ class Physics{
 	Vector3* getPositionPointer();
 	Vector3 getVelocity() const;
 	Vector3 getImpulse() const;
+	Vector3 getAccumulatedForce() const;
 	float getMass() const;
 
 	//Elastisches Abprallen an Oberflächennormalen (Kinematisch)
