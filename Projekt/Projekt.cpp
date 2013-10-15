@@ -55,7 +55,7 @@ void Projekt::keyPressed(int key){
 		mSceneManager.getPlayerRocket()->getPhysics()->switchIntegrationMode();
 	}
 	if(key == 't'){
-		rocketTracer = new TimedPointTracer(mSceneManager.getPlayerRocket()->getPhysics()->getPositionPointer());
+		rocketTracer = new TimedPointTracer(mSceneManager.getPlayerRocket()->getPhysics()->getPositionPointer(),1000);
 	}
 }
 
