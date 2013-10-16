@@ -80,4 +80,26 @@ static void drawTracer(PointTracer* tracer){
 	glEnd();
 }
 
+static void drawVector3(Vector3 vector){
+	glBegin(GL_LINES);
+		glVertex3f(0,0,0);
+		glVertex3f(vector.getX(),vector.getY(),vector.getZ());
+	glEnd();
+}
+
+static void drawVector3(Vector3 vector, Vector3 position){
+	glPushMatrix();
+		glTranslatef(position.getX(), position.getY(), position.getZ());
+		drawVector3(vector);
+	glPopMatrix();
+}
+
+static void drawVector3(Vector3 vector, Vector3 position, Vector3 color){
+	float currentColor[4];
+	glGetFloatv(GL_CURRENT_COLOR,currentColor);
+		glColor3f(color.getX(),color.getY(),color.getZ());
+		drawVector3(vector,position);
+	glColor4f(currentColor[0],currentColor[1],currentColor[2],currentColor[3]);
+}
+
 #endif
