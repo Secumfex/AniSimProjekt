@@ -45,8 +45,8 @@ float gMatSpec [] = {1.0, 1.0, 1.0, 1.0};
 //timing
 clock_t t;
 double d_t = 0.016667;
-double t_accumulator = 0.0; //simulation time accumulator
-double t_frame_accumulator = 0.0;
+double t_accumulator = 0.01; //simulation time accumulator
+double t_frame_accumulator = 0.01;
 
 BasisApplication *gApplication;
 Camera gCamera;
@@ -122,6 +122,13 @@ void display(void){
 		gApplication->update(t_accumulator);
 		gApplication->draw();
 		t_accumulator -= 0.01;
+
+		t = clock()-t;
+		d_t = (double) t / CLOCKS_PER_SEC;
+		t_accumulator += d_t;
+
+		drawFPS(t_frame_accumulator);
+		glutSwapBuffers();
 	}
 	else{
 		Sleep(0.0001);
@@ -129,16 +136,20 @@ void display(void){
 	//-------------stop taking time ---------------------
 	t = clock()-t;
 	d_t = (double) t / CLOCKS_PER_SEC;
-	//Bis jetzt vergangene Zeit
 
-	t_accumulator += d_t;
-	t_frame_accumulator += d_t;
+	//Bis jetzt vergangene Zeit
+			//Zeit seit dem letzten Update
+
 
 	if(t_frame_accumulator >= 0.01){
-		drawFPS(t_frame_accumulator);
-		glutSwapBuffers();
+
 		t_frame_accumulator -= 0.01;
+
+
+		t_accumulator += d_t;		//Zeit seit dem letzten Update
+		t_frame_accumulator += d_t; //Zeit für Malen des Frames
 	}
+
 
 
 }
