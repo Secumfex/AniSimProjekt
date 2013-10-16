@@ -77,7 +77,8 @@ void Rocket::update(float d_t){
 			mDirection = mPhysics.getVelocity();
 			mDirection.normalize();
 		}
-
+	}else{ //Update vor Start
+		mPhysics.clearAccumulatedForce(); //Acc Force clearen, denn keine Kraft SOLL wirken
 	}
 }
 
@@ -182,7 +183,7 @@ void drawAccumulatedForce(SimulationObject* pSim){
 		glTranslatef(pos.getX(),pos.getY(),pos.getZ());
 		glBegin(GL_LINES);
 			glVertex3f(0,0,0);
-			glVertex3f(forceAcc.getX(),forceAcc.getY(),forceAcc.getZ());
+			glVertex3f(forceAcc.getX()*0.1,forceAcc.getY()*0.1,forceAcc.getZ()*0.1);
 		glEnd();
 	glPopMatrix();
 }
