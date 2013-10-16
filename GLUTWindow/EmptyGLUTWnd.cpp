@@ -43,10 +43,10 @@ float gMatDif [] = {0.8, 0.7, 0.0, 1.0};
 float gMatSpec [] = {1.0, 1.0, 1.0, 1.0};
 
 //timing
-clock_t t;
-double d_t = 0.016667;
-double t_accumulator = 0.0; //simulation time accumulator
-double t_frame_accumulator = 0.0;
+clock_t t;			  		//Variable für aktuelle Clocktime. Wenn Clock Time nötig, t = clock() setzten
+double d_t = 0.016667;//nicht mehr nötig
+clock_t update_start; 		//Clock Time des letzten Updatestarts
+clock_t frame_last_swapped;	//Clock Time des letzten Buffer-Swaps
 
 BasisApplication *gApplication;
 Camera gCamera;
@@ -104,43 +104,35 @@ void drawFPS(float frametime){
 
 //--------------------GLUT callback functions------------------------------------
 void display(void){
-	
-	
 	//-------------start taking time ---------------------
 	/*CPU Clocks are used instead of GLUT_ELAPSED_TIME*/
-	t = clock();
+	/*Aktuelle Clock-Time */
+	t = clock();									//Clock Time: start der Display Methode
 	
-	/*
-	 * Genug Zeit vergangen für einen Zeitschritt
-	 */
-	if(t_accumulator >= 0.01){
+	float time_since_last_update_start = ((float)(t-update_start)/(float)CLOCKS_PER_SEC); //Zeit-Differenz
+	if(time_since_last_update_start >= 0.01){		//Zeit seit letztem Update größer als 10 ms
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glLoadIdentity();
 		gCamera.look();
-	
-		gApplication->update(t_accumulator);
+
+		update_start = clock();						//Clock Time: Start des Updates
+
+		gApplication->update(time_since_last_update_start);
+
 		gApplication->draw();
-		t_accumulator -= 0.01;
+
+		t = clock();								//Clock Time: Frame Bereit zum swap
+		float frame_time = ((float)(t-frame_last_swapped)/(float)CLOCKS_PER_SEC);
+
+		drawFPS(frame_time);
+
+		glutSwapBuffers();
+		frame_last_swapped = clock();				//Clock Time: Swap der Buffer
 	}
 	else{
-		Sleep(0.0001);
+		Sleep(0.0001);								//Warte für 0.1 ms
 	}
-	//-------------stop taking time ---------------------
-	t = clock()-t;
-	d_t = (double) t / CLOCKS_PER_SEC;
-	//Bis jetzt vergangene Zeit
-
-	t_accumulator += d_t;
-	t_frame_accumulator += d_t;
-
-	if(t_frame_accumulator >= 0.01){
-		drawFPS(t_frame_accumulator);
-		glutSwapBuffers();
-		t_frame_accumulator -= 0.01;
-	}
-
-
 }
 
 void reshape (int w, int h){
@@ -235,7 +227,6 @@ void mouseMotion(int x, int y){
 		
 	}
 
-
 	gMouseXPos = x;
 	gMouseYPos = y;
 
@@ -274,14 +265,12 @@ int main(int argc, char* argv[])
 	glutMouseFunc(mouseButtons);
 	glutMotionFunc(mouseMotion);
 
-
-	
 	gApplication->init();
-
-
-
+	//timing init
+	t = clock();
+	update_start = clock(); //simulation time accumulator
+	frame_last_swapped = clock();
 	glutMainLoop();
-	
 	
 	return 0;
 }
