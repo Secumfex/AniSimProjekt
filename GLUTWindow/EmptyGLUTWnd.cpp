@@ -45,8 +45,10 @@ float gMatSpec [] = {1.0, 1.0, 1.0, 1.0};
 //timing
 clock_t t;
 double d_t = 0.016667;
-double t_accumulator = 0.01; //simulation time accumulator
-double t_frame_accumulator = 0.01;
+clock_t update_start; //simulation time accumulator
+clock_t frame_ready;
+clock_t frame_last_swapped;
+clock_t t_end;
 
 BasisApplication *gApplication;
 Camera gCamera;
@@ -104,54 +106,40 @@ void drawFPS(float frametime){
 
 //--------------------GLUT callback functions------------------------------------
 void display(void){
-	
-	
 	//-------------start taking time ---------------------
 	/*CPU Clocks are used instead of GLUT_ELAPSED_TIME*/
+	/*Aktueller clock */
 	t = clock();
 	
 	/*
 	 * Genug Zeit vergangen für einen Zeitschritt
 	 */
-	if(t_accumulator >= 0.01){
+	float time_since_last_update_start = ((float)(t-update_start)/(float)CLOCKS_PER_SEC);
+	if(time_since_last_update_start >= 0.01){
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glLoadIdentity();
 		gCamera.look();
-	
-		gApplication->update(t_accumulator);
+
+
+		update_start = clock();						//Start des update
+
+		gApplication->update(time_since_last_update_start);
+
 		gApplication->draw();
-		t_accumulator -= 0.01;
 
-		t = clock()-t;
-		d_t = (double) t / CLOCKS_PER_SEC;
-		t_accumulator += d_t;
+		frame_ready = clock();						//Frame Bereit zum swap
 
-		drawFPS(t_frame_accumulator);
+		float frame_time = ((float)(t-frame_last_swapped)/(float)CLOCKS_PER_SEC);
+
+		drawFPS(frame_time);
+
 		glutSwapBuffers();
+		frame_last_swapped = clock();
 	}
 	else{
 		Sleep(0.0001);
 	}
-	//-------------stop taking time ---------------------
-	t = clock()-t;
-	d_t = (double) t / CLOCKS_PER_SEC;
-
-	//Bis jetzt vergangene Zeit
-			//Zeit seit dem letzten Update
-
-
-	if(t_frame_accumulator >= 0.01){
-
-		t_frame_accumulator -= 0.01;
-
-
-		t_accumulator += d_t;		//Zeit seit dem letzten Update
-		t_frame_accumulator += d_t; //Zeit für Malen des Frames
-	}
-
-
-
 }
 
 void reshape (int w, int h){
@@ -246,7 +234,6 @@ void mouseMotion(int x, int y){
 		
 	}
 
-
 	gMouseXPos = x;
 	gMouseYPos = y;
 
@@ -285,14 +272,14 @@ int main(int argc, char* argv[])
 	glutMouseFunc(mouseButtons);
 	glutMotionFunc(mouseMotion);
 
-
-	
 	gApplication->init();
-
-
-
+	//timing init
+	t = clock();
+	update_start = clock(); //simulation time accumulator
+	frame_ready = clock();
+	frame_last_swapped = clock();
+	t_end = clock();
 	glutMainLoop();
-	
 	
 	return 0;
 }
