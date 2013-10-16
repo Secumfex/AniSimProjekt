@@ -43,12 +43,10 @@ float gMatDif [] = {0.8, 0.7, 0.0, 1.0};
 float gMatSpec [] = {1.0, 1.0, 1.0, 1.0};
 
 //timing
-clock_t t;
-double d_t = 0.016667;
-clock_t update_start; //simulation time accumulator
-clock_t frame_ready;
-clock_t frame_last_swapped;
-clock_t t_end;
+clock_t t;			  		//Variable für aktuelle Clocktime. Wenn Clock Time nötig, t = clock() setzten
+double d_t = 0.016667;//nicht mehr nötig
+clock_t update_start; 		//Clock Time des letzten Updatestarts
+clock_t frame_last_swapped;	//Clock Time des letzten Buffer-Swaps
 
 BasisApplication *gApplication;
 Camera gCamera;
@@ -108,37 +106,32 @@ void drawFPS(float frametime){
 void display(void){
 	//-------------start taking time ---------------------
 	/*CPU Clocks are used instead of GLUT_ELAPSED_TIME*/
-	/*Aktueller clock */
-	t = clock();
+	/*Aktuelle Clock-Time */
+	t = clock();									//Clock Time: start der Display Methode
 	
-	/*
-	 * Genug Zeit vergangen für einen Zeitschritt
-	 */
-	float time_since_last_update_start = ((float)(t-update_start)/(float)CLOCKS_PER_SEC);
-	if(time_since_last_update_start >= 0.01){
+	float time_since_last_update_start = ((float)(t-update_start)/(float)CLOCKS_PER_SEC); //Zeit-Differenz
+	if(time_since_last_update_start >= 0.01){		//Zeit seit letztem Update größer als 10 ms
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glLoadIdentity();
 		gCamera.look();
 
-
-		update_start = clock();						//Start des update
+		update_start = clock();						//Clock Time: Start des Updates
 
 		gApplication->update(time_since_last_update_start);
 
 		gApplication->draw();
 
-		frame_ready = clock();						//Frame Bereit zum swap
-
+		t = clock();								//Clock Time: Frame Bereit zum swap
 		float frame_time = ((float)(t-frame_last_swapped)/(float)CLOCKS_PER_SEC);
 
 		drawFPS(frame_time);
 
 		glutSwapBuffers();
-		frame_last_swapped = clock();
+		frame_last_swapped = clock();				//Clock Time: Swap der Buffer
 	}
 	else{
-		Sleep(0.0001);
+		Sleep(0.0001);								//Warte für 0.1 ms
 	}
 }
 
@@ -276,9 +269,7 @@ int main(int argc, char* argv[])
 	//timing init
 	t = clock();
 	update_start = clock(); //simulation time accumulator
-	frame_ready = clock();
 	frame_last_swapped = clock();
-	t_end = clock();
 	glutMainLoop();
 	
 	return 0;
