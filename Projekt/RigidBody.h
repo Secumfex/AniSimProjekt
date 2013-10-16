@@ -13,24 +13,25 @@ using namespace std;
  * Implementation nach Rigid Body Dynamics 1
  */
 class RigidBody {
+private:
 protected:
-
+	void renormalize();
 	vector<Physics> mMassPoints;
 	Physics mCenterOfMass; //Lineare Kräfte können direkt angewandt werden
 
 	//Konstanten (meistens)
 	float mMass;
-	Matrix3 mIbody;		//Trägheitstensor
-	Matrix3 mIbody_inv;
+	Matrix3 mIbody;		//konstanter in Körperkoordinaten Trägheitstensor
+	Matrix3 mIbody_inv;	//konstanter in Körperkoordinaten inverser Trägheitstensor
 
 	//Status Variablen
-	Vector3 mX;		//Position
+	Vector3 mX;			//Position
 	Quaternion mQ;		//Rotation
 	Vector3 mP;			//Impuls
 	Vector3 mL;			//Drehimpuls (nicht zu verwechseln mit Drehmoment)
 
 	//Ableitungen
-	Matrix3 mIinv;		//Inverser Trägheitstensor
+	Matrix3 mIinv;		//Inverser, rotierter, aktueller Trägheitstensor
 	Matrix3 mR;			//Rotation als Matrix
 	Vector3 mV;			//Lineare Geschwindigkeit
 	Vector3 mOmega;		//Winkelgeschwindigkeit?
@@ -48,10 +49,13 @@ public:
 	/*Getter und Setter*/
 
 	Vector3 getPosition();
+	float getMass();
 	Vector3 getImpulse();
 	Vector3 getVelocity();
 	Quaternion getRotationQuaternion();
 	Matrix3 getRotationMatrix();
+	Vector3 getAngularVelocity();
+	Vector3 getAngularMomentum();
 
 	void setMass(float mass);
 	void setIbody(Matrix3 Ibody);
@@ -63,7 +67,7 @@ public:
 	void setImpulse(Vector3 impulse);
 	void setVelocity(Vector3 velocity);
 
-	void initValues(float mass = 1.0,
+	virtual void initValues(float mass = 1.0,
 			Matrix3 Ibody = Matrix3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
 					1.0), Vector3 position = Vector3(0, 0, 0),
 			Vector3 velocity = Vector3(0, 0, 0), Quaternion rotation =
@@ -71,7 +75,7 @@ public:
 
 	/*Misc*/
 	void applyForceAndTorque();
-	void update(float d_t);
+	virtual void update(float d_t);
 	void printState();
 
 };
@@ -83,7 +87,7 @@ class RigidStick : public RigidBody{
 
 };
 
-//Ein Block mit SeitenlÃ¤ngen a, b, c
+//Ein Block mit SeitenlÃ¤ngen a, b, c, mass
 class RigidBlock : public RigidBody{
 protected:
 	float mA;
@@ -91,9 +95,17 @@ protected:
 	float mC;
 public:
 	RigidBlock(float a = 1.0, float b = 1.0, float c = 1.0,
-			Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
+			float mass = 1.0, Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
 			Quaternion rotation = Quaternion(0,1,0,0), Vector3 angularMomentum = Vector3(0,0,0));
 	void setDimensions(float a, float b, float c);
+};
+
+//zwei Massepunkte die soundsoweit von einadner weg sind
+class RigidTwoMass : public RigidBody{
+protected:
+public:
+	RigidTwoMass(float mass1 = 1.0, float mass2 = 1.0, float distance = 1.0, Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
+			Quaternion rotation = Quaternion(0,1,0,0), Vector3 angularMomentum = Vector3(0,0,0));
 };
 
 #endif /* RIGIDBODY_H_ */

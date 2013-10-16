@@ -7,7 +7,7 @@
 
 #include "RigidBody.h"
 #include "Physics.h"
-#include <GL/glut.h>
+#include "UtilityClasses.h"
 
 /**
  * Klasse SimulationObject : ein prinzipiell dynamisches Objekt in der Simulation, z.B. Rakete, Asteroiden oder Planeten
@@ -73,20 +73,52 @@ public:
 	BlackHole(float mass = 1000.0, Vector3 position = Vector3(0,0,0));
 };
 
+class RigidSimulationObject : public SimulationObject{
+protected:
+	RigidBody mRigidBody;
+public:
+	RigidSimulationObject(float mass = 1, Matrix3 Ibody = Matrix3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,1.0),
+	Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
+	Quaternion rotation = Quaternion(0,0,0,1), Vector3 angularMomentum = Vector3(0,0,0));
+
+	RigidBody* getRigidBodyPointer();
+
+	void drawAngularMomentum();
+	void drawAngularVelocity();
+
+	virtual void update(float d_t);
+	virtual void draw();
+
+
+};
+
+class InterstellaresZweiMassePunkteObjekt : public RigidSimulationObject{
+
+public:
+	InterstellaresZweiMassePunkteObjekt(float mass1 = 0.5, float mass2 = 0.5, float distance = 1.0,
+		Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
+		Quaternion rotation = Quaternion(0,0,0,1), Vector3 angularMomentum = Vector3(0,0,0));
+
+	virtual void update(float d_t);
+	virtual void draw();
+};
+
 class InterstellarerZiegelstein: public SimulationObject{
 protected:
 	RigidBlock mRigidBody;
 	float mA,mB,mC;
 public:
 
-	InterstellarerZiegelstein(float a = 1.0, float b = 1.0, float c = 1.0,
-			Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
-			Quaternion rotation = Quaternion(0,0,0,1), Vector3 angularMomentum = Vector3(0,0,0));
+	InterstellarerZiegelstein(float a = 1.0, float b = 1.0, float c = 1.0, float mass = 1,
+	Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
+	Quaternion rotation = Quaternion(0,0,0,1), Vector3 angularMomentum = Vector3(0,0,0));
 
 	RigidBody* getRigidBodyPointer();
 
 	virtual void update(float d_t);
 	virtual void draw();
+	virtual void drawAngularMomentum();
+	virtual void drawAngularVelocity();
 };
 
 /*Verwandte Funktionen*/

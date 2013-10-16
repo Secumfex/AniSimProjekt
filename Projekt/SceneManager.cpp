@@ -36,11 +36,11 @@ inline void SceneManager::initRocketSimulation(){
 }
 
 inline void SceneManager::initInterstellareZiegelsteinSimulation(){
-	InterstellarerZiegelstein* ziegelstein = new InterstellarerZiegelstein(2.0,0.5,1.0,Vector3(0,1.0,0.0));
+	InterstellarerZiegelstein* ziegelstein = new InterstellarerZiegelstein(2.0,0.5,1.0,1,Vector3(0,1.0,0.0));
 	mSimulationObjects.push_back(ziegelstein);
 
 	ziegelstein->getRigidBodyPointer()->setImpulse(Vector3(0.0,0.0,0.0));
-	ziegelstein->getRigidBodyPointer()->setAngularMomentum(Vector3(0.2,0.0,0.0));
+	ziegelstein->getRigidBodyPointer()->setAngularMomentum(Vector3(0.0,1.0,0.0));
 }
 
 void SceneManager::init(){

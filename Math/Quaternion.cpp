@@ -180,7 +180,7 @@ Quaternion Quaternion::scale(float s){
 Quaternion Quaternion::normalized(){
 	float f;
 	if(x != 0.0 || y != 0.0 || z != 0.0 || w != 0.0){
-    	 f = 1 / std::sqrt(x * x + y * y + z * z + w * w);
+    	 f = 1 / std::sqrt(norm());
     }
     else{
     	f = 1.0;
