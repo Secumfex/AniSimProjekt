@@ -46,6 +46,9 @@ Vector3 RigidBody::getPosition(){
 float RigidBody::getMass(){
 	return mMass;
 }
+vector<Physics> RigidBody::getMassPoints(){
+	return mMassPoints;
+}
 Vector3 RigidBody::getImpulse(){
 	return mCenterOfMass.getImpulse();
 }
@@ -78,6 +81,9 @@ void RigidBody::setIbody(Matrix3 Ibody){
 void RigidBody::setPosition(Vector3 position){
 	mX = position;
 	mCenterOfMass.setPosition(position);
+	for (unsigned int i = 0; i < mMassPoints.size(); i++){
+		mMassPoints[i].setPosition(position);
+	}
 }
 void RigidBody::setPosition(float x, float y, float z){
 	mX = Vector3(x,y,z);
@@ -204,14 +210,16 @@ void RigidBlock::setDimensions(float a,float b,float c){
 
 RigidTwoMass::RigidTwoMass(float mass1, float mass2, float distance,Vector3 position, Vector3 velocity,
 		Quaternion rotation, Vector3 angularMomentum){
-	mMassPoints.push_back(Physics(mass1,Vector3(0,0,0),Vector3(-distance/2.0,0,0)));
-	mMassPoints.push_back(Physics(mass2,Vector3(0,0,0),Vector3(distance/2.0,0,0)));
+	mMassPoints.push_back(Physics(mass1,Vector3(0,0,0),position,Vector3(-distance/2.0,0,0)));
+	mMassPoints.push_back(Physics(mass2,Vector3(0,0,0),position,Vector3(distance/2.0,0,0)));
 
-	float I_yy = mass1 * (distance * distance)/4.0;
-	float I_zz = mass2 * (distance * distance)/4.0;
-	Matrix3 I_body( 0		,0	    ,	0,
+	float I_xx = 0;
+	float I_yy = mass1 * ((distance/2.0) * (distance/2.0)) + mass2 * ((distance/2.0)*(distance/2.0));
+	float I_zz = mass1 * ((distance/2.0) * (distance/2.0)) + mass2 * ((distance/2.0)*(distance/2.0));
+	Matrix3 I_body( I_xx	,0	    ,	0,
 					0		,I_yy 	,	0,
 					0		,0		,	I_zz);
+	I_body.debugPrintToCerr();
 	initValues(mass1+mass2, I_body, position, velocity, rotation, angularMomentum);
 }
 

@@ -50,6 +50,7 @@ public:
 
 	Vector3 getPosition();
 	float getMass();
+	vector<Physics> getMassPoints();
 	Vector3 getImpulse();
 	Vector3 getVelocity();
 	Quaternion getRotationQuaternion();

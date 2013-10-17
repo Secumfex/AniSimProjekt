@@ -2,6 +2,7 @@
 #define PHYSICS_H
 
 #include "Vector3.h"
+#include "Matrix3.h"
 #include <vector>
 
 using namespace std;
@@ -22,6 +23,7 @@ class Physics{
 
 	private:
 	Vector3 mPosition;
+	Vector3 mRelativePosition; //Relative Position zum Mittelpunkt (mPosition)
 	Vector3 mImpulse;
 	Vector3 mVelocity;
 	Vector3 mForceAccumulator;
@@ -44,7 +46,7 @@ class Physics{
 
 	public:
 	//Konstruktor
-	Physics(float mass = 0.0, Vector3 velocity = Vector3(0,0,0), Vector3 position = Vector3(0,0,0));
+	Physics(float mass = 0.0, Vector3 velocity = Vector3(0,0,0), Vector3 position = Vector3(0,0,0), Vector3 relativePosition = Vector3(0,0,0));
 	~Physics();
 
 	//Kraft Anwenden und anschlieﬂend Position aktualisieren
@@ -67,12 +69,17 @@ class Physics{
 	void setMass(float mass);
 	void setPosition(Vector3 position);
 	void setPosition(float x, float y, float z);
+	void setRelativePosition(Vector3 relativePosition);
+	void setRelativePosition(float x, float y, float z);
 	//Getter
 	Vector3 getPosition() const;
+	Vector3 getRelativePosition() const;
 	Vector3* getPositionPointer();
+	Vector3* getRelativePositionPointer();
 	Vector3 getVelocity() const;
 	Vector3 getImpulse() const;
 	Vector3 getAccumulatedForce() const;
+
 	float getMass() const;
 
 	//Elastisches Abprallen an Oberfl‰chennormalen (Kinematisch)
@@ -80,7 +87,7 @@ class Physics{
 	//Hilfsfunktionen ohne weitere Bedeutung
 	void recomputeImpulse();
 	void recomputeVelocity();
-
+	Matrix3 computeIntertiaTensor();
 };
 
 	/*Andere Hilfsfunktionen*/

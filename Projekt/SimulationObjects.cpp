@@ -231,20 +231,12 @@ void InterstellarerZiegelstein::drawAngularMomentum(){
 	glColor4f(currentColor[0],currentColor[1],currentColor[2],currentColor[3]);
 }
 void InterstellarerZiegelstein::drawAngularVelocity(){
-Vector3 angular_velocity = mRigidBody.getAngularVelocity();
-Vector3 position = mRigidBody.getPosition();
-	float currentColor[4];
-	glGetFloatv(GL_CURRENT_COLOR,currentColor);
-	glColor3f(0.0,0.5,0.8);
-	glPushMatrix();
-		glTranslatef(position.getX(), position.getY(), position.getZ());
-		glBegin(GL_LINES);
-			glVertex3f(0,0,0);
-			glVertex3f(angular_velocity.getX(),angular_velocity.getY(),angular_velocity.getZ());
-		glEnd();
-	glPopMatrix();
-	glColor4f(currentColor[0],currentColor[1],currentColor[2],currentColor[3]);
+	Vector3 angular_momentum = mRigidBody.getAngularMomentum();
+	Vector3 position = mRigidBody.getPosition();
+	drawVector3(angular_momentum,position,Vector3(0.0,0.5,0.8));
 }
+
+
 void InterstellarerZiegelstein::update(float d_t){
 	mRigidBody.update(d_t);
 }
@@ -284,15 +276,19 @@ RigidBody* RigidSimulationObject::getRigidBodyPointer(){
 }
 
 void RigidSimulationObject::update(float d_t){
-
+	mRigidBody.update(d_t);
 }
 
 void RigidSimulationObject::draw(){
 	Vector3 position = mRigidBody.getPosition();
+	Quaternion rot = mRigidBody.getRotationQuaternion();
 	glPushMatrix();
 		glTranslatef(position.getX(),position.getY(),position.getZ());
+		glRotatef(rot.getAngle(),rot.getX(),rot.getY(),rot.getZ());
 		glutWireTeapot(mRigidBody.getMass()/2.0);
 	glPopMatrix();
+	drawAngularMomentum();
+	drawAngularVelocity();
 }
 void RigidSimulationObject::drawAngularMomentum(){
 	Vector3 angular_momentum = mRigidBody.getAngularMomentum();
@@ -303,4 +299,35 @@ void RigidSimulationObject::drawAngularVelocity(){
 	Vector3 angular_momentum = mRigidBody.getAngularMomentum();
 	Vector3 position = mRigidBody.getPosition();
 	drawVector3(angular_momentum,position,Vector3(0.0,0.5,0.8));
+}
+
+InterstellaresZweiMassePunkteObjekt::InterstellaresZweiMassePunkteObjekt(float mass1, float mass2, float distance, Vector3 position, Vector3 velocity, Quaternion rotation, Vector3 angularMomentum){
+	mRigidBody = RigidTwoMass(mass1,mass2,distance,position,velocity,rotation,angularMomentum);
+}
+
+void InterstellaresZweiMassePunkteObjekt::draw(){
+	float currentColor[4];
+	glGetFloatv(GL_CURRENT_COLOR,currentColor);
+
+	vector<Physics> mp = mRigidBody.getMassPoints();
+	Quaternion rot = mRigidBody.getRotationQuaternion();
+	Vector3 pos = mRigidBody.getPosition();
+	glPushMatrix();
+		glTranslatef(pos.getX(),pos.getY(),pos.getZ());
+		glRotatef(rot.getAngle(),rot.getX(),rot.getY(),rot.getZ());
+		glColor3f(0.4,1.0,0.4);
+		glutWireSphere(mRigidBody.getMass()/4.0,10,5);
+		glColor3f(1.0,0.0,0.4);
+		for (unsigned int i = 0; i < mp.size(); i++){
+			Vector3 rel_pos = mp[i].getRelativePosition();
+			glPushMatrix();
+				glTranslatef(rel_pos.getX(),rel_pos.getY(),rel_pos.getZ());
+				glutWireSphere(mp[i].getMass()/4.0,10,5);
+			glPopMatrix();
+		}
+	glPopMatrix();
+	glColor4f(currentColor[0],currentColor[1],currentColor[2],currentColor[3]);
+}
+void InterstellaresZweiMassePunkteObjekt::update(float d_t){
+	RigidSimulationObject::update(d_t);
 }

@@ -92,6 +92,7 @@ public:
 
 };
 
+//Objekt mit zwei Massepunkten aka Physi
 class InterstellaresZweiMassePunkteObjekt : public RigidSimulationObject{
 
 public:
@@ -103,6 +104,7 @@ public:
 	virtual void draw();
 };
 
+//Vorsicht: noch kein RigidSimulationObject!
 class InterstellarerZiegelstein: public SimulationObject{
 protected:
 	RigidBlock mRigidBody;

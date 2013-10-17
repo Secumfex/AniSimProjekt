@@ -1,10 +1,11 @@
 #include "Physics.h"
 
 	//Masse 0 -> solid
-Physics::Physics(float mass, Vector3 velocity, Vector3 position){
+Physics::Physics(float mass, Vector3 velocity, Vector3 position, Vector3 relativePosition){
 	setMass(mass);
 	setVelocity(velocity);
 	setPosition(position);
+	setRelativePosition(relativePosition);
 	mIntegrationMode = 1;
 }
 
@@ -49,7 +50,12 @@ void Physics::setMass(float mass){
 void Physics::setPosition(Vector3 position){
 	mPosition = position;
 }
-
+void Physics::setRelativePosition(Vector3 relativePosition){
+	mRelativePosition = relativePosition;
+}
+void Physics::setRelativePosition(float x, float y, float z){
+	mRelativePosition = Vector3(x,y,z);
+}
 void Physics::setPosition(float x, float y, float z){
 	mPosition.setX(x);
 	mPosition.setY(y);
@@ -62,12 +68,17 @@ float Physics::getMass() const{
 }
 
 Vector3 Physics::getPosition() const{
-	return mPosition;
+	return mPosition + mRelativePosition;
 }
-
+Vector3 Physics::getRelativePosition() const{
+	return mRelativePosition;
+}
 Vector3* Physics::getPositionPointer(){
 	Vector3* pointer = &mPosition;
 	return pointer;
+}
+Vector3* Physics::getRelativePositionPointer(){
+	return &mRelativePosition;
 }
 
 Vector3 Physics::getVelocity() const{
