@@ -66,8 +66,7 @@ Vector3 Physics::getPosition() const{
 }
 
 Vector3* Physics::getPositionPointer(){
-	Vector3* pointer = &mPosition;
-	return pointer;
+	return &mPosition;
 }
 
 
@@ -224,8 +223,8 @@ RelativePhysics::RelativePhysics(float mass, Vector3 velocity, Vector3* centerPo
 	setVelocity(velocity);
 	setCenterPositionPointer(centerPosition);
 	setRelativePosition(relativePosition);
-	relativePosition.debugPrintToCerr();
 	setRotationPointer(rotation);
+
 	mIntegrationMode = 1;
 
 }
@@ -262,8 +261,12 @@ Vector3* RelativePhysics::getCenterPositionPointer(){
 }
 //Gibt statt der normalen Position die rotierte um relative position verschobene CenterPosition zurück
 Vector3 RelativePhysics::getPosition() const{
+	mRotation->debugPrintToCerr();
 	Matrix3 rot = mRotation->computeRotationMatrix();
+//	rot.debugPrintToCerr();
 	Vector3 res = rot*mRelativePosition;
+//	res.debugPrintToCerr();
 	res += *mCenterPosition;
+//	res.debugPrintToCerr();
 	return res;
 }

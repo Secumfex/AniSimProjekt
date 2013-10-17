@@ -79,7 +79,7 @@ protected:
 public:
 	RigidSimulationObject(float mass = 1, Matrix3 Ibody = Matrix3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,1.0),
 	Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
-	Quaternion rotation = Quaternion(0,0,0,1), Vector3 angularMomentum = Vector3(0,0,0));
+	Quaternion rotation = Quaternion(1,0,0,0), Vector3 angularMomentum = Vector3(0,0,0));
 
 	RigidBody* getRigidBodyPointer();
 
@@ -98,7 +98,7 @@ class InterstellaresZweiMassePunkteObjekt : public RigidSimulationObject{
 public:
 	InterstellaresZweiMassePunkteObjekt(float mass1 = 0.5, float mass2 = 0.5, float distance = 1.0,
 		Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
-		Quaternion rotation = Quaternion(0,0,0,1), Vector3 angularMomentum = Vector3(0,0,0));
+		Quaternion rotation = Quaternion(1,0,0,0), Vector3 angularMomentum = Vector3(0,0,0));
 
 	virtual void update(float d_t);
 	virtual void draw();
@@ -113,7 +113,7 @@ public:
 
 	InterstellarerZiegelstein(float a = 1.0, float b = 1.0, float c = 1.0, float mass = 1,
 	Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
-	Quaternion rotation = Quaternion(0,0,0,1), Vector3 angularMomentum = Vector3(0,0,0));
+	Quaternion rotation = Quaternion(1,0,0,0), Vector3 angularMomentum = Vector3(0,0,0));
 
 	RigidBody* getRigidBodyPointer();
 

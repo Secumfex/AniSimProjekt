@@ -45,7 +45,7 @@ Vector3 RigidBody::getPosition(){
 float RigidBody::getMass(){
 	return mCenterOfMass.getMass();
 }
-vector<Physics> RigidBody::getMassPoints(){
+vector<Physics* > RigidBody::getMassPoints(){
 	return mMassPoints;
 }
 Vector3 RigidBody::getImpulse(){
@@ -80,9 +80,6 @@ void RigidBody::setIbody(Matrix3 Ibody){
 void RigidBody::setPosition(Vector3 position){
 	mX = position;
 	mCenterOfMass.setPosition(position);
-	for (unsigned int i = 0; i < mMassPoints.size(); i++){
-		mMassPoints[i].setPosition(position);
-	}
 }
 void RigidBody::setPosition(float x, float y, float z){
 	mX = Vector3(x,y,z);
@@ -90,7 +87,6 @@ void RigidBody::setPosition(float x, float y, float z){
 }
 void RigidBody::setRotation(Quaternion rotation){
 	mQ = rotation.normalized();
-
 }
 
 void RigidBody::setAngularMomentum(Vector3 angularMomentum){
@@ -209,8 +205,9 @@ void RigidBlock::setDimensions(float a,float b,float c){
 
 RigidTwoMass::RigidTwoMass(float mass1, float mass2, float distance,Vector3 position, Vector3 velocity,
 	Quaternion rotation, Vector3 angularMomentum){
-	mMassPoints.push_back(RelativePhysics(mass1,Vector3(0,0,0),mCenterOfMass.getPositionPointer(),Vector3(-distance/2.0,0,0), &mQ));
-	mMassPoints.push_back(RelativePhysics(mass2,Vector3(0,0,0),mCenterOfMass.getPositionPointer(),Vector3(distance/2.0,0,0), &mQ));
+
+	mMassPoints.push_back(new RelativePhysics(mass1,Vector3(0,0,0),mCenterOfMass.getPositionPointer(),Vector3(-distance/2.0,0,0), &mQ));
+	mMassPoints.push_back(new RelativePhysics(mass2,Vector3(0,0,0),mCenterOfMass.getPositionPointer(),Vector3(distance/2.0,0,0), &mQ));
 
 	float I_xx = 0;
 	float I_yy = mass1 * ((distance/2.0) * (distance/2.0)) + mass2 * ((distance/2.0)*(distance/2.0));
@@ -218,7 +215,6 @@ RigidTwoMass::RigidTwoMass(float mass1, float mass2, float distance,Vector3 posi
 	Matrix3 I_body( I_xx	,0	    ,	0,
 					0		,I_yy 	,	0,
 					0		,0		,	I_zz);
-	//I_body.debugPrintToCerr();
 	initValues(mass1+mass2, I_body, position, velocity, rotation, angularMomentum);
 }
 

@@ -16,7 +16,7 @@ class RigidBody {
 private:
 protected:
 	void renormalize();
-	vector<Physics> mMassPoints;
+	vector<Physics* > mMassPoints;
 	Physics mCenterOfMass; //Lineare Kräfte können direkt angewandt werden
 
 	//Konstanten (meistens)
@@ -43,14 +43,14 @@ protected:
 public:
 	 RigidBody(float mass = 1.0, Matrix3 Ibody = Matrix3(1.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0),
 			  Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
-			  Quaternion rotation = Quaternion(), Vector3 angularMomentum = Vector3(0,0,0));
+			  Quaternion rotation = Quaternion(1,0,0,0), Vector3 angularMomentum = Vector3(0,0,0));
 	virtual ~RigidBody();
 
 	/*Getter und Setter*/
 
 	Vector3 getPosition();
 	float getMass();
-	vector<Physics> getMassPoints();
+	vector<Physics* > getMassPoints();
 	Vector3 getImpulse();
 	Vector3 getVelocity();
 	Quaternion getRotationQuaternion();
@@ -72,7 +72,7 @@ public:
 			Matrix3 Ibody = Matrix3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
 					1.0), Vector3 position = Vector3(0, 0, 0),
 			Vector3 velocity = Vector3(0, 0, 0), Quaternion rotation =
-					Quaternion(), Vector3 angularMomentum = Vector3(0, 0, 0));
+					Quaternion(1,0,0,0), Vector3 angularMomentum = Vector3(0, 0, 0));
 
 	/*Misc*/
 	void applyForceAndTorque();
@@ -97,7 +97,7 @@ protected:
 public:
 	RigidBlock(float a = 1.0, float b = 1.0, float c = 1.0,
 			float mass = 1.0, Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
-			Quaternion rotation = Quaternion(0,1,0,0), Vector3 angularMomentum = Vector3(0,0,0));
+			Quaternion rotation = Quaternion(1,0,0,0), Vector3 angularMomentum = Vector3(0,0,0));
 	void setDimensions(float a, float b, float c);
 };
 
@@ -106,7 +106,7 @@ class RigidTwoMass : public RigidBody{
 protected:
 public:
 	RigidTwoMass(float mass1 = 1.0, float mass2 = 1.0, float distance = 1.0, Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
-			Quaternion rotation = Quaternion(0,1,0,0), Vector3 angularMomentum = Vector3(0,0,0));
+			Quaternion rotation = Quaternion(1,0,0,0), Vector3 angularMomentum = Vector3(0,0,0));
 };
 
 #endif /* RIGIDBODY_H_ */

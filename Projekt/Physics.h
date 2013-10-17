@@ -106,8 +106,6 @@ public:
 	void setRelativePosition(Vector3 relativePosition);
 	void setRelativePosition(float x, float y, float z);
 	void setRotationPointer(Quaternion* rotation);
-
-
 };
 
 
