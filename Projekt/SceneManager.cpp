@@ -46,7 +46,7 @@ inline void SceneManager::initInterstellareZiegelsteinSimulation(){
 	mSimulationObjects.push_back(zweiMassePunkteObjekt);
 
 	zweiMassePunkteObjekt->getRigidBodyPointer()->setImpulse(Vector3(0.0,0.0,0.0));
-	zweiMassePunkteObjekt->getRigidBodyPointer()->setAngularMomentum(Vector3(1.0,1.0,0.0));
+	zweiMassePunkteObjekt->getRigidBodyPointer()->setAngularMomentum(Vector3(1.0,2.0,3.0));
 }
 
 void SceneManager::init(){

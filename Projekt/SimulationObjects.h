@@ -75,7 +75,7 @@ public:
 
 class RigidSimulationObject : public SimulationObject{
 protected:
-	RigidBody mRigidBody;
+	RigidBody* mRigidBody;
 public:
 	RigidSimulationObject(float mass = 1, Matrix3 Ibody = Matrix3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,1.0),
 	Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),

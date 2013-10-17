@@ -261,7 +261,7 @@ Vector3* RelativePhysics::getCenterPositionPointer(){
 }
 //Gibt statt der normalen Position die rotierte um relative position verschobene CenterPosition zurück
 Vector3 RelativePhysics::getPosition() const{
-	mRotation->debugPrintToCerr();
+//	mRotation->debugPrintToCerr();
 	Matrix3 rot = mRotation->computeRotationMatrix();
 //	rot.debugPrintToCerr();
 	Vector3 res = rot*mRelativePosition;
