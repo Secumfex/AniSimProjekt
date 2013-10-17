@@ -1,11 +1,10 @@
 #include "Physics.h"
 
 	//Masse 0 -> solid
-Physics::Physics(float mass, Vector3 velocity, Vector3 position, Vector3 relativePosition){
+Physics::Physics(float mass, Vector3 velocity, Vector3 position){
 	setMass(mass);
 	setVelocity(velocity);
 	setPosition(position);
-	setRelativePosition(relativePosition);
 	mIntegrationMode = 1;
 }
 
@@ -50,12 +49,7 @@ void Physics::setMass(float mass){
 void Physics::setPosition(Vector3 position){
 	mPosition = position;
 }
-void Physics::setRelativePosition(Vector3 relativePosition){
-	mRelativePosition = relativePosition;
-}
-void Physics::setRelativePosition(float x, float y, float z){
-	mRelativePosition = Vector3(x,y,z);
-}
+
 void Physics::setPosition(float x, float y, float z){
 	mPosition.setX(x);
 	mPosition.setY(y);
@@ -68,18 +62,14 @@ float Physics::getMass() const{
 }
 
 Vector3 Physics::getPosition() const{
-	return mPosition + mRelativePosition;
+	return mPosition;
 }
-Vector3 Physics::getRelativePosition() const{
-	return mRelativePosition;
-}
+
 Vector3* Physics::getPositionPointer(){
 	Vector3* pointer = &mPosition;
 	return pointer;
 }
-Vector3* Physics::getRelativePositionPointer(){
-	return &mRelativePosition;
-}
+
 
 Vector3 Physics::getVelocity() const{
 	return mVelocity;
@@ -228,4 +218,52 @@ void collide(Physics* lhs, const Vector3& lhsNormal, Physics* rhs, const Vector3
 	 lhs->applyForce(totalForceAgainstLhs);
 	 rhs->applyForce(totalForceAgainstRhs);
 	}
+}
+RelativePhysics::RelativePhysics(float mass, Vector3 velocity, Vector3* centerPosition, Vector3 relativePosition, Quaternion* rotation){
+	setMass(mass);
+	setVelocity(velocity);
+	setCenterPositionPointer(centerPosition);
+	setRelativePosition(relativePosition);
+	relativePosition.debugPrintToCerr();
+	setRotationPointer(rotation);
+	mIntegrationMode = 1;
+
+}
+void RelativePhysics::setRelativePosition(Vector3 relativePosition){
+	mRelativePosition = relativePosition;
+}
+void RelativePhysics::setRelativePosition(float x, float y, float z){
+	mRelativePosition = Vector3(x,y,z);
+}
+void RelativePhysics::setRotationPointer(Quaternion* rotation){
+	mRotation = rotation;
+}
+Vector3 RelativePhysics::getRelativePosition() const{
+	return mRelativePosition;
+}
+Vector3* RelativePhysics::getRelativePositionPointer(){
+	return &mRelativePosition;
+}
+Vector3* RelativePhysics::getPositionPointer(){
+	return mCenterPosition;
+}
+void RelativePhysics::setPosition(Vector3 position){
+	*mCenterPosition = position;
+}
+void RelativePhysics::setPosition(float x, float y, float z){
+	*mCenterPosition = Vector3(x,y,z);
+}
+
+void RelativePhysics::setCenterPositionPointer(Vector3* centerPosition){
+	mCenterPosition=centerPosition;
+}
+Vector3* RelativePhysics::getCenterPositionPointer(){
+	return mCenterPosition;
+}
+//Gibt statt der normalen Position die rotierte um relative position verschobene CenterPosition zurück
+Vector3 RelativePhysics::getPosition() const{
+	Matrix3 rot = mRotation->computeRotationMatrix();
+	Vector3 res = rot*mRelativePosition;
+	res += *mCenterPosition;
+	return res;
 }

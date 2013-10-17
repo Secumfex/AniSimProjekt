@@ -318,14 +318,15 @@ void InterstellaresZweiMassePunkteObjekt::draw(){
 		glColor3f(0.4,1.0,0.4);
 		glutWireSphere(mRigidBody.getMass()/4.0,10,5);
 		glColor3f(1.0,0.0,0.4);
-		for (unsigned int i = 0; i < mp.size(); i++){
-			Vector3 rel_pos = mp[i].getRelativePosition();
-			glPushMatrix();
-				glTranslatef(rel_pos.getX(),rel_pos.getY(),rel_pos.getZ());
-				glutWireSphere(mp[i].getMass()/4.0,10,5);
-			glPopMatrix();
-		}
 	glPopMatrix();
+	for (unsigned int i = 0; i < mp.size(); i++){
+		glPushMatrix();
+			pos = mp[i].getPosition();
+			glTranslatef(pos.getX(), pos.getY(), pos.getZ());
+			glRotatef(rot.getAngle(),rot.getX(),rot.getY(),rot.getZ());
+			glutWireSphere(mp[i].getMass()/4.0,10,5);
+		glPopMatrix();
+	}
 	glColor4f(currentColor[0],currentColor[1],currentColor[2],currentColor[3]);
 }
 void InterstellaresZweiMassePunkteObjekt::update(float d_t){
