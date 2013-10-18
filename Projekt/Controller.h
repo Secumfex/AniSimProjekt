@@ -35,6 +35,9 @@ private:
 		void setCameraPointer(Camera* cam);
 		void setTracer(TimedPointTracer* tracer);
 		void setScene(SceneManager* scene);
+
+		void keyPressed(int key);
+
 		void prelaunched(int key);
 		void launched(int key);
 		void remaining(int key);

@@ -97,6 +97,10 @@ void Rocket::setDirection(Vector3 direction){
 	mDirection = direction;
 }
 
+Vector3 Rocket::getDirection(){
+	return mDirection;
+}
+
 
 //Solange nix besseres: Default draw methode + Richtung
 void Rocket::draw(){

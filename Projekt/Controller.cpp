@@ -37,14 +37,37 @@ void Controller:: setScene(SceneManager* scene){
 	mSceneManager = scene;
 }
 
+void Controller::keyPressed(int key){
+	if(mSceneManager ->getPlayerRocket()->isLaunched())
+		launched(key);
+	else if(!mSceneManager -> getPlayerRocket()->isLaunched())
+		prelaunched(key);
+
+
+	remaining(key);
+}
+
 void Controller:: prelaunched(int key){
 	//Raketenstart
 	if (key == ' '){
 			if(mRocketPointer != NULL){
 				mRocketPointer->launch();
 			}
-
-}
+		}
+	switch (key) {
+		case GLUT_KEY_UP :
+			mRocketPointer -> setDirection(mRocketPointer -> getDirection().rotate(Vector3(1,0,0),1));
+				break;
+		case GLUT_KEY_DOWN :
+			mRocketPointer -> setDirection(mRocketPointer -> getDirection().rotate(Vector3(1,0,0),-1));
+				break;
+		case GLUT_KEY_LEFT :
+			mRocketPointer -> setDirection(mRocketPointer -> getDirection().rotate(Vector3(0,0,1),1));
+				break;
+		case GLUT_KEY_RIGHT :
+			mRocketPointer -> setDirection(mRocketPointer -> getDirection().rotate(Vector3(0,0,1),-1));
+				break;
+	}
 }
 void Controller:: launched(int key){}
 

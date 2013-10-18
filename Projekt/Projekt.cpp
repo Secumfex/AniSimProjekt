@@ -45,13 +45,7 @@ void Projekt::update(float d_t){
 //TODO INPUT / OUTPUT Manager
 void Projekt::keyPressed(int key){
 
-	if(mSceneManager.getPlayerRocket()->isLaunched())
-		mController.launched(key);
-	else if(!mSceneManager.getPlayerRocket()->isLaunched())
-		mController.prelaunched(key);
-
-
-	mController.remaining(key);
+	mController.keyPressed(key);
 //	if (key == ' '){
 //		if(mSceneManager.getPlayerRocket() != NULL){
 //			mSceneManager.getPlayerRocket()->launch();
