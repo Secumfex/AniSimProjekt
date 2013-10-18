@@ -30,6 +30,7 @@ private:
 	SceneManager* mSceneManager;
 	//---------------MEMBER FUNCTIONS------------
 	public:
+		void resetObjectPointers();
 		void setRocketPointer(Rocket* rocket);
 		void setCameraPointer(Camera* cam);
 		void setTracer(TimedPointTracer* tracer);

@@ -15,10 +15,12 @@ Projekt::~Projekt(){
 
 void Projekt::init(){
 	mSceneManager.init();
-	//Sonst potentielle NULL-Pointer Exception beim update
 	rocketTracer = NULL;
+
+	mController.setScene(&mSceneManager);
 	mController.setCameraPointer(mCamera);
-	mController.setRocketPointer(mSceneManager.getPlayerRocket());
+
+	mController.resetObjectPointers();
 }
 
 void Projekt::draw(){

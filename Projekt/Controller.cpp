@@ -17,6 +17,12 @@ Controller::~Controller() {
 	// TODO Auto-generated destructor stub
 }
 
+void Controller::resetObjectPointers(){
+	if (mSceneManager != NULL){
+		setRocketPointer( mSceneManager->getPlayerRocket() );
+	}
+}
+
 void Controller:: setRocketPointer(Rocket* rocket){
 	mRocketPointer = rocket;
 }
@@ -47,7 +53,10 @@ void Controller:: remaining(int key){
 	//HIER IS DER WURM DRIN
 	if(key == 'r'){
 		mSceneManager -> reset();
-		mRocketPointer = mSceneManager -> getPlayerRocket();
+
+		//Lade neue Objekt Pointer, denn die alten sind futsch
+		resetObjectPointers();
+
 		if(rocketTracer!= NULL){
 			rocketTracer = NULL;
 		}
