@@ -35,6 +35,8 @@ void applyGlobalForces(float d_t);
 	inline void initInterstellareZiegelsteinSimulation();
 
 public:
+	/*Methode um ein SimulationsObject vollständig bei der Force anzumelden*/
+	void registerSimulationObjectAtForce(SimulationObject* simulationObject, Force* force);
 
 	Rocket* getPlayerRocket();
 

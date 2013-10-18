@@ -36,7 +36,10 @@ inline void SceneManager::initRocketSimulation(){
 }
 
 inline void SceneManager::initInterstellareZiegelsteinSimulation(){
-//	InterstellarerZiegelstein* ziegelstein = new InterstellarerZiegelstein(2.0,0.5,1.0,1,Vector3(0,1.0,0.0));
+	SimpleForce* gravity = new SimpleForce(Vector3(0.0,-10.0,0.0));
+	mGlobalForceObjects.push_back(gravity);
+
+	//	InterstellarerZiegelstein* ziegelstein = new InterstellarerZiegelstein(2.0,0.5,1.0,1,Vector3(0,1.0,0.0));
 //	mSimulationObjects.push_back(ziegelstein);
 //
 //	ziegelstein->getRigidBodyPointer()->setImpulse(Vector3(0.0,0.0,0.0));
@@ -68,8 +71,15 @@ ObjectFactory  einfügen*/
 //Alle Objekte bei GlobalForces Anmelden
 	for (unsigned int i = 0; i < mSimulationObjects.size(); i ++){
 		for (unsigned int j = 0; j < mGlobalForceObjects.size();j++){
-			mGlobalForceObjects[j]->addInfluencedPhysics(mSimulationObjects[i]->getPhysics());
+			registerSimulationObjectAtForce(mSimulationObjects[i],mGlobalForceObjects[j]);
 		}
+	}
+}
+
+void SceneManager::registerSimulationObjectAtForce(SimulationObject* simulationObject, Force* force){
+	vector<Physics* > mp;
+	for (unsigned int i = 0; i < mp.size(); i++ ){
+		force->addInfluencedPhysics(mp[i]);
 	}
 }
 

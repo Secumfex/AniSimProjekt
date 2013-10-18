@@ -25,6 +25,8 @@ public:
 	//Setzen der Massepunkt-Membervariablen
 	void setPhysicsMembers(float mass, Vector3 velocity, Vector3 position);
 
+	//Liefert den einzigen Massepunkt zurück falls es eh nur den einen gibt
+	virtual vector<Physics* > getPhysicsList();
 	Physics* getPhysics();
 };
 
@@ -82,6 +84,7 @@ public:
 	Quaternion rotation = Quaternion(1,0,0,0), Vector3 angularMomentum = Vector3(0,0,0));
 
 	RigidBody* getRigidBodyPointer();
+	vector<Physics* > getPhysicsList();
 
 	void drawAngularMomentum();
 	void drawAngularVelocity();
