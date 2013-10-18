@@ -143,24 +143,79 @@ void Rocket::draw(){
 
 //TODO: Male/Importiere Rakete
 void Rocket::drawRocket(){
-glBegin(GL_TRIANGLE_STRIP);
-glColor3f(0.0, 1.0, 0.0);
-glVertex3f(-0.25, 0.0, 0.0);
-glVertex3f(0.25, 0.0, 0.0);
-glVertex3f(0.0, 1.0, 0.0);
-glColor3f(1.0, 0.0, 0.0);
-glVertex3f(0.0, 0.0, -0.25);
-glVertex3f(0.0, 0.0, 0.25);
-glVertex3f(0.0, 1.0, 0.0);
-glEnd();
 
+	glPushMatrix();
+
+	glBegin(GL_TRIANGLE_STRIP);
+	glColor3f(0.5, 0.5, 0.7);
+	glVertex3f(-0.25, -1.0, 0.25);
+	glVertex3f(0.25, -1.0, 0.25);
+	glVertex3f(-0.25, 0.8, 0.25);
+	glVertex3f(0.25, 0.8, 0.25);
+	glEnd();
+
+	glBegin(GL_TRIANGLE_STRIP);
+	glColor3f(0.5, 0.5, 0.7);
+	glVertex3f(-0.25, -1.0, -0.25);
+	glVertex3f(0.25, -1.0, -0.25);
+	glVertex3f(-0.25, 0.8, -0.25);
+	glVertex3f(0.25, 0.8, -0.25);
+	glEnd();
+
+	glBegin(GL_TRIANGLE_STRIP);
+	glColor3f(0.4, 0.4, 0.6);
+	glVertex3f(0.25, -1.0, -0.25);
+	glVertex3f(0.25, -1.0, 0.25);
+	glVertex3f(0.25, 0.8, -0.25);
+	glVertex3f(0.25, 0.8, 0.25);
+	glEnd();
+
+	glBegin(GL_TRIANGLE_STRIP);
+	glColor3f(0.4, 0.4, 0.6);
+	glVertex3f(-0.25, -1.0, -0.25);
+	glVertex3f(-0.25, -1.0, 0.25);
+	glVertex3f(-0.25, 0.8, -0.25);
+	glVertex3f(-0.25, 0.8, 0.25);
+	glEnd();
+
+	glColor3f(0.2, 0.2, 0.2);
+
+	glBegin(GL_TRIANGLE_STRIP);
+		glVertex3f(-0.25, -1.0, -0.25);
+		glVertex3f(-0.25, -1.0, 0.25);
+		glVertex3f(0.25, -1.0, -0.25);
+		glVertex3f(0.25, -1.0, 0.25);
+		glEnd();
+
+	glColor3f(0.8, 0.0, 0.0);
+	glBegin(GL_TRIANGLE_STRIP);
+	glVertex3f(0.4, -1.0, 0.0);
+	glVertex3f(-0.4, -1.0, 0.0);
+	glVertex3f(-0.25, -0.8, 0.0);
+	glVertex3f(0.25, -0.8, 0.0);
+	glEnd();
+
+	glBegin(GL_TRIANGLE_STRIP);
+	glVertex3f(0.0, -1.0, 0.4);
+	glVertex3f(0.0, -1.0, -0.4);
+	glVertex3f(0.0, -0.8, -0.25);
+	glVertex3f(0.0, -0.8, 0.25);
+	glEnd();
+
+	glTranslated(0.0, 0.8, 0.0);
+	glRotated(90, -1, 0, 0);
+	glutSolidCone(0.35, 0.5, 6, 6);
+
+	glPopMatrix();
 }
 
 void Rocket::drawTail(){
-	glColor3f(1.0, 1.0, 0.0);
-	glTranslatef(0.0, -0.5, 0.0);
 
-	glutWireSphere(0.3, 4, 5);
+	glColor3f(1.0, 1.0, 0.0);
+	glTranslatef(0.0, -1.1, 0.0);
+	glRotated(90, 1, 0, 0);
+	glutSolidCone(0.1, 0.2, 6, 6);
+
 
 }
 
