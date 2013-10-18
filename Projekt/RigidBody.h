@@ -77,6 +77,9 @@ public:
 	/*Misc*/
 	void applyForceAndTorque();
 	virtual void update(float d_t);
+
+	//Berechnet Drehmoment und Lineare Kraft auf Center Of Mass
+	virtual void updateLinearForceAndTorque(float d_t);
 	void printState();
 
 };

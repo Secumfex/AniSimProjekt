@@ -46,6 +46,12 @@ float RigidBody::getMass(){
 	return mCenterOfMass.getMass();
 }
 vector<Physics* > RigidBody::getMassPoints(){
+	if(mMassPoints.size() == 0){
+		vector<Physics* > mp;
+		mp.push_back(&mCenterOfMass);
+		return mp;
+	}
+
 	return mMassPoints;
 }
 Vector3 RigidBody::getImpulse(){
@@ -119,6 +125,28 @@ void RigidBody::setMass(float mass){
 
 /*********** Funktionalität ***********/
 
+void RigidBody::updateLinearForceAndTorque(float d_t){
+	Vector3 forceAcc(0,0,0);
+	Vector3 torqueAcc(0,0,0);
+	Vector3 r(0,0,0);
+	Vector3 f(0,0,0);
+	Vector3 t(0,0,0);
+	vector<Physics* > mp = getMassPoints();
+	for (unsigned int i = 0; i < mp.size(); i++)
+	{
+		r = mp[i]->getPosition()-getPosition();
+		f = mp[i]->getAccumulatedForce();
+
+		t = r.cross(f);
+		forceAcc+=f;
+		torqueAcc+=t;
+
+		mp[i]->clearAccumulatedForce();
+	}
+	mTorque = torqueAcc;
+	mCenterOfMass.applyForce(forceAcc);
+}
+
 /**
  * Annahme: torque und force wurden für d_t bereits berechnet
  */
@@ -128,6 +156,8 @@ void RigidBody::update(float d_t){
 	//UpdatePosition
 	//	Vector3 Xdot = mV*d_t;
 	//	setPosition(mX+Xdot);
+
+	updateLinearForceAndTorque(d_t);
 
 	//UpdateRotation
 	Quaternion OmegaQuat(0.0,mOmega);
