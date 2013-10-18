@@ -51,6 +51,8 @@ class Rocket : public SimulationObject{
 	 virtual void update(float d_t);
 	 virtual void draw();
 
+	 bool isLaunched();
+
 	 void launch();
 	 float getFuel();
 

@@ -41,6 +41,10 @@ Rocket::Rocket(float fuel, float fuelPower, Vector3 direction, Vector3 position)
     setPhysicsMembers(mFuel+10.0,Vector3(0,0,0),position);
 }
 
+bool Rocket::isLaunched(){
+	return mMode == LAUNCHED;
+}
+
 //Launch Rocket --> nur, wenn noch nicht gelaunched
 void Rocket::launch(){
 	if (mMode == PRELAUNCH){
