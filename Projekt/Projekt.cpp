@@ -52,7 +52,7 @@ void Projekt::keyPressed(int key){
 		}
 		if (mCamera != NULL){
 			mCamera->setLookAt(Vector3(0,0,0));
-			mCamera->setPosition(Vector3(0.0, 5.0, 5.0));
+			mCamera->setPosition(Vector3(0.0, 5.0, 15.0));
 			mCamera->setDirection(Vector3(0.0, 0.0, -1.0));
 		}
 	}
