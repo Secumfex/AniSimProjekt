@@ -4,6 +4,7 @@
 #include <iostream>
 #include "BasisApplication.h"
 #include "SceneManager.h"
+#include "Controller.h"
 
 using namespace std;
 
@@ -17,6 +18,7 @@ class Projekt : public BasisApplication
 	//---------------MEMBER VARIABLES---------------------
 	protected:
 		SceneManager mSceneManager;
+		Controller mController;
 
 	//---------------MEMBER FUNCTIONS---------------------
 	private:

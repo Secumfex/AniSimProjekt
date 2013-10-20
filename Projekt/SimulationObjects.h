@@ -51,12 +51,16 @@ class Rocket : public SimulationObject{
 	 virtual void update(float d_t);
 	 virtual void draw();
 
+	 bool isLaunched();
+
 	 void launch();
 	 float getFuel();
 
 	 void setDirection(Vector3 direction);
 	 void setFuel(float fuel);
 	 void setFuelPower(float fuelPower);
+
+	 Vector3 getDirection();
 
  };
 
