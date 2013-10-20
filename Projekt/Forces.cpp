@@ -183,18 +183,15 @@ void GravitationalForce::apply_fun(float d_t){
 			if (distance < getMaxDistance() && distance >= 0.01){
 				distanceVector.normalize();
 				//Anziehungskraft berechnen
-				float Rhs_force = mScale * (rhs->getMass() / distance);
+				float force = mScale * (rhs->getMass()*lhs->getMass() / (distance*distance));
 				//Anziehungskraft in Ordnung
-				if (Rhs_force > getMinForce()){
+				if (force > getMinForce()){
 					Vector3 Rhs_forceVector = distanceVector;
-					Rhs_forceVector *= Rhs_force;
+					Rhs_forceVector *= force;
 					//Anziehungskraft um d_t skaliert anwenden
 					lhs->applyForce(Rhs_forceVector*d_t);
-				}
-				float Lhs_force = mScale * (lhs->getMass() / distance);
-				if (Lhs_force > getMinForce()){
 					Vector3 Lhs_forceVector = (-1.0) * distanceVector;
-					Lhs_forceVector *= Lhs_force;
+					Lhs_forceVector *= force;
 					//Anziehungskraft um d_t skaliert anwenden
 					rhs->applyForce(Lhs_forceVector*d_t);
 				}

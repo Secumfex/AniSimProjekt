@@ -39,7 +39,7 @@ inline void SceneManager::initInterstellareZiegelsteinSimulation(){
 //	SimpleForce* gravity = new SimpleForce(Vector3(0.0,-1.0,0.0));
 //	mGlobalForceObjects.push_back(gravity);
 	//Anziehungskraft untereinander
-	GravitationalForce* gravitation = new GravitationalForce(100.0,0.0,5.0);
+	GravitationalForce* gravitation = new GravitationalForce(100.0,0.0,1.0);
 	mGlobalForceObjects.push_back(gravitation);
 
 
@@ -49,13 +49,13 @@ inline void SceneManager::initInterstellareZiegelsteinSimulation(){
 //	ziegelstein->getRigidBodyPointer()->setImpulse(Vector3(0.0,0.0,0.0));
 //	ziegelstein->getRigidBodyPointer()->setAngularMomentum(Vector3(0.0,1.0,0.0));
 
-	InterstellaresZweiMassePunkteObjekt* zweiMassePunkteObjekt = new InterstellaresZweiMassePunkteObjekt(0.2,0.5,1.0,Vector3(0.0,3.0,0.0));
+	InterstellaresZweiMassePunkteObjekt* zweiMassePunkteObjekt = new InterstellaresZweiMassePunkteObjekt(0.5,0.5,1.0,Vector3(0.0,0.0,0.0));
 	mSimulationObjects.push_back(zweiMassePunkteObjekt);
 
-	zweiMassePunkteObjekt->getRigidBodyPointer()->setImpulse(Vector3(0.0,0.0,0.0));
+	zweiMassePunkteObjekt->getRigidBodyPointer()->setImpulse(Vector3(10.0,0.0,0.0));
 	zweiMassePunkteObjekt->getRigidBodyPointer()->setAngularMomentum(Vector3(0.0,0.0,0.0));
 
-	SimulationObject* black_hole0 = new BlackHole(10.0,Vector3(3.0,5.0,0.0));
+	SimulationObject* black_hole0 = new BlackHole(1000.0,Vector3(0.0,6.0,0.0));
 	mSimulationObjects.push_back(black_hole0);
 
 }

@@ -236,15 +236,24 @@ void RigidBlock::setDimensions(float a,float b,float c){
 RigidTwoMass::RigidTwoMass(float mass1, float mass2, float distance,Vector3 position, Vector3 velocity,
 	Quaternion rotation, Vector3 angularMomentum){
 
-	mMassPoints.push_back(new RelativePhysics(mass1,Vector3(0,0,0),mCenterOfMass.getPositionPointer(),Vector3(-distance/2.0,0,0), &mQ));
-	mMassPoints.push_back(new RelativePhysics(mass2,Vector3(0,0,0),mCenterOfMass.getPositionPointer(),Vector3(distance/2.0,0,0), &mQ));
+	float dist_half = distance/2.0;
+	float total_mass = mass1+mass2;
+	float com_x 	 = -dist_half*(mass1 / total_mass) + dist_half*(mass2 / total_mass);
+
+	float rel_x_m1 = - dist_half - com_x;
+    float rel_x_m2 = dist_half - com_x;
+
+   // cout << "com_x = " << com_x<< " , rel_x_m1 = " << rel_x_m1<< " , rel_x_m2 = " << rel_x_m2<<endl;
+
+	mMassPoints.push_back(new RelativePhysics(mass1,Vector3(0,0,0),mCenterOfMass.getPositionPointer(),Vector3(rel_x_m1,0,0), &mQ));
+	mMassPoints.push_back(new RelativePhysics(mass2,Vector3(0,0,0),mCenterOfMass.getPositionPointer(),Vector3(rel_x_m2,0,0), &mQ));
 
 	float I_xx = 0;
-	float I_yy = mass1 * ((distance/2.0) * (distance/2.0)) + mass2 * ((distance/2.0)*(distance/2.0));
-	float I_zz = mass1 * ((distance/2.0) * (distance/2.0)) + mass2 * ((distance/2.0)*(distance/2.0));
+	float I_yy = mass1 * ((rel_x_m1)*(rel_x_m1)) + mass2 * ((rel_x_m2)*(rel_x_m2));
+	float I_zz = mass1 * ((rel_x_m1)*(rel_x_m1)) + mass2 * ((rel_x_m2)*(rel_x_m2));
 	Matrix3 I_body( I_xx	,0	    ,	0,
 					0		,I_yy 	,	0,
 					0		,0		,	I_zz);
-	initValues(mass1+mass2, I_body, position, velocity, rotation, angularMomentum);
+	initValues(total_mass, I_body, position, velocity, rotation, angularMomentum);
 }
 
