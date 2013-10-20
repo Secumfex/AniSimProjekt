@@ -66,9 +66,9 @@ Vector3 Physics::getPosition() const{
 }
 
 Vector3* Physics::getPositionPointer(){
-	Vector3* pointer = &mPosition;
-	return pointer;
+	return &mPosition;
 }
+
 
 Vector3 Physics::getVelocity() const{
 	return mVelocity;
@@ -217,4 +217,56 @@ void collide(Physics* lhs, const Vector3& lhsNormal, Physics* rhs, const Vector3
 	 lhs->applyForce(totalForceAgainstLhs);
 	 rhs->applyForce(totalForceAgainstRhs);
 	}
+}
+RelativePhysics::RelativePhysics(float mass, Vector3 velocity, Vector3* centerPosition, Vector3 relativePosition, Quaternion* rotation){
+	setMass(mass);
+	setVelocity(velocity);
+	setCenterPositionPointer(centerPosition);
+	setRelativePosition(relativePosition);
+	setRotationPointer(rotation);
+
+	mIntegrationMode = 1;
+
+}
+void RelativePhysics::setRelativePosition(Vector3 relativePosition){
+	mRelativePosition = relativePosition;
+}
+void RelativePhysics::setRelativePosition(float x, float y, float z){
+	mRelativePosition = Vector3(x,y,z);
+}
+void RelativePhysics::setRotationPointer(Quaternion* rotation){
+	mRotation = rotation;
+}
+Vector3 RelativePhysics::getRelativePosition() const{
+	return mRelativePosition;
+}
+Vector3* RelativePhysics::getRelativePositionPointer(){
+	return &mRelativePosition;
+}
+Vector3* RelativePhysics::getPositionPointer(){
+	return mCenterPosition;
+}
+void RelativePhysics::setPosition(Vector3 position){
+	*mCenterPosition = position;
+}
+void RelativePhysics::setPosition(float x, float y, float z){
+	*mCenterPosition = Vector3(x,y,z);
+}
+
+void RelativePhysics::setCenterPositionPointer(Vector3* centerPosition){
+	mCenterPosition=centerPosition;
+}
+Vector3* RelativePhysics::getCenterPositionPointer(){
+	return mCenterPosition;
+}
+//Gibt statt der normalen Position die rotierte um relative position verschobene CenterPosition zurück
+Vector3 RelativePhysics::getPosition() const{
+//	mRotation->debugPrintToCerr();
+	Matrix3 rot = mRotation->computeRotationMatrix();
+//	rot.debugPrintToCerr();
+	Vector3 res = rot*mRelativePosition;
+//	res.debugPrintToCerr();
+	res += *mCenterPosition;
+//	res.debugPrintToCerr();
+	return res;
 }
