@@ -5,8 +5,11 @@
 #include <math.h>
 using namespace std;
 
-SimulationObject::SimulationObject(float mass, Vector3 velocity, Vector3 position){
-	setPhysicsMembers(mass,velocity,position);
+SimulationObject::SimulationObject(float mass, Vector3 velocity,
+		Vector3 position) {
+	mPhysics.setMass(mass);
+	mPhysics.setVelocity(velocity);
+	mPhysics.setPosition(position);
 }
 
 Physics* SimulationObject::getPhysics(){
@@ -20,12 +23,6 @@ vector<Physics*> SimulationObject::getPhysicsList(){
 	vector<Physics* > result;
 	result.push_back(&mPhysics);
 	return result;
-}
-
-void SimulationObject::setPhysicsMembers(float mass, Vector3 velocity, Vector3 position){
-	mPhysics.setMass(mass);
-	mPhysics.setVelocity(velocity);
-	mPhysics.setPosition(position);
 }
 
 void SimulationObject::draw(){
@@ -48,7 +45,9 @@ Rocket::Rocket(float fuel, float fuelPower, Vector3 direction, Vector3 position)
 	mDirection = direction;
 	mMode = PRELAUNCH;
 					//Rakete ist schwerer je mehr Treibstoff sie besitzt
-    setPhysicsMembers(mFuel+10.0,Vector3(0,0,0),position);
+    mPhysics.setMass(mFuel+10.0);
+    mPhysics.setVelocity(Vector3(0,0,0));
+    mPhysics.setPosition(position);
 }
 
 bool Rocket::isLaunched(){
@@ -232,7 +231,9 @@ void BlackHole::update(float d_t){
 }
 
 BlackHole::BlackHole(float mass,Vector3 position){
-	setPhysicsMembers(mass,Vector3(0,0,0),position);
+	mPhysics.setMass(mass);
+    mPhysics.setVelocity(Vector3(0,0,0));
+    mPhysics.setPosition(position);
 }
 
 void drawAccumulatedForce(SimulationObject* pSim){

@@ -155,23 +155,22 @@ void SceneManager::drawSimulationObjects(){
 	}
 }
 
-void SceneManager::update(float d_t){
+void SceneManager::update(float d_t) {
 /// ----Applying global forces...;
 	applyGlobalForces(d_t);
 
 //	----Applying forces...
-	for (unsigned int i = 0; i < mForceObjects.size();i++){
+	for (unsigned int i = 0; i < mForceObjects.size(); i++) {
 		mForceObjects[i]->apply_fun(d_t);
 	}
 
-	for (unsigned int i = 0; i < mSimulationObjects.size(); i ++){
-		drawAccumulatedForce(mSimulationObjects[i]);
+	for (unsigned int i = 0; i < mSimulationObjects.size(); i++) {
 		mSimulationObjects[i]->update(d_t);
 	}
 }
 
-void SceneManager::applyGlobalForces(float d_t){
-	for (unsigned int i = 0; i < mGlobalForceObjects.size(); i++){
+void SceneManager::applyGlobalForces(float d_t) {
+	for (unsigned int i = 0; i < mGlobalForceObjects.size(); i++) {
 		mGlobalForceObjects[i]->apply_fun(d_t);
 	}
 }

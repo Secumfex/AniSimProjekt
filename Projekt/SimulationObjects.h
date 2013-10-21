@@ -22,9 +22,6 @@ public:
 	virtual void update(float d_t);
 	virtual void draw();
 
-	//Setzen der Massepunkt-Membervariablen
-	void setPhysicsMembers(float mass, Vector3 velocity, Vector3 position);
-
 	//Liefert den einzigen Massepunkt zurück falls es eh nur den einen gibt
 	virtual vector<Physics* > getPhysicsList();
 	virtual Vector3* getPositionPointer();
@@ -169,6 +166,11 @@ public:
 
 	virtual void update(float d_t);
 	virtual void draw();
+};
+
+class ParticleCloud : public SimulationObject{
+public:
+	ParticleCloud(int particleAmount = 100, float maxVelocity = 10.0, float maxPosition = 40.0);
 };
 
 /*Verwandte Funktionen*/
