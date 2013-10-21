@@ -46,6 +46,9 @@ void RigidBody::renormalize(){
 Vector3 RigidBody::getPosition(){
 	return mCenterOfMass.getPosition();
 }
+Vector3* RigidBody::getPositionPointer(){
+	return mCenterOfMass.getPositionPointer();
+}
 float RigidBody::getMass(){
 	return mCenterOfMass.getMass();
 }

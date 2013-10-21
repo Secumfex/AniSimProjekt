@@ -27,6 +27,7 @@ public:
 
 	//Liefert den einzigen Massepunkt zurück falls es eh nur den einen gibt
 	virtual vector<Physics* > getPhysicsList();
+	virtual Vector3* getPositionPointer();
 	Physics* getPhysics();
 };
 
@@ -88,6 +89,7 @@ public:
 	Quaternion rotation = Quaternion(1,0,0,0), Vector3 angularMomentum = Vector3(0,0,0));
 
 	RigidBody* getRigidBodyPointer();
+	Vector3* getPositionPointer();
 	vector<Physics* > getPhysicsList();
 
 	void drawAngularMomentum();

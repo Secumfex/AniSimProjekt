@@ -31,6 +31,7 @@ private:
 	//---------------MEMBER FUNCTIONS------------
 	public:
 		void resetObjectPointers();
+
 		void setRocketPointer(RigidRocket* rocket);
 		void setCameraPointer(Camera* cam);
 		void setTracer(TimedPointTracer* tracer);

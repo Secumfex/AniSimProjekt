@@ -12,7 +12,9 @@ SimulationObject::SimulationObject(float mass, Vector3 velocity, Vector3 positio
 Physics* SimulationObject::getPhysics(){
 	return &mPhysics;
 }
-
+Vector3* SimulationObject::getPositionPointer(){
+	return mPhysics.getPositionPointer();
+}
 //liefert den einzigen Massepunkt zurück, falls es eh nur den einen gibt
 vector<Physics*> SimulationObject::getPhysicsList(){
 	vector<Physics* > result;
@@ -358,6 +360,9 @@ RigidSimulationObject::RigidSimulationObject(float mass, Matrix3 Ibody,
 
 RigidBody* RigidSimulationObject::getRigidBodyPointer(){
 	return mRigidBody;
+}
+Vector3* RigidSimulationObject::getPositionPointer(){
+	return 	mRigidBody->getPositionPointer();
 }
 vector<Physics* > RigidSimulationObject::getPhysicsList(){
 	return mRigidBody->getMassPoints();

@@ -21,7 +21,7 @@ void Controller::resetObjectPointers(){
 	if (mSceneManager != NULL){
 		setRocketPointer( mSceneManager->getPlayerRocket() );
 		if(rocketTracer!= NULL){
-			rocketTracer->setTargetPointer(mRocketPointer->getPhysics()->getPositionPointer());
+			rocketTracer->setTargetPointer(mRocketPointer->getPositionPointer());
 		}
 	}
 }
@@ -115,7 +115,7 @@ void Controller:: remaining(int key){
 	//Camera at Rakete
 	if(key == 'c'){
 		if (mCamera != NULL){
-			Vector3* rocketPos = mSceneManager ->getPlayerRocket()->getPhysics()->getPositionPointer();
+			Vector3* rocketPos = mSceneManager ->getPlayerRocket()->getPositionPointer();
 			mCamera->setLookAtPointer(rocketPos);
 		}
 	}

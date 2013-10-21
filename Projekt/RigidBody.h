@@ -49,6 +49,7 @@ public:
 	/*Getter und Setter*/
 
 	Vector3 getPosition();
+	Vector3* getPositionPointer();
 	float getMass();
 	vector<Physics* > getMassPoints();
 	Vector3 getImpulse();
