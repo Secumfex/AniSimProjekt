@@ -29,20 +29,33 @@ protected:
 	Vector3* mTarget;
 	vector<Vector3> mPoints;
 	unsigned int mLength;
+	bool mEnabled;
 public:
-	PointTracer(Vector3* target = new Vector3(0,0,0),unsigned int length = 100){
+	PointTracer(Vector3* target = new Vector3(0, 0, 0), unsigned int length =
+			100) {
 		mTarget = target;
 		mLength = length;
 	}
-	vector<Vector3>* getPointsPointer(){
-				return &mPoints;
+	vector<Vector3>* getPointsPointer() {
+		return &mPoints;
+	}
+	virtual void setTargetPointer(Vector3* target){
+		mTarget = target;
+	}
+	virtual void trace() {
+		if (mEnabled) {
+			mPoints.push_back(
+					Vector3(mTarget->getX(), mTarget->getY(), mTarget->getZ()));
+			if (mPoints.size() > mLength) {
+				mPoints.erase(mPoints.begin() + 0);
 			}
-	virtual void trace(){
-		mPoints.push_back(Vector3(mTarget->getX(), mTarget->getY(), mTarget->getZ()));
-
-		if (mPoints.size() > mLength){
-			mPoints.erase(mPoints.begin()+0);
 		}
+	}
+	virtual void switchMode() {
+		mEnabled = !mEnabled;
+	}
+	virtual void reset() {
+		mPoints.clear();
 	}
 };
 
@@ -50,6 +63,7 @@ class TimedPointTracer : public PointTracer{
 protected:
 		float mInterval;
 		float mTimer;
+
 public:
 		TimedPointTracer(Vector3* target = new Vector3(0,0,0),unsigned int length = 100, float interval = 0.1){
 			mTarget = target;
@@ -57,15 +71,20 @@ public:
 			mInterval = interval;
 			mTimer = 0.0;
 		}
-
-
-
 		void trace(float d_t){
 			mTimer += d_t;
-			if ((mTimer / mInterval) > 1.0 ){
+			if ((mTimer / mInterval) > 1.0 && mEnabled){
 				mTimer-= mInterval;
 				PointTracer::trace();
 			}
+		}
+		void switchMode(){
+			mTimer = 0.0;
+			PointTracer::switchMode();
+		}
+		void reset(){
+			mTimer = 0.0;
+			PointTracer::reset();
 		}
 };
 

@@ -10,19 +10,22 @@ inline void SceneManager::initRocketSimulation(){
 //		mGlobalForceObjects.push_back(gravity);
 
 		//Anziehungskraft untereinander
-		GravitationalForce* gravitation = new GravitationalForce(100.0,0.0,5.0);
+		GravitationalForce* gravitation = new GravitationalForce(100.0,0.0,1.0);
 		mGlobalForceObjects.push_back(gravitation);
 
 
 /////////////// Simulations Objekte ////////////////////////////////////////////////////////////////////
 		//TODO ObjectFactory bauen
 
-		mPlayerRocket = new Rocket(10.0,5.0,Vector3(0.0,1.0,0.0),Vector3(-5.0,0.0,0.0));
-		mSimulationObjects.push_back(mPlayerRocket);
-		mPlayerRocket->getPhysics()->setVelocity(Vector3(0,6.0,0.0));
 
-		SimulationObject* black_hole0 = new BlackHole(1000.0,Vector3(0.0,0.0,0.0));
+		SimulationObject* black_hole0 = new BlackHole(400.0,Vector3(0.0,0.0,0.0));
 		mSimulationObjects.push_back(black_hole0);
+
+		mPlayerRocket = new RigidRocket(3.0,100.0,10);
+		mPlayerRocket->getRigidBodyPointer()->setPosition(Vector3(-5.0,5.0,0.0));
+
+		mSimulationObjects.push_back(mPlayerRocket);
+
 
 //		SimulationObject* black_hole1 = new BlackHole(1000.0,Vector3(5.0,8.0,0.0));
 //		mSimulationObjects.push_back(black_hole1);
@@ -64,7 +67,7 @@ void SceneManager::init(){
 /*TODO Referenzen setzen
 ObjectFactory  einfügen*/
 
-	int simulation_index = 2;
+	int simulation_index = 1;
 
 	switch(simulation_index){
 	case 1:
@@ -176,6 +179,6 @@ void SceneManager::applyGlobalForces(float d_t){
 }
 
 //Das is doof
-Rocket* SceneManager::getPlayerRocket(){
+RigidRocket* SceneManager::getPlayerRocket(){
 	return mPlayerRocket;
 }

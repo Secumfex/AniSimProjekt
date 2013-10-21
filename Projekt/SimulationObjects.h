@@ -95,20 +95,48 @@ public:
 
 	virtual void update(float d_t);
 	virtual void draw();
-
+	void rotate(Quaternion rot);
 
 };
 
-//Objekt mit zwei Massepunkten aka Physi
-class InterstellaresZweiMassePunkteObjekt : public RigidSimulationObject{
-
+/*Ersatz für Rocket, jetzt mit sexy 2-Punkte-Rigid-Body*/
+class RigidRocket : public RigidSimulationObject{
+	enum mode{PRELAUNCH,LAUNCHED};
+private:
+	 Vector3 mDirection;
+	 Quaternion* mRotation;
+	 float mFuel;
+	 float mFuelPower;
+	 mode mMode;
+	 Physics* mTail;
+	 Physics* mHead;
+	 void drawRocket();
+	 void drawTail();
 public:
-	InterstellaresZweiMassePunkteObjekt(float mass1 = 0.5, float mass2 = 0.5, float distance = 1.0,
-		Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
-		Quaternion rotation = Quaternion(1,0,0,0), Vector3 angularMomentum = Vector3(0,0,0));
-
+	/*param:
+	 * fuel : Menge des Spritts
+	 * fuelPower : Kraft des Spritts
+	 * mass_tail : Gewicht des Hinterteils bei leerem Tank
+	 * mass_head : Gewicht des Vorderteils
+	 * scale:		Skalierungsfaktor der Rakete
+	 * position  : Startposition der Rakete*/
+	RigidRocket(float fuel = 1.0, float fuelPower = 1.0, float mass_tail = 0.5,
+			float mass_head = 0.5, Vector3 position = Vector3(0, 0, 0),
+			float scale = 1.0);
 	virtual void update(float d_t);
 	virtual void draw();
+
+
+	bool isLaunched();
+
+	void launch();
+	float getFuel();
+
+	void setRotation(Quaternion rotation);
+	void setFuel(float fuel);
+	void setFuelPower(float fuelPower);
+
+	Vector3 getDirection();
 };
 
 //Vorsicht: noch kein RigidSimulationObject!
@@ -128,6 +156,17 @@ public:
 	virtual void draw();
 	virtual void drawAngularMomentum();
 	virtual void drawAngularVelocity();
+};
+//Objekt mit zwei Massepunkten aka Physi
+class InterstellaresZweiMassePunkteObjekt : public RigidSimulationObject{
+
+public:
+	InterstellaresZweiMassePunkteObjekt(float mass1 = 0.5, float mass2 = 0.5, float distance = 1.0,
+		Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
+		Quaternion rotation = Quaternion(1,0,0,0), Vector3 angularMomentum = Vector3(0,0,0));
+
+	virtual void update(float d_t);
+	virtual void draw();
 };
 
 /*Verwandte Funktionen*/

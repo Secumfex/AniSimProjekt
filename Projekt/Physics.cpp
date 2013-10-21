@@ -96,51 +96,48 @@ inline void Physics::rungeKutta(float d_t){
 //	X[0] und X_dot ohne Zeit-Intervall (bzw. d_t = 1.0)
 	Vector3 idot_0 = mForceAccumulator;	 //ist schon skaliert
 	Vector3 pdot_0 = mVelocity;
-	Vector3 p_0 = mPosition;
-	Vector3 i_0 = mImpulse;
+	Vector3 p_0 = getPosition();
+	Vector3 i_0 = getImpulse();
 
 	//K1
 	//X_dot mit Anfangswerten X = X_0
-	Vector3 idot_1 = idot_0;			//Hier skaliert, dann muss sonst nix mehr skaliert werden
-	Vector3 pdot_1 = pdot_0			* d_t;
-
+	Vector3 k_idot_1 = idot_0;			//Hier skaliert, dann muss sonst nix mehr skaliert werden
+	Vector3 k_pdot_1 = i_0 * i_Mass * d_t;
 
 	//K2
 	//X_dot mit aktualisierten Werten X = X[0] + K1
-    Vector3 i_2 = deriveImpulse( i_0, idot_1   , 0.5);//Neuer Impuls bei halbem Zeitschritt d_t
-	Vector3 p_2 = derivePosition(p_0, pdot_1   , 0.5);//Neue Position bei halbem Zeitschritt d_t und Impuls i_0
-    Vector3 idot_2 = (i_2-i_0);						//Impulsänderung    bei	T_0+0.5*d_t
-    Vector3 pdot_2 = (p_2-p_0);						//Positionsänderung bei T_0+0.5*d_t
+    Vector3 i_2 = evaluateImpulse( i_0, k_idot_1, 0.5);//Neuer Impuls bei halbem Zeitschritt d_t
+	Vector3 k_idot_2 = idot_0;							  //Impulsänderung  konstant
+    Vector3 k_pdot_2 = i_2 * i_Mass * d_t;				  //Positionsänderung bei T_0+0.5*d_t
 
     //K3
     //X_dot mit aktualisierten Werten X = X[0] + K2
-    Vector3 i_3 = deriveImpulse( i_0, idot_2, 0.5);	//Neuer Impuls bei halbem Zeitschritt d_t
-	Vector3 p_3 = derivePosition(p_0, pdot_2, 0.5); //Neue Position bei halbem Zeitschritt d_t und Impuls i_0
-    Vector3 idot_3 = (i_3-i_0);						//Impulsänderung    bei	T_0+0.5*d_t
-    Vector3 pdot_3 = (p_3-p_0);						//Positionsänderung bei T_0+0.5*d_t
+    Vector3 i_3 = evaluateImpulse( i_0, k_idot_2, 0.5);	//Neuer Impuls bei halbem Zeitschritt d_t
+	Vector3 k_idot_3 = idot_0;							//Impulsänderung    bei	T_0+0.5*d_t == Force Accumulator
+    Vector3 k_pdot_3 = i_3 * i_Mass * d_t;						//Positionsänderung bei T_0+0.5*d_t
 
     //K4
     //X_dot mit aktualisierten Werten X = X[0] + K3
-    Vector3 i_4 = deriveImpulse( i_0, idot_3, 1.0);	//Neuer Impuls bei halbem Zeitschritt d_t
-	Vector3 p_4 = derivePosition(p_0, pdot_3, 1.0); //Neue Position bei halbem Zeitschritt d_t und Impuls i_0
-    Vector3 idot_4 = (i_4-i_0);						//Impulsänderung    bei	T_0+0.5*d_t
-    Vector3 pdot_4 = (p_4-p_0);						//Positionsänderung bei T_0+0.5*d_t
+    Vector3 i_4 = evaluateImpulse( i_0, k_idot_3, 1.0);	//Neuer Impuls bei halbem Zeitschritt d_t
+	Vector3 k_idot_4 = idot_0;							//Impulsänderung    bei	T_0+0.5*d_t
+    Vector3 k_pdot_4 = i_4 * i_Mass * d_t;				//Positionsänderung bei T_0+0.5*d_t
 
     //Endwerte setzen:
-    Vector3 p_neu = p_0 + (pdot_1 + 2.0 * pdot_2 + 2.0 * pdot_3 + pdot_4) * ((1.0)/ 6.0);
-    Vector3 i_neu = i_0 + (idot_1 + 2.0 * idot_2 + 2.0 * idot_3 + idot_4) * ((1.0)/ 6.0);
+    Vector3 p_neu = p_0 + (k_pdot_1 + 2.0 * k_pdot_2 + 2.0 * k_pdot_3 + k_pdot_4) * ((1.0)/ 6.0);
+    Vector3 i_neu = i_0 + (k_idot_1 + 2.0 * k_idot_2 + 2.0 * k_idot_3 + k_idot_4) * ((1.0)/ 6.0);
+
     setPosition(p_neu);
     setImpulse(i_neu);
     clearAccumulatedForce();
 }
 
 //liefert den Impuls bei Zeitschritt d_t von übergebenen Werten aus zurück
-inline Vector3 Physics::deriveImpulse(Vector3 imp, Vector3 i_dot, float d_t){
+inline Vector3 Physics::evaluateImpulse(Vector3 imp, Vector3 i_dot, float d_t){
 	return  imp + i_dot * d_t;
 }
 
-//liefert die Positionbei Zeitschritt d_t von übergebenen Werten aus zurück
-inline Vector3 Physics::derivePosition(Vector3 pos, Vector3 p_dot, float d_t){
+//liefert die Position bei Zeitschritt d_t von übergebenen Werten aus zurück
+inline Vector3 Physics::evaluatePosition(Vector3 pos, Vector3 p_dot, float d_t){
 	return pos + p_dot * d_t;
 }
 ////////////////////////////////////////////////

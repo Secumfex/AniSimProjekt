@@ -24,14 +24,14 @@ public:
 	virtual ~Controller();
 	//---------------MEMBER VARIABLES------------
 private:
-	Rocket* mRocketPointer;
+	RigidRocket* mRocketPointer;
 	Camera* mCamera;
 	TimedPointTracer* rocketTracer;
 	SceneManager* mSceneManager;
 	//---------------MEMBER FUNCTIONS------------
 	public:
 		void resetObjectPointers();
-		void setRocketPointer(Rocket* rocket);
+		void setRocketPointer(RigidRocket* rocket);
 		void setCameraPointer(Camera* cam);
 		void setTracer(TimedPointTracer* tracer);
 		void setScene(SceneManager* scene);

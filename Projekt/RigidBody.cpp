@@ -29,6 +29,10 @@ void RigidBody::initValues(float mass, Matrix3 Ibody ,
 
 		setAngularMomentum(angularMomentum);
 }
+
+
+void RigidBody::switchIntegrationMode(){
+}
 RigidBody::~RigidBody() {
 	// TODO Auto-generated destructor stub
 }
@@ -65,6 +69,9 @@ Quaternion RigidBody::getRotationQuaternion(){
 }
 Matrix3 RigidBody::getRotationMatrix(){
 	return mR;
+}
+Quaternion* RigidBody::getRotationQuaternionPointer(){
+	return &mQ;
 }
 Vector3 RigidBody::getAngularVelocity(){
 	return mOmega;
@@ -124,7 +131,7 @@ void RigidBody::setMass(float mass){
 }
 
 /*********** Funktionalität ***********/
-
+void RigidBody::recomputeCenterAndTensor(){ }
 void RigidBody::updateLinearForceAndTorque(float d_t){
 	Vector3 forceAcc(0,0,0);
 	Vector3 torqueAcc(0,0,0);
@@ -146,7 +153,18 @@ void RigidBody::updateLinearForceAndTorque(float d_t){
 	mTorque = torqueAcc;
 	mCenterOfMass.applyForce(forceAcc);
 }
+void RigidBody::clearForceAndTorque(){
+	mTorque = Vector3(0,0,0);
+	mCenterOfMass.clearAccumulatedForce();
+	for (unsigned int i = 0; i < mMassPoints.size(); i++){
+		mMassPoints[i]->clearAccumulatedForce();
+	}
+}
+void RigidBody::rotate(Quaternion rot){
+	mQ = rot * mQ;
+	renormalize();
 
+}
 /**
  * Annahme: torque und force wurden für d_t bereits berechnet
  */
@@ -244,10 +262,10 @@ RigidTwoMass::RigidTwoMass(float mass1, float mass2, float distance,Vector3 posi
     float rel_x_m2 = dist_half - com_x;
 
    // cout << "com_x = " << com_x<< " , rel_x_m1 = " << rel_x_m1<< " , rel_x_m2 = " << rel_x_m2<<endl;
-
-	mMassPoints.push_back(new RelativePhysics(mass1,Vector3(0,0,0),mCenterOfMass.getPositionPointer(),Vector3(rel_x_m1,0,0), &mQ));
-	mMassPoints.push_back(new RelativePhysics(mass2,Vector3(0,0,0),mCenterOfMass.getPositionPointer(),Vector3(rel_x_m2,0,0), &mQ));
-
+    leftMassPoint  = new RelativePhysics(mass1,Vector3(0,0,0),mCenterOfMass.getPositionPointer(),Vector3(rel_x_m1,0,0), &mQ);
+    rightMassPoint = new RelativePhysics(mass2,Vector3(0,0,0),mCenterOfMass.getPositionPointer(),Vector3(rel_x_m2,0,0), &mQ);
+    mMassPoints.push_back(leftMassPoint);
+	mMassPoints.push_back(rightMassPoint);
 	float I_xx = 0;
 	float I_yy = mass1 * ((rel_x_m1)*(rel_x_m1)) + mass2 * ((rel_x_m2)*(rel_x_m2));
 	float I_zz = mass1 * ((rel_x_m1)*(rel_x_m1)) + mass2 * ((rel_x_m2)*(rel_x_m2));
@@ -256,4 +274,18 @@ RigidTwoMass::RigidTwoMass(float mass1, float mass2, float distance,Vector3 posi
 					0		,0		,	I_zz);
 	initValues(total_mass, I_body, position, velocity, rotation, angularMomentum);
 }
+RelativePhysics* RigidTwoMass::getLeftMassPoint(){
+	return leftMassPoint;
+}
+RelativePhysics* RigidTwoMass::getRightMassPoint(){
+	return rightMassPoint;
+}
+void RigidTwoMass::recomputeCenterAndTensor(){
+	cout<<"recomputeCenterAndTensor() not yet implemented..."<<endl;
+}
+void RigidTwoMass::switchIntegrationMode() {
+	leftMassPoint->switchIntegrationMode();
+	rightMassPoint->switchIntegrationMode();
+	mCenterOfMass.switchIntegrationMode();
 
+}

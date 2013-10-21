@@ -55,6 +55,7 @@ public:
 	Vector3 getVelocity();
 	Quaternion getRotationQuaternion();
 	Matrix3 getRotationMatrix();
+	Quaternion* getRotationQuaternionPointer();
 	Vector3 getAngularVelocity();
 	Vector3 getAngularMomentum();
 
@@ -76,7 +77,11 @@ public:
 
 	/*Misc*/
 	void applyForceAndTorque();
+	void clearForceAndTorque();
+	virtual void recomputeCenterAndTensor();
 	virtual void update(float d_t);
+	virtual void switchIntegrationMode();
+	void rotate(Quaternion rot);
 
 	//Berechnet Drehmoment und Lineare Kraft auf Center Of Mass
 	virtual void updateLinearForceAndTorque(float d_t);
@@ -107,9 +112,15 @@ public:
 //zwei Massepunkte die soundsoweit von einadner weg sind
 class RigidTwoMass : public RigidBody{
 protected:
+	RelativePhysics* leftMassPoint;
+	RelativePhysics* rightMassPoint;
 public:
 	RigidTwoMass(float mass1 = 1.0, float mass2 = 1.0, float distance = 1.0, Vector3 position = Vector3(0,0,0), Vector3 velocity = Vector3(0,0,0),
 			Quaternion rotation = Quaternion(1,0,0,0), Vector3 angularMomentum = Vector3(0,0,0));
+	RelativePhysics* getLeftMassPoint();
+	RelativePhysics* getRightMassPoint();
+	void recomputeCenterAndTensor();
+	void switchIntegrationMode();
 };
 
 #endif /* RIGIDBODY_H_ */

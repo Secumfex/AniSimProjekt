@@ -20,10 +20,13 @@ Controller::~Controller() {
 void Controller::resetObjectPointers(){
 	if (mSceneManager != NULL){
 		setRocketPointer( mSceneManager->getPlayerRocket() );
+		if(rocketTracer!= NULL){
+			rocketTracer->setTargetPointer(mRocketPointer->getPhysics()->getPositionPointer());
+		}
 	}
 }
 
-void Controller:: setRocketPointer(Rocket* rocket){
+void Controller:: setRocketPointer(RigidRocket* rocket){
 	mRocketPointer = rocket;
 }
 
@@ -49,24 +52,29 @@ void Controller::keyPressed(int key){
 
 void Controller:: prelaunched(int key){
 	//Raketenstart
+	Quaternion rot;
 	if (key == ' '){
 			if(mRocketPointer != NULL){
 				mRocketPointer->launch();
 			}
 		}
 	switch (key) {
-		case GLUT_KEY_UP :
-			mRocketPointer -> setDirection(mRocketPointer -> getDirection().rotate(Vector3(1,0,0),1));
-				break;
-		case GLUT_KEY_DOWN :
-			mRocketPointer -> setDirection(mRocketPointer -> getDirection().rotate(Vector3(1,0,0),-1));
-				break;
-		case GLUT_KEY_LEFT :
-			mRocketPointer -> setDirection(mRocketPointer -> getDirection().rotate(Vector3(0,0,1),1));
-				break;
-		case GLUT_KEY_RIGHT :
-			mRocketPointer -> setDirection(mRocketPointer -> getDirection().rotate(Vector3(0,0,1),-1));
-				break;
+	case GLUT_KEY_UP:
+		rot = Quaternion(Vector3(1, 0, 0), 1);
+		mRocketPointer->rotate(rot);
+		break;
+	case GLUT_KEY_DOWN:
+		rot = Quaternion(Vector3(1, 0, 0), -1);
+		mRocketPointer->rotate(rot);
+		break;
+	case GLUT_KEY_LEFT:
+		rot = Quaternion(Vector3(0, 0, 1), 1);
+		mRocketPointer->rotate(rot);
+		break;
+	case GLUT_KEY_RIGHT:
+		rot = Quaternion(Vector3(0, 0, 1), -1);
+		mRocketPointer->rotate(rot);
+		break;
 	}
 }
 void Controller:: launched(int key){}
@@ -80,26 +88,29 @@ void Controller:: remaining(int key){
 		//Lade neue Objekt Pointer, denn die alten sind futsch
 		resetObjectPointers();
 
-		if(rocketTracer!= NULL){
-			rocketTracer = NULL;
-		}
-
 		if (mCamera != NULL){
 			mCamera->setLookAt(Vector3(0,0,0));
-			mCamera->setPosition(Vector3(0.0, 5.0, 5.0));
+			mCamera->setPosition(Vector3(0.0, 5.0, 20.0));
 			mCamera->setDirection(Vector3(0.0, 0.0, -1.0));
 		}
-
 	}
 	//Integration
 	if(key == 'm'){
-		mSceneManager->getPlayerRocket()->getPhysics()->switchIntegrationMode();
+		mSceneManager->getPlayerRocket()->getRigidBodyPointer()->switchIntegrationMode();
 	}
 
 	//Raketenspur
 	if(key == 't'){
-		rocketTracer = new TimedPointTracer(mSceneManager -> getPlayerRocket()->getPhysics()->getPositionPointer(),1000);
+		if (rocketTracer != NULL){
+			rocketTracer->switchMode();
+		}
 	}
+	//Raketenspur Leeren
+		if(key == 'T'){
+			if (rocketTracer != NULL){
+				rocketTracer->reset();
+			}
+		}
 
 	//Camera at Rakete
 	if(key == 'c'){
@@ -113,7 +124,7 @@ void Controller:: remaining(int key){
 	if(key == 'b'){
 		if (mCamera != NULL){
 			mCamera->setLookAt(Vector3(0,0,0));
-			mCamera->setPosition(Vector3(0.0, 5.0, 5.0));
+			mCamera->setPosition(Vector3(0.0, 5.0, 20.0));
 			mCamera->setDirection(Vector3(0.0, 0.0, -1.0));
 		}
 	}

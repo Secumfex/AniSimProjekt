@@ -39,9 +39,9 @@ class Physics{
 	void applyAccumulatedForce();
 
 	//Ableitung bei Zeitschritt d_t (ausgehend von übergebenen Werten)
-	Vector3 derivePosition(Vector3 pos, Vector3 p_dot, float d_t);
+	Vector3 evaluatePosition(Vector3 pos, Vector3 p_dot, float d_t);
 	//Ableitung bei Zeitschritt d_t (ausgehend von übergebenen Werten)
-	Vector3 deriveImpulse(Vector3 imp, Vector3 i_dot, float d_t);
+	Vector3 evaluateImpulse(Vector3 imp, Vector3 i_dot, float d_t);
 
 	public:
 	//Konstruktor

@@ -26,7 +26,7 @@ private:
 
 //TODO das würde ich lieber anders lösen KA
 
-	Rocket* mPlayerRocket;
+	RigidRocket* mPlayerRocket;
 
 void applyGlobalForces(float d_t);
 
@@ -38,7 +38,7 @@ public:
 	/*Methode um ein SimulationsObject vollständig bei der Force anzumelden*/
 	void registerSimulationObjectAtForce(SimulationObject* simulationObject, Force* force);
 
-	Rocket* getPlayerRocket();
+	RigidRocket* getPlayerRocket();
 
 	/*Init der Szene*/
 	void init();

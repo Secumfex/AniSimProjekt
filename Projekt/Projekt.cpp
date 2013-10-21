@@ -15,9 +15,11 @@ Projekt::~Projekt(){
 
 void Projekt::init(){
 	mSceneManager.init();
-	rocketTracer = NULL;
 	mController.setScene(&mSceneManager);
 	mController.setCameraPointer(mCamera);
+	rocketTracer = new TimedPointTracer(mSceneManager.getPlayerRocket()->getPhysics()->getPositionPointer(),1000);
+	mController.setTracer(rocketTracer);
+
 
 	mController.resetObjectPointers();
 }
@@ -64,7 +66,7 @@ void Projekt::keyPressed(int key){
 //		mSceneManager.getPlayerRocket()->getPhysics()->switchIntegrationMode();
 //	}
 //	if(key == 't'){
-//		rocketTracer = new TimedPointTracer(mSceneManager.getPlayerRocket()->getPhysics()->getPositionPointer(),1000);
+//
 //	}
 //	if(key == 'c'){
 //		if (mCamera != NULL){
