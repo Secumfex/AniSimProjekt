@@ -10,7 +10,7 @@ inline void SceneManager::initRocketSimulation(){
 //		mGlobalForceObjects.push_back(gravity);
 
 		//Anziehungskraft untereinander
-		GravitationalForce* gravitation = new GravitationalForce(100.0,0.0,1.0);
+		GravitationalForce* gravitation = new GravitationalForce(1000.0,0.0,1.0);
 		mGlobalForceObjects.push_back(gravitation);
 
 
@@ -21,20 +21,19 @@ inline void SceneManager::initRocketSimulation(){
 		SimulationObject* black_hole0 = new BlackHole(400.0,Vector3(0.0,0.0,0.0));
 		mSimulationObjects.push_back(black_hole0);
 
-		mPlayerRocket = new RigidRocket(3.0,100.0,10);
-		mPlayerRocket->getRigidBodyPointer()->setPosition(Vector3(-5.0,5.0,0.0));
-
+		mPlayerRocket = new RigidRocket(1.0,10.0,1 ,1);
+		mPlayerRocket->getRigidBodyPointer()->setPosition(Vector3(.0,20.0,0.0));
 		mSimulationObjects.push_back(mPlayerRocket);
 
 
-//		SimulationObject* black_hole1 = new BlackHole(1000.0,Vector3(5.0,8.0,0.0));
-//		mSimulationObjects.push_back(black_hole1);
+		SimulationObject* black_hole1 = new BlackHole(1000.0,Vector3(25.0,8.0,0.0));
+		mSimulationObjects.push_back(black_hole1);
 
 //		SimulationObject* black_hole2 = new BlackHole(1000.0,Vector3(-5.0,12.0,0.0));
 //		mSimulationObjects.push_back(black_hole2);
 
-//		SimulationObject* black_hole3 = new BlackHole(1000.0,Vector3(-5.0,-12.0,0.0));
-//		mSimulationObjects.push_back(black_hole3);
+		SimulationObject* black_hole3 = new BlackHole(1000.0,Vector3(-5.0,-12.0,0.0));
+		mSimulationObjects.push_back(black_hole3);
 
 }
 
@@ -165,7 +164,6 @@ void SceneManager::update(float d_t){
 		mForceObjects[i]->apply_fun(d_t);
 	}
 
-//TODO// ----Updating all Objects
 	for (unsigned int i = 0; i < mSimulationObjects.size(); i ++){
 		drawAccumulatedForce(mSimulationObjects[i]);
 		mSimulationObjects[i]->update(d_t);

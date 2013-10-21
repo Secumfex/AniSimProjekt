@@ -35,6 +35,7 @@ public:
 			100) {
 		mTarget = target;
 		mLength = length;
+		mEnabled = false;
 	}
 	vector<Vector3>* getPointsPointer() {
 		return &mPoints;
@@ -70,6 +71,7 @@ public:
 			mLength = length;
 			mInterval = interval;
 			mTimer = 0.0;
+			mEnabled = false;
 		}
 		void trace(float d_t){
 			mTimer += d_t;

@@ -60,19 +60,19 @@ void Controller:: prelaunched(int key){
 		}
 	switch (key) {
 	case GLUT_KEY_UP:
-		rot = Quaternion(Vector3(1, 0, 0), 1);
+		rot = Quaternion(Vector3(1, 0, 0), 5);
 		mRocketPointer->rotate(rot);
 		break;
 	case GLUT_KEY_DOWN:
-		rot = Quaternion(Vector3(1, 0, 0), -1);
+		rot = Quaternion(Vector3(1, 0, 0), -5);
 		mRocketPointer->rotate(rot);
 		break;
 	case GLUT_KEY_LEFT:
-		rot = Quaternion(Vector3(0, 0, 1), 1);
+		rot = Quaternion(Vector3(0, 0, 1), 5);
 		mRocketPointer->rotate(rot);
 		break;
 	case GLUT_KEY_RIGHT:
-		rot = Quaternion(Vector3(0, 0, 1), -1);
+		rot = Quaternion(Vector3(0, 0, 1), -5);
 		mRocketPointer->rotate(rot);
 		break;
 	}
@@ -90,8 +90,6 @@ void Controller:: remaining(int key){
 
 		if (mCamera != NULL){
 			mCamera->setLookAt(Vector3(0,0,0));
-			mCamera->setPosition(Vector3(0.0, 5.0, 20.0));
-			mCamera->setDirection(Vector3(0.0, 0.0, -1.0));
 		}
 	}
 	//Integration
@@ -124,8 +122,6 @@ void Controller:: remaining(int key){
 	if(key == 'b'){
 		if (mCamera != NULL){
 			mCamera->setLookAt(Vector3(0,0,0));
-			mCamera->setPosition(Vector3(0.0, 5.0, 20.0));
-			mCamera->setDirection(Vector3(0.0, 0.0, -1.0));
 		}
 	}
 }
