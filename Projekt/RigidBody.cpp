@@ -174,7 +174,6 @@ void RigidBody::clearForceAndTorque(){
 void RigidBody::rotate(Quaternion rot){
 	mQ = rot * mQ;
 	renormalize();
-
 }
 /**
  * Annahme: torque und force wurden für d_t bereits berechnet
@@ -230,7 +229,7 @@ void RigidBody::update(float d_t){
 	mIinv = mR * mIbody_inv * R_trans;
 	//Update Omega
 	mOmega = mIinv * mL;
-	cout<<mOmega.length()<<endl;
+//	cout<<mOmega.length()<<endl;
 
 	//printState();
 }
