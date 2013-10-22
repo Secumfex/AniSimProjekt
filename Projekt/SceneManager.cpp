@@ -6,13 +6,16 @@ inline void SceneManager::initRocketSimulation(){
 /////////////// Globale Kräfte     /////////////////////////////////////////////////////////////////////////
 
 		//Erdanziehungskraft
-//		SimpleForce* gravity = new SimpleForce(Vector3(0.0,-10.0,0.0));
+//		SimpleAcceleration* gravity = new SimpleAcceleration(Vector3(0.0,-10.0,0.0));
 //		mGlobalForceObjects.push_back(gravity);
 
 		//Anziehungskraft untereinander
 		GravitationalForce* gravitation = new GravitationalForce(1000.0,0.0,1.0);
 		mGlobalForceObjects.push_back(gravitation);
 
+		//Drag
+		ViscousDrag* drag = new ViscousDrag(0.0001);
+		mGlobalForceObjects.push_back(drag);
 
 /////////////// Simulations Objekte ////////////////////////////////////////////////////////////////////
 		//TODO ObjectFactory bauen
@@ -35,7 +38,7 @@ inline void SceneManager::initRocketSimulation(){
 //		SimulationObject* black_hole3 = new BlackHole(1000.0,Vector3(-5.0,-12.0,0.0));
 //		mSimulationObjects.push_back(black_hole3);
 
-		ParticleCloud* pc = new ParticleCloud(100,0.0,10.0,Vector3(0,0,0));
+		ParticleCloud* pc = new ParticleCloud();
 		mSimulationObjects.push_back(pc);
 
 }

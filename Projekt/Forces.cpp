@@ -57,6 +57,15 @@ void SimpleForce::apply_fun(float d_t){
 		mInfluencedPhysics[i]->applyForce(mForce*d_t);
 	}
 }
+SimpleAcceleration::SimpleAcceleration(Vector3 force){
+	mForce = force;
+}
+void SimpleAcceleration::apply_fun(float d_t){
+	for (unsigned int i = 0; i < mInfluencedPhysics.size(); i++){
+		float mass = mInfluencedPhysics[i]->getMass();
+		mInfluencedPhysics[i]->applyForce(mForce*mass*d_t);
+	}
+}
 
 /*ElasticCollision Funktionalität*/
 ElasticCollision::ElasticCollision(Physics* lhs, Physics*rhs){
@@ -204,5 +213,37 @@ void GravitationalForce::apply_fun(float d_t){
 				}
 			}
 		}
+	}
+}
+
+DistancePointForce::DistancePointForce(float minDistance, float strength, Vector3 center, float maxDistance){
+	mMinDistance = minDistance;
+	mMaxDistance = maxDistance;
+	mStrength = strength;
+	mCenter = center;
+}
+
+void DistancePointForce::setMinDistance(float minDistance){
+	mMinDistance = minDistance;
+}
+void DistancePointForce::setMaxDistance(float maxDistance){
+	mMaxDistance = maxDistance;
+}
+void DistancePointForce::setStrength(float strength) {
+	mStrength = strength;
+}
+void DistancePointForce::setCenter(Vector3 center){
+	mCenter = center;
+}
+void DistancePointForce::apply_fun(float d_t){
+	for (unsigned int i = 0; i <mInfluencedPhysics.size();i++){
+		Vector3 distance = (mInfluencedPhysics[i]->getPosition()-mCenter);
+		float dist = distance.length();
+			if(dist > mMinDistance && dist < mMaxDistance){
+				float difference = dist-mMinDistance;
+				Vector3 dir = (-1.0) * distance;
+				dir.normalize();
+				mInfluencedPhysics[i]->applyForce(dir*mStrength*difference*d_t);
+			}
 	}
 }

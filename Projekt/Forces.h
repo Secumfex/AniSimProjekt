@@ -82,6 +82,11 @@ public:
 	virtual void apply_fun(float d_t);
 };
 
+class SimpleAcceleration : public SimpleForce{
+	public:
+	SimpleAcceleration(Vector3 force = Vector3(0,0,0));
+	virtual void apply_fun(float d_t);
+};
 
 /*Wechselwirkende Kraft bei Elastischer Kollision zweier Massepunkte*/
 class ElasticCollision : public BinaryForce{
@@ -173,4 +178,30 @@ public:
 	virtual void apply_fun(float d_t);
 };
 
+/**
+ * Eine Kraft in Richtung Zentrum, die stärker ist, je größer die Distanz zum Zentrum ist
+ */
+class DistancePointForce : public Force{
+private:
+	//Punkt zu dem die Kraft wirkt
+	Vector3 mCenter;
+	// minimale Distanz ab der die Kraft wirkt
+	float mMinDistance;
+	float mMaxDistance;
+	float mStrength;
+public:
+	DistancePointForce(float minDistance = 50.0 , float strength = 1.0, Vector3 center = Vector3(0,0,0), float maxDistance = 1000.0);
+
+	void setMinDistance(float minDistance);
+	void setMaxDistance(float maxDistance);
+	void setStrength(float strength);
+	void setCenter(Vector3 center);
+
+	virtual void apply_fun(float d_t);
+};
+
+class RingPointForce:public Force{
+private:
+
+};
 #endif

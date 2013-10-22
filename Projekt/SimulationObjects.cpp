@@ -597,14 +597,17 @@ void RigidRocket::drawTail(){
 ParticleCloud::ParticleCloud(int particleAmount, float maxVelocity, float maxPositionOffset, Vector3 cloudCentrum){
 	setPosition(cloudCentrum);
 	createRandomParticles(particleAmount, maxVelocity, maxPositionOffset,cloudCentrum);
+	mParticleSystem.addForce(new DistancePointForce(maxPositionOffset,0.0001,cloudCentrum));
 }
 
 void ParticleCloud::createRandomParticles(int particleAmount, float maxVelocity, float maxPositionOffset, Vector3 cloudCentrum){
 	mParticleSystem.clearAllParticles();
 	for (int i = 0; i < particleAmount; i++){
-			Vector3 pos = randomVector3(cloudCentrum,(((float)(i+1))/(float)particleAmount)*maxPositionOffset,(((float)(i+1))/(float)particleAmount)*maxPositionOffset);	//TODOnoch nur auf X und Y Achse
+			Vector3 pos = randomVector3(cloudCentrum,(((float)(i+1))/(float)particleAmount)*maxPositionOffset,(((float)(i+1))/(float)particleAmount)*maxPositionOffset,0);	//TODOnoch nur auf X und Y Achse
 			float v = (((float) rand()) / ((float)RAND_MAX)-0.5)*2.0;
-			Vector3 vel = randomVector3(Vector3(0,0,0),1.0,1.0,0.0)*vel*maxVelocity;
+			Vector3 vel = randomVector3(Vector3(0,0,0),1.0,1.0,0.0);
+			vel.normalize();
+			vel*=v*maxVelocity;
 			mParticleSystem.addParticle(new Physics(0.001,vel,pos));
 		}
 }
@@ -623,9 +626,19 @@ void ParticleCloud::draw(){
 }
 
 void ParticleCloud::update(float d_t){
+	mParticleSystem.applyForces(d_t);
 	mParticleSystem.update(d_t);
 }
 
 vector<Physics* > ParticleCloud::getPhysicsList(){
 	return mParticleSystem.getParticles();
+}
+
+ParticleRing::ParticleRing(int particleAmount, float maxVelocity, float maxRadius, float minRadius, Vector3 ringCentrum){
+	setPosition(ringCentrum);
+	ParticleCloud::createRandomParticles(particleAmount, maxVelocity, maxRadius,ringCentrum);
+	//Kraft die auﬂerhalb des Rings nach Innen wirkt
+	mParticleSystem.addForce(new DistancePointForce(maxRadius,0.001,ringCentrum));
+	//Kraft die innerhalb des Rings nach Auﬂen wirkt
+	mParticleSystem.addForce(new DistancePointForce(1.0,-0.001,ringCentrum,minRadius));
 }
