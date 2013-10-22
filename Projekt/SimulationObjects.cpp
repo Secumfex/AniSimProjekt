@@ -18,6 +18,14 @@ Physics* SimulationObject::getPhysics(){
 Vector3* SimulationObject::getPositionPointer(){
 	return mPhysics.getPositionPointer();
 }
+Vector3 SimulationObject::getPosition(){
+	return mPhysics.getPosition();
+}
+
+void SimulationObject::setPosition(Vector3 pos){
+	mPhysics.setPosition(pos);
+}
+
 //liefert den einzigen Massepunkt zurück, falls es eh nur den einen gibt
 vector<Physics*> SimulationObject::getPhysicsList(){
 	vector<Physics* > result;
@@ -365,6 +373,9 @@ RigidBody* RigidSimulationObject::getRigidBodyPointer(){
 Vector3* RigidSimulationObject::getPositionPointer(){
 	return 	mRigidBody->getPositionPointer();
 }
+Vector3 RigidSimulationObject::getPosition(){
+	return 	mRigidBody->getPosition();
+}
 vector<Physics* > RigidSimulationObject::getPhysicsList(){
 	return mRigidBody->getMassPoints();
 }
@@ -570,9 +581,43 @@ void RigidRocket::drawRocket(){
 }
 
 void RigidRocket::drawTail(){
-
 	glColor3f(1.0, 1.0, 0.0);
 	glTranslatef(0.0, -1.1, 0.0);
 	glRotated(90, 1, 0, 0);
 	glutSolidCone(0.1, 0.2, 6, 6);
+}
+
+ParticleCloud::ParticleCloud(int particleAmount, float maxVelocity, float maxPositionOffset, Vector3 cloudCentrum){
+	setPosition(cloudCentrum);
+	createRandomParticles(particleAmount, maxVelocity, maxPositionOffset,cloudCentrum);
+}
+
+void ParticleCloud::createRandomParticles(int particleAmount, float maxVelocity, float maxPositionOffset, Vector3 cloudCentrum){
+	mParticleSystem.clearAllParticles();
+	for (int i = 0; i < particleAmount; i++){
+			Vector3 pos = randomVector3(cloudCentrum,maxPositionOffset,maxPositionOffset);	//TODOnoch nur auf X und Y Achse
+			Vector3 vel = randomVector3(Vector3(0,0,0),1.0,1.0,0.0)*maxVelocity;
+			mParticleSystem.addParticle(new Physics(100,vel,pos));
+		}
+}
+
+void ParticleCloud::draw(){
+	glColor3f(0,0,1);
+	glPointSize(5.0);
+	glBegin(GL_POINTS);
+
+	vector<Physics* > particles = mParticleSystem.getParticles();
+	for (unsigned int i = 0; i < particles.size();i++){
+		Vector3 pos = particles[i]->getPosition();
+		glVertex3f(pos.getX(), pos.getY(), pos.getZ());
+	}
+	glEnd();
+}
+
+void ParticleCloud::update(float d_t){
+	mParticleSystem.update(d_t);
+}
+
+vector<Physics* > ParticleCloud::getPhysicsList(){
+	return mParticleSystem.getParticles();
 }

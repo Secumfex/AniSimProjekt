@@ -104,11 +104,11 @@ void Controller:: remaining(int key){
 		}
 	}
 	//Raketenspur Leeren
-		if(key == 'T'){
-			if (rocketTracer != NULL){
-				rocketTracer->reset();
-			}
+	if (key == 'T') {
+		if (rocketTracer != NULL) {
+			rocketTracer->reset();
 		}
+	}
 
 	//Camera at Rakete
 	if(key == 'c'){

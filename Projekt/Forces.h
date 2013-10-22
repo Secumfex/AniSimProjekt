@@ -37,6 +37,8 @@ public:
 	void addInfluencedPhysics(Physics* physics);
 	//Hinzufügen einer Liste von zu beinflussenden Massepunkten
 	void addInfluencedPhysics(vector <Physics* > physics);
+	//Löschen der Liste aller Beeinflussten Massepunkte
+	virtual void clearAllInfluencedPhysics();
 	//Getter der Liste der beeinflussten Massepunkten
 	vector<Physics* > getInfluencedPhysics(); 
 	//Anwenden der Force-Klasse auf ihre spezielle Weise

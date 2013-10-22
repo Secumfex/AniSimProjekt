@@ -14,7 +14,17 @@ void ParticleSystem::addParticles(vector<Physics* > particles){
 		mParticles.push_back(particles[i]);
 	}
 }
+vector<Physics* > ParticleSystem::getParticles(){
+	return mParticles;
+}
 
+void ParticleSystem::clearAllParticles(){
+	for(unsigned int i = 0; i < mForces.size();i++ ){
+		mForces[i]->clearAllInfluencedPhysics();
+	}
+	mParticles.clear();
+
+}
 void ParticleSystem::applyForces(float d_t){
 	for (unsigned int i = 0; i < mForces.size(); i++){
 		mForces[i]->apply_fun(d_t);

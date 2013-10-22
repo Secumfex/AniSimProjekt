@@ -13,6 +13,10 @@ void Force::addInfluencedPhysics(vector<Physics* > physics){
 		addInfluencedPhysics(physics[i]);
 	}
 }
+void Force::clearAllInfluencedPhysics(){
+	mInfluencedPhysics.clear();
+}
+
 
 vector<Physics* > Force::getInfluencedPhysics(){
 	return mInfluencedPhysics;

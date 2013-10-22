@@ -236,7 +236,7 @@ void mouseMotion(int x, int y){
 
 int main(int argc, char* argv[])
 {
-	
+	srand (time(NULL)); //Für den Fall
 
 	//******************************************************
 	//Hier werden die entsprechenden Übungen eingebunden. 
