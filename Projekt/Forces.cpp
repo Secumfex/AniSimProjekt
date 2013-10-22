@@ -184,9 +184,9 @@ void GravitationalForce::apply_fun(float d_t){
 			Vector3 distanceVector = rhs->getPosition()-lhs->getPosition();
 			float distance = distanceVector.length();
 			//Distanz in Ordnung
-			if (distance < getMaxDistance()){
-				if(distance < 0.1){
-					distance = 0.1;
+			if (distance < getMaxDistance() && distance >= 1.0){
+				if(distance < 1){
+					distance = 1;
 				}
 				distanceVector.normalize();
 				//Anziehungskraft berechnen

@@ -1,10 +1,3 @@
-/*
- * RigidBody.cpp
- *
- *  Created on: 15.10.2013
- *      Author: Arend
- */
-
 #include "RigidBody.h"
 
 

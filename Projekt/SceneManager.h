@@ -59,6 +59,8 @@ public:
 	/*Zeichnet alle Simulations Objekte*/
 	void drawSimulationObjects();
 
+	/*Umschalten zwischen Euler Integration und Runge-Kutta*/
+	void switchIntegrationMode();
 };
 
 #endif

@@ -26,16 +26,16 @@ inline void SceneManager::initRocketSimulation(){
 		mSimulationObjects.push_back(mPlayerRocket);
 
 
-		SimulationObject* black_hole1 = new BlackHole(1000.0,Vector3(25.0,8.0,0.0));
-		mSimulationObjects.push_back(black_hole1);
+//		SimulationObject* black_hole1 = new BlackHole(1000.0,Vector3(25.0,8.0,0.0));
+//		mSimulationObjects.push_back(black_hole1);
 
 //		SimulationObject* black_hole2 = new BlackHole(1000.0,Vector3(-5.0,12.0,0.0));
 //		mSimulationObjects.push_back(black_hole2);
 
-		SimulationObject* black_hole3 = new BlackHole(1000.0,Vector3(-5.0,-12.0,0.0));
-		mSimulationObjects.push_back(black_hole3);
+//		SimulationObject* black_hole3 = new BlackHole(1000.0,Vector3(-5.0,-12.0,0.0));
+//		mSimulationObjects.push_back(black_hole3);
 
-		ParticleCloud* pc = new ParticleCloud();
+		ParticleCloud* pc = new ParticleCloud(100,0.0,10.0,Vector3(0,0,0));
 		mSimulationObjects.push_back(pc);
 
 }
@@ -178,7 +178,13 @@ void SceneManager::applyGlobalForces(float d_t) {
 	}
 }
 
-//Das is doof
+//TODO Das is doof
 RigidRocket* SceneManager::getPlayerRocket(){
 	return mPlayerRocket;
+}
+
+void SceneManager::switchIntegrationMode(){
+	for (unsigned int i = 0; i < mSimulationObjects.size(); i++){
+		mSimulationObjects[i]->switchIntegrationMode();
+	}
 }

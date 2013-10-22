@@ -94,7 +94,7 @@ void Controller:: remaining(int key){
 	}
 	//Integration
 	if(key == 'm'){
-		mSceneManager->getPlayerRocket()->getRigidBodyPointer()->switchIntegrationMode();
+		mSceneManager->switchIntegrationMode();
 	}
 
 	//Raketenspur

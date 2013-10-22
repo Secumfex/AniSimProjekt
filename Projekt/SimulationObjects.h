@@ -23,6 +23,8 @@ public:
 	virtual void update(float d_t);
 	virtual void draw();
 
+	virtual void switchIntegrationMode();
+
 	//Liefert den einzigen Massepunkt zurück falls es eh nur den einen gibt
 	virtual vector<Physics* > getPhysicsList();
 	virtual Vector3* getPositionPointer();
@@ -179,7 +181,7 @@ protected:
 	ParticleSystem mParticleSystem;
 public:
 	ParticleCloud(int particleAmount = 100, float maxVelocity = 10.0, float maxPositionOffset = 40.0, Vector3 cloudCentrum = Vector3(0,0,0));
-	void createRandomParticles(int particleAmount = 100, float maxVelocity = 10.0, float maxPositionOffset = 40.0, Vector3 cloudCentrum = Vector3(0,0,0));
+	void createRandomParticles(int particleAmount = 100, float maxVelocity = 1.0, float maxPositionOffset = 10.0, Vector3 cloudCentrum = Vector3(0,0,0));
 
 	virtual vector<Physics* > getPhysicsList();
 

@@ -46,6 +46,13 @@ void SimulationObject::update(float d_t){
 	mPhysics.update(d_t);
 }
 
+void SimulationObject::switchIntegrationMode(){
+	vector<Physics* > pl = getPhysicsList();
+	for (unsigned int i = 0 ; i < pl.size(); i++){
+		pl[i]->switchIntegrationMode();
+	}
+}
+
 Rocket::Rocket(float fuel, float fuelPower, Vector3 direction, Vector3 position){
 	mFuel = fuel;
 	mFuelPower = fuelPower;
@@ -595,9 +602,10 @@ ParticleCloud::ParticleCloud(int particleAmount, float maxVelocity, float maxPos
 void ParticleCloud::createRandomParticles(int particleAmount, float maxVelocity, float maxPositionOffset, Vector3 cloudCentrum){
 	mParticleSystem.clearAllParticles();
 	for (int i = 0; i < particleAmount; i++){
-			Vector3 pos = randomVector3(cloudCentrum,maxPositionOffset,maxPositionOffset);	//TODOnoch nur auf X und Y Achse
-			Vector3 vel = randomVector3(Vector3(0,0,0),1.0,1.0,0.0)*maxVelocity;
-			mParticleSystem.addParticle(new Physics(100,vel,pos));
+			Vector3 pos = randomVector3(cloudCentrum,(((float)(i+1))/(float)particleAmount)*maxPositionOffset,(((float)(i+1))/(float)particleAmount)*maxPositionOffset);	//TODOnoch nur auf X und Y Achse
+			float v = (((float) rand()) / ((float)RAND_MAX)-0.5)*2.0;
+			Vector3 vel = randomVector3(Vector3(0,0,0),1.0,1.0,0.0)*vel*maxVelocity;
+			mParticleSystem.addParticle(new Physics(0.001,vel,pos));
 		}
 }
 
