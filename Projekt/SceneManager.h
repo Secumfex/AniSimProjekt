@@ -40,6 +40,9 @@ public:
 
 	RigidRocket* getPlayerRocket();
 
+	vector<SimulationObject* > getSimulationObjects();
+
+
 	/*Init der Szene*/
 	void init();
 	/*Reset der Szene*/

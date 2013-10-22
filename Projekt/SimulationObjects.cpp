@@ -55,6 +55,10 @@ bool Rocket::isLaunched(){
 	return mMode == LAUNCHED;
 }
 
+bool Rocket:: isCrashed(){
+	return mMode == CRASHED;
+}
+
 //Launch Rocket --> nur, wenn noch nicht gelaunched
 void Rocket::launch(){
 	if (mMode == PRELAUNCH){
@@ -420,6 +424,14 @@ float RigidRocket::getFuel(){
 
 bool RigidRocket::isLaunched(){
 	return mMode == LAUNCHED;
+}
+
+bool RigidRocket:: isCrashed(){
+	return mMode == CRASHED;
+}
+
+void RigidRocket:: crash(){
+	mMode = CRASHED;
 }
 
 //Launch Rocket --> nur, wenn noch nicht gelaunched

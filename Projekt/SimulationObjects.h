@@ -41,7 +41,7 @@ public:
  * 					PRELAUNCH	:  Ausrichtung Möglich
  * 					LAUNCHED	:  Rakete beschleunigt bis fuel verbrannt, keine Ausrichtungen mehr möglich*/
 class Rocket : public SimulationObject{
-	 enum mode{PRELAUNCH,LAUNCHED};
+	 enum mode{PRELAUNCH,LAUNCHED,CRASHED};
  private:
 	 Vector3 mDirection;
 	 float mFuel;
@@ -56,6 +56,8 @@ class Rocket : public SimulationObject{
 	 virtual void draw();
 
 	 bool isLaunched();
+
+	bool isCrashed();
 
 	 void launch();
 	 float getFuel();
@@ -103,7 +105,7 @@ public:
 
 /*Ersatz für Rocket, jetzt mit sexy 2-Punkte-Rigid-Body*/
 class RigidRocket : public RigidSimulationObject{
-	enum mode{PRELAUNCH,LAUNCHED};
+	enum mode{PRELAUNCH,LAUNCHED,CRASHED};
 private:
 	 Vector3 mDirection;
 	 Quaternion* mRotation;
@@ -130,6 +132,10 @@ public:
 
 
 	bool isLaunched();
+
+	bool isCrashed();
+
+	void  crash();
 
 	void launch();
 	float getFuel();

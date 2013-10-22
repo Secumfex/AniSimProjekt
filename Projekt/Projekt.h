@@ -5,6 +5,7 @@
 #include "BasisApplication.h"
 #include "SceneManager.h"
 #include "Controller.h"
+#include "CollisionManager.h"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ class Projekt : public BasisApplication
 	protected:
 		SceneManager mSceneManager;
 		Controller mController;
+		CollisionManager mCollision;
 
 	//---------------MEMBER FUNCTIONS---------------------
 	private:

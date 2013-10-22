@@ -18,8 +18,10 @@ inline void SceneManager::initRocketSimulation(){
 		//TODO ObjectFactory bauen
 
 
-		SimulationObject* black_hole0 = new BlackHole(400.0,Vector3(0.0,0.0,0.0));
+		SimulationObject* black_hole0 = new BlackHole(400.0,Vector3(-10.0,0.0,0.0));
+		SimulationObject* black_hole1 = new BlackHole(400.0,Vector3(10.0,10.0,0.0));
 		mSimulationObjects.push_back(black_hole0);
+		mSimulationObjects.push_back(black_hole1);
 
 		mPlayerRocket = new RigidRocket(3.0,100.0,10);
 		mPlayerRocket->getRigidBodyPointer()->setPosition(Vector3(-5.0,5.0,0.0));
@@ -181,4 +183,8 @@ void SceneManager::applyGlobalForces(float d_t){
 //Das is doof
 RigidRocket* SceneManager::getPlayerRocket(){
 	return mPlayerRocket;
+}
+
+vector<SimulationObject* > SceneManager::getSimulationObjects(){
+	return mSimulationObjects;
 }

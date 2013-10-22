@@ -19,9 +19,9 @@ void Projekt::init(){
 	mController.setCameraPointer(mCamera);
 	rocketTracer = new TimedPointTracer(mSceneManager.getPlayerRocket()->getPhysics()->getPositionPointer(),1000);
 	mController.setTracer(rocketTracer);
-
-
 	mController.resetObjectPointers();
+
+	mCollision.setScene(&mSceneManager);
 }
 
 void Projekt::draw(){
@@ -41,6 +41,11 @@ void Projekt::update(float d_t){
 	if(rocketTracer != NULL){
 		rocketTracer->trace(d_t);
 	}
+
+	mCollision.collisionCheck();
+//	if(mCollision.isCollision())
+//		cout << "KOLLISION!!" << endl;
+
 }
 
 //TODO INPUT / OUTPUT Manager
