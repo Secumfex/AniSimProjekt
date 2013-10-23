@@ -195,6 +195,8 @@ public:
 
 	virtual vector<Physics* > getPhysicsList();
 
+	void forceParticlesToLoop(bool clockwise = true);
+
 	virtual void draw();
 	virtual void update(float d_t);
 };
