@@ -114,8 +114,10 @@ private:
 	 mode mMode;
 	 Physics* mTail;
 	 Physics* mHead;
+	 void drawCrash();
 	 void drawRocket();
 	 void drawTail();
+
 public:
 	/*param:
 	 * fuel : Menge des Spritts
@@ -130,6 +132,8 @@ public:
 	virtual void update(float d_t);
 	virtual void draw();
 
+	 Vector3 getHeadPosition();
+	 Vector3 getTailPosition();
 
 	bool isLaunched();
 

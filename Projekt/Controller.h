@@ -14,6 +14,7 @@
 #include "Camera.h"
 #include "UtilityClasses.h"
 #include "SceneManager.h"
+#include "CollisionManager.h"
 
 using namespace std;
 
@@ -28,6 +29,7 @@ private:
 	Camera* mCamera;
 	TimedPointTracer* rocketTracer;
 	SceneManager* mSceneManager;
+	CollisionManager* mColli;
 	//---------------MEMBER FUNCTIONS------------
 	public:
 		void resetObjectPointers();
@@ -36,6 +38,7 @@ private:
 		void setCameraPointer(Camera* cam);
 		void setTracer(TimedPointTracer* tracer);
 		void setScene(SceneManager* scene);
+		void setCollisionsManager(CollisionManager* colli);
 
 		void keyPressed(int key);
 

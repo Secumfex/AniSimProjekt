@@ -20,6 +20,7 @@ void Projekt::init(){
 	rocketTracer = new TimedPointTracer(mSceneManager.getPlayerRocket()->getPhysics()->getPositionPointer(),1000);
 	mController.setTracer(rocketTracer);
 	mController.resetObjectPointers();
+	mController.setCollisionsManager(&mCollision);
 
 	mCollision.setScene(&mSceneManager);
 }
@@ -42,9 +43,11 @@ void Projekt::update(float d_t){
 		rocketTracer->trace(d_t);
 	}
 
-	mCollision.collisionCheck();
-//	if(mCollision.isCollision())
-//		cout << "KOLLISION!!" << endl;
+	mCollision.collisionCheck(d_t);
+	if(mCollision.isCollision()){
+//		cout << "Hallo Mama" <<endl;
+				mCollision.explosion(d_t);
+	}
 
 }
 

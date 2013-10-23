@@ -40,7 +40,11 @@ void Controller:: setScene(SceneManager* scene){
 	mSceneManager = scene;
 }
 
-void Controller::keyPressed(int key){
+void Controller:: setCollisionsManager(CollisionManager* colli){
+	mColli = colli;
+}
+
+void Controller:: keyPressed(int key){
 	if(mSceneManager ->getPlayerRocket()->isLaunched())
 		launched(key);
 	else if(!mSceneManager -> getPlayerRocket()->isLaunched())
@@ -93,6 +97,7 @@ void Controller:: remaining(int key){
 			mCamera->setPosition(Vector3(0.0, 5.0, 20.0));
 			mCamera->setDirection(Vector3(0.0, 0.0, -1.0));
 		}
+	mColli->setScene(mSceneManager);
 	}
 	//Integration
 	if(key == 'm'){

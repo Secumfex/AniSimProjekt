@@ -21,13 +21,34 @@ CollisionManager::~CollisionManager() {
 void CollisionManager:: setScene(SceneManager* scene){
 	mSceneManager = scene;
 	mRocket = mSceneManager->getPlayerRocket();
+	collisiontime = 0.0;
 }
 
 bool CollisionManager:: isCollision (){
 	return mRocket -> isCrashed();
 }
 
-void CollisionManager:: collisionCheck(){
+
+void CollisionManager:: explosion (float d_t){
+
+	collisiontime = collisiontime + d_t;
+
+	if(3.0 > collisiontime){
+
+	glPushMatrix();
+
+	glColor3f(1.0, 0.9, 0.0);
+
+	glTranslatef(collisionPoint.getX(), collisionPoint.getY(), collisionPoint.getZ());
+
+	glutSolidTeapot(1.3 *collisiontime);
+//	glutSolidSphere(1.3 *collisiontime , 4, 4);
+
+	glPopMatrix();
+	}
+}
+
+void CollisionManager:: collisionCheck(float d_t){
 
 	vector<SimulationObject* > temp = mSceneManager->getSimulationObjects();
 
@@ -35,15 +56,20 @@ void CollisionManager:: collisionCheck(){
 		if(temp[i] != mRocket){
 
 		//Normales Minus hat bei Vektor3 Mist gebaut... deshalb der ugly code
-			Vector3 diff = Vector3(	temp[i]->getPositionPointer()->getX() - mRocket-> getPositionPointer()->getX(),
-									temp[i]->getPositionPointer()->getY() - mRocket-> getPositionPointer()->getY(),
-									temp[i]->getPositionPointer()->getZ() - mRocket-> getPositionPointer()->getZ());
-//			cout << diff.getX() << "  "<< diff.getY() << "  "<< diff.getZ() << "  "<<endl;
+			Vector3 diff_head = Vector3(	temp[i]->getPositionPointer()->getX() - mRocket-> getHeadPosition().getX(),
+											temp[i]->getPositionPointer()->getY() - mRocket-> getHeadPosition().getY(),
+											temp[i]->getPositionPointer()->getZ() - mRocket-> getHeadPosition().getZ());
 
-			if (diff.length() < 1){
-//				mRocket->crash();
-				cout << "Es kracht"<< diff.length() << endl;
+			Vector3 diff_tail = Vector3(	temp[i]->getPositionPointer()->getX() - mRocket-> getTailPosition().getX(),
+											temp[i]->getPositionPointer()->getY() - mRocket-> getTailPosition().getY(),
+											temp[i]->getPositionPointer()->getZ() - mRocket-> getTailPosition().getZ());
+			if (diff_head.length() < 0.5 || diff_tail.length() < 0.5){
+				mRocket->crash();
+				collisionPoint = (mRocket -> getHeadPosition() + mRocket -> getTailPosition()) * 0.5;
+//				collisionPoint = (*(mRocket->getPositionPointer()) + *(temp[i]->getPositionPointer())) * 0.5;
 			}
+
+			cout << collisionPoint.getY() << endl;
 		}
 	}
 

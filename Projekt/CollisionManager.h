@@ -8,6 +8,7 @@
 #ifndef COLLISIONMANAGER_H_
 #define COLLISIONMANAGER_H_
 
+#include <windows.h>
 #include "SceneManager.h"
 #include "SimulationObjects.h"
 #include "GL/glut.h"
@@ -27,13 +28,16 @@ public:
 private:
 	SceneManager* mSceneManager;
 	RigidRocket* mRocket;
-	int banana = 999;
+	Vector3 collisionPoint;
+	float collisiontime;
+
 
 //---------------MEMBER FUNCTIONS------------
 public:
 	void setScene(SceneManager* scene);
 	bool  isCollision ();
-	void collisionCheck();
+	void collisionCheck(float d_t);
+	void explosion (float d_t);
 
 };
 
