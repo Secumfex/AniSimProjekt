@@ -141,8 +141,8 @@ void CollisionManager::collisionCheckObjectAgainstObject(SimulationObject* lhs,S
 	vector<Physics* > lhs_phys = lhs->getPhysicsList();
 	vector<Physics* > rhs_phys = rhs->getPhysicsList();
 	//Alle MassePunkte auf Kollision testen
-	for(unsigned int i = 0; i < lhs_phys.size();i++){
-		for(unsigned int j=0; j < rhs_phys.size();j++){
+	for(unsigned int i = 0; i < lhs_phys.size()-1;i++){
+		for(unsigned int j=i+1; j < rhs_phys.size();j++){
 			if (lhs_phys[i] != rhs_phys[j]){ //Unterschiedliche Massepunkte
 				collisionCheckPhysicsAgainstPhysics(lhs_phys[i],rhs_phys[j]);
 			}
@@ -156,7 +156,7 @@ void CollisionManager::collisionCheckPhysicsAgainstPhysics(Physics* lhs, Physics
 	if (distance.length() < mMassPointEpsilon){
 		float scalar = (lhs->getImpulse() * rhs->getImpulse());
 		if (scalar < 0){	//Bewegen sich aufeinander zu --> Kollision
-			mCollisionForces.push_back(new ElasticCollision(lhs,rhs,0.4));
+			mCollisionForces.push_back(new ElasticCollision(lhs,rhs,0.1));
 		}
 		//sonst nichts zu machen weil sie sich eh von einander weg bewegen
 	}

@@ -147,8 +147,8 @@ inline Vector3 Physics::evaluatePosition(Vector3 pos, Vector3 p_dot, float d_t){
 ////////////////////////////////////////////////
 //////////////// EULER STEP ////////////////////
 inline void Physics::eulerStep(float d_t){
-	applyAccumulatedForce();
 	setPosition( mPosition + (mVelocity * d_t));
+	applyAccumulatedForce();
 }
 
 /*Kraft wird angewendet*/
