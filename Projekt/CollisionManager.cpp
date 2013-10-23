@@ -10,7 +10,7 @@
 using namespace std;
 
 CollisionManager::CollisionManager() {
-	mMassPointEpsilon = 0.20;
+	mMassPointEpsilon = 0.40;
 }
 
 CollisionManager::~CollisionManager() {

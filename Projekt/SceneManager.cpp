@@ -10,7 +10,7 @@ inline void SceneManager::initRocketSimulation(){
 //		mGlobalForceObjects.push_back(gravity);
 
 		//Anziehungskraft untereinander
-		GravitationalForce* gravitation = new GravitationalForce(1000.0,0.0,0.5);
+		GravitationalForce* gravitation = new GravitationalForce(1000.0,0.0,0.7);
 		mGlobalForceObjects.push_back(gravitation);
 
 		//Drag
