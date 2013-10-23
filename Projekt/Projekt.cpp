@@ -35,6 +35,9 @@ void Projekt::draw(){
 }
 
 void Projekt::update(float d_t){
+	mCollision.collisionCheckAll();
+	mCollision.applyAndEmptyCollisionForces(d_t);
+
 	BasisApplication::update(d_t);
 	mSceneManager.update(d_t);
 
@@ -49,8 +52,6 @@ void Projekt::update(float d_t){
 				mCollision.explosion(d_t);
 	}
 
-	mCollision.collisionCheckAll();
-	mCollision.applyAndEmptyCollisionForces(d_t);
 }
 
 //TODO INPUT / OUTPUT Manager

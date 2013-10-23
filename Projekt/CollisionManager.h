@@ -49,7 +49,7 @@ public:
 	void collisionCheckObjectAgainstObject(SimulationObject* lhs, SimulationObject* rhs);
 	//Teste SimulationObject gegen Waend
 	void collisionCheckObjectAgainstSceneWalls(SimulationObject* object);
-	void collisionCheckPhysicsAgainstSceneWalls(Physics* physics);
+	void collisionCheckPhysicsAgainstSceneWalls(Physics* physics,Vector3 impulse);
 	//Teste Massepunkt gegen Massepunkt
 	void collisionCheckPhysicsAgainstPhysics(Physics* lhs, Physics* rhs);
 	//Wende alle Gefundenen CollisionsKräfte an und leere den KraftVektor

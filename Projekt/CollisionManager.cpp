@@ -87,42 +87,41 @@ void CollisionManager::collisionCheckAll(){
 void CollisionManager::collisionCheckObjectAgainstSceneWalls(SimulationObject* object){
 	vector<Physics* > temp = object->getPhysicsList();
 	for(unsigned int i = 0; i < temp.size();i++){
-		collisionCheckPhysicsAgainstSceneWalls(temp[i]);
+		collisionCheckPhysicsAgainstSceneWalls(temp[i], object->getPhysics()->getImpulse());
 	}
 }
-void CollisionManager::collisionCheckPhysicsAgainstSceneWalls(Physics* physics){
+void CollisionManager::collisionCheckPhysicsAgainstSceneWalls(Physics* physics, Vector3 impulse){
 	Vector3 n(0,0,0);
 	Vector3 p = physics->getPosition();
-	float e = mMassPointEpsilon;
 	if (p.getX() > World_max_X) {	//rechts
-		physics->setPosition(World_max_X - e * 0.5, p.getY(), p.getZ());
+		physics->setPosition(World_max_X, p.getY(), p.getZ());
 		n.setX(-1.0);
-		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
+		mCollisionForces.push_back(new ReflectiveCollision(physics, n,impulse));
 	}
 	if (p.getY() > World_max_Y) {	//oben
-		physics->setPosition(p.getX(), World_max_Y - e, p.getZ());
+		physics->setPosition(p.getX(), World_max_Y, p.getZ());
 		n.setY(-1.0);
-		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
+		mCollisionForces.push_back(new ReflectiveCollision(physics, n,impulse));
 	}
 	if (p.getZ() > World_max_Z) {	//vorne
-		physics->setPosition(p.getX(), p.getY(), World_max_Z - e);
+		physics->setPosition(p.getX(), p.getY(), World_max_Z);
 		n.setZ(-1.0);
-		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
+		mCollisionForces.push_back(new ReflectiveCollision(physics, n,impulse));
 	}
 	if (p.getX() < World_min_X) {	//links
-		physics->setPosition(World_min_X + e, p.getY(), p.getZ());
+		physics->setPosition(World_min_X, p.getY(), p.getZ());
 		n.setX(1.0);
-		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
+		mCollisionForces.push_back(new ReflectiveCollision(physics, n,impulse));
 	}
 	if (p.getY() < World_min_Y) {	//unten
-		physics->setPosition(p.getX(), World_min_Y + e, p.getZ());
+		physics->setPosition(p.getX(), World_min_Y, p.getZ());
 		n.setY(1.0);
-		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
+		mCollisionForces.push_back(new ReflectiveCollision(physics, n,impulse));
 	}
 	if (p.getZ() < World_min_Z) {	//oben
-		physics->setPosition(p.getX(), p.getY(), World_min_Z + e);
+		physics->setPosition(p.getX(), p.getY(), World_min_Z);
 		n.setZ(1.0);
-		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
+		mCollisionForces.push_back(new ReflectiveCollision(physics, n,impulse));
 	}
 }
 
@@ -153,4 +152,5 @@ void CollisionManager::applyAndEmptyCollisionForces(float d_t){
 	for(unsigned int i = 0; i < mCollisionForces.size(); i++){
 		mCollisionForces[i]->apply_fun(d_t);
 	}
+	mCollisionForces.clear();
 }
