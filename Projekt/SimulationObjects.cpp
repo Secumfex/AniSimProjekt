@@ -597,7 +597,7 @@ void RigidRocket::drawTail(){
 ParticleCloud::ParticleCloud(int particleAmount, float maxVelocity, float maxPositionOffset, Vector3 cloudCentrum){
 	setPosition(cloudCentrum);
 	createRandomParticles(particleAmount, maxVelocity, maxPositionOffset,cloudCentrum);
-	mParticleSystem.addForce(new DistancePointForce(maxPositionOffset,0.0001,cloudCentrum));
+	mParticleSystem.addForce(new DistancePointForce(maxPositionOffset,0.01,cloudCentrum));
 }
 
 void ParticleCloud::createRandomParticles(int particleAmount, float maxVelocity, float maxPositionOffset, Vector3 cloudCentrum){
@@ -608,8 +608,27 @@ void ParticleCloud::createRandomParticles(int particleAmount, float maxVelocity,
 			Vector3 vel = randomVector3(Vector3(0,0,0),1.0,1.0,0.0);
 			vel.normalize();
 			vel*=v*maxVelocity;
-			mParticleSystem.addParticle(new Physics(0.001,vel,pos));
+			mParticleSystem.addParticle(new Physics(0.1,vel,pos));
 		}
+}
+
+//Setzt den Impuls der Partikel orthogonal zum Mittelpunktsvektor
+void ParticleCloud::forceParticlesToLoop(bool clockwise){
+	vector<Physics* > p= mParticleSystem.getParticles();
+	for (unsigned int i = 0; i <p.size(); i++ ){
+		Vector3 CenterToParticle = p[i]->getPosition()-getPosition();
+		CenterToParticle.normalize();
+		Vector3 ortho(CenterToParticle.getY(),CenterToParticle.getX(),CenterToParticle.getZ());
+		if (clockwise){
+			ortho.setY(ortho.getY()*(-1));
+		}
+		else{
+			ortho.setX(ortho.getX()*(-1));
+		}
+		float imp = p[i]->getImpulse().length();
+		Vector3 newImp = imp*ortho;
+		p[i]->setImpulse(newImp);
+	}
 }
 
 void ParticleCloud::draw(){
