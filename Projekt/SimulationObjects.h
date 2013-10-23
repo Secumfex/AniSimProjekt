@@ -9,7 +9,7 @@
 #include "Physics.h"
 #include "ParticleSystem.h"
 #include "UtilityClasses.h"
-
+ 
 /**
  * Klasse SimulationObject : ein prinzipiell dynamisches Objekt in der Simulation, z.B. Rakete, Asteroiden oder Planeten
  * Physics: Massepunkt des Simulationsobjekts, sollte besser was anderes sein...
@@ -119,6 +119,7 @@ private:
 	 mode mMode;
 	 Physics* mTail;
 	 Physics* mHead;
+	 float explosion_time;
 	 void drawCrash();
 	 void drawRocket();
 	 void drawTail();
@@ -139,6 +140,9 @@ public:
 
 	 Vector3 getHeadPosition();
 	 Vector3 getTailPosition();
+
+	 Physics* getTail();
+	 Physics* getHead();
 
 	bool isLaunched();
 

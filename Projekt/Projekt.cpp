@@ -47,10 +47,10 @@ void Projekt::update(float d_t){
 	}
 
 	mCollision.collisionCheck(d_t);
-	if(mCollision.isCollision()){
-//		cout << "Hallo Mama" <<endl;
-				mCollision.explosion(d_t);
-	}
+//	if(mCollision.isCollision()){
+////		cout << "Hallo Mama" <<endl;
+//				mCollision.explosion(d_t);
+//	}
 
 }
 

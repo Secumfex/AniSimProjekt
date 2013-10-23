@@ -15,6 +15,8 @@
 #include <String.h>
 #include "Forces.h"
 #include <vector>
+#include "SceneConstraints.h"
+
 
 using namespace std;
 
@@ -35,8 +37,6 @@ private:
 	float mMassPointEpsilon;
 
 	RigidRocket* mRocket;
-	Vector3 collisionPoint;
-	float collisiontime;
 
 //---------------MEMBER FUNCTIONS------------
 public:
@@ -59,7 +59,8 @@ public:
 	void setScene(SceneManager* scene);
 	bool  isCollision ();
 	void collisionCheck(float d_t);
-	void explosion (float d_t);
+	void collisionHoleCheck(float d_t);
+	void collisionWallCheck(float d_t);
 
 };
 
