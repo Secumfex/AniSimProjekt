@@ -6,13 +6,16 @@ inline void SceneManager::initRocketSimulation(){
 /////////////// Globale Kräfte     /////////////////////////////////////////////////////////////////////////
 
 		//Erdanziehungskraft
-//		SimpleForce* gravity = new SimpleForce(Vector3(0.0,-10.0,0.0));
+//		SimpleAcceleration* gravity = new SimpleAcceleration(Vector3(0.0,-10.0,0.0));
 //		mGlobalForceObjects.push_back(gravity);
 
 		//Anziehungskraft untereinander
-		GravitationalForce* gravitation = new GravitationalForce(100.0,0.0,1.0);
+		GravitationalForce* gravitation = new GravitationalForce(1000.0,0.0,1.0);
 		mGlobalForceObjects.push_back(gravitation);
 
+		//Drag
+		ViscousDrag* drag = new ViscousDrag(0.0001);
+		mGlobalForceObjects.push_back(drag);
 
 /////////////// Simulations Objekte ////////////////////////////////////////////////////////////////////
 		//TODO ObjectFactory bauen
@@ -23,13 +26,12 @@ inline void SceneManager::initRocketSimulation(){
 		mSimulationObjects.push_back(black_hole0);
 		mSimulationObjects.push_back(black_hole1);
 
-		mPlayerRocket = new RigidRocket(3.0,100.0,10);
-		mPlayerRocket->getRigidBodyPointer()->setPosition(Vector3(-5.0,5.0,0.0));
-
+		mPlayerRocket = new RigidRocket(1.0,10.0,1 ,1);
+		mPlayerRocket->getRigidBodyPointer()->setPosition(Vector3(.0,20.0,0.0));
 		mSimulationObjects.push_back(mPlayerRocket);
 
 
-//		SimulationObject* black_hole1 = new BlackHole(1000.0,Vector3(5.0,8.0,0.0));
+//		SimulationObject* black_hole1 = new BlackHole(1000.0,Vector3(25.0,8.0,0.0));
 //		mSimulationObjects.push_back(black_hole1);
 
 //		SimulationObject* black_hole2 = new BlackHole(1000.0,Vector3(-5.0,12.0,0.0));
@@ -37,6 +39,9 @@ inline void SceneManager::initRocketSimulation(){
 
 //		SimulationObject* black_hole3 = new BlackHole(1000.0,Vector3(-5.0,-12.0,0.0));
 //		mSimulationObjects.push_back(black_hole3);
+
+		ParticleCloud* pc = new ParticleCloud();
+		mSimulationObjects.push_back(pc);
 
 }
 
@@ -158,33 +163,37 @@ void SceneManager::drawSimulationObjects(){
 	}
 }
 
-void SceneManager::update(float d_t){
+void SceneManager::update(float d_t) {
 /// ----Applying global forces...;
 	applyGlobalForces(d_t);
 
 //	----Applying forces...
-	for (unsigned int i = 0; i < mForceObjects.size();i++){
+	for (unsigned int i = 0; i < mForceObjects.size(); i++) {
 		mForceObjects[i]->apply_fun(d_t);
 	}
 
-//TODO// ----Updating all Objects
-	for (unsigned int i = 0; i < mSimulationObjects.size(); i ++){
-		drawAccumulatedForce(mSimulationObjects[i]);
+	for (unsigned int i = 0; i < mSimulationObjects.size(); i++) {
 		mSimulationObjects[i]->update(d_t);
 	}
 }
 
-void SceneManager::applyGlobalForces(float d_t){
-	for (unsigned int i = 0; i < mGlobalForceObjects.size(); i++){
+void SceneManager::applyGlobalForces(float d_t) {
+	for (unsigned int i = 0; i < mGlobalForceObjects.size(); i++) {
 		mGlobalForceObjects[i]->apply_fun(d_t);
 	}
 }
 
-//Das is doof
+//TODO Das is doof
 RigidRocket* SceneManager::getPlayerRocket(){
 	return mPlayerRocket;
 }
 
 vector<SimulationObject* > SceneManager::getSimulationObjects(){
 	return mSimulationObjects;
+}
+
+void SceneManager::switchIntegrationMode(){
+	for (unsigned int i = 0; i < mSimulationObjects.size(); i++){
+		mSimulationObjects[i]->switchIntegrationMode();
+	}
 }

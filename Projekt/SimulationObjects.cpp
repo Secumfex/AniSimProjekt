@@ -5,8 +5,11 @@
 #include <math.h>
 using namespace std;
 
-SimulationObject::SimulationObject(float mass, Vector3 velocity, Vector3 position){
-	setPhysicsMembers(mass,velocity,position);
+SimulationObject::SimulationObject(float mass, Vector3 velocity,
+		Vector3 position) {
+	mPhysics.setMass(mass);
+	mPhysics.setVelocity(velocity);
+	mPhysics.setPosition(position);
 }
 
 Physics* SimulationObject::getPhysics(){
@@ -15,17 +18,19 @@ Physics* SimulationObject::getPhysics(){
 Vector3* SimulationObject::getPositionPointer(){
 	return mPhysics.getPositionPointer();
 }
+Vector3 SimulationObject::getPosition(){
+	return mPhysics.getPosition();
+}
+
+void SimulationObject::setPosition(Vector3 pos){
+	mPhysics.setPosition(pos);
+}
+
 //liefert den einzigen Massepunkt zurück, falls es eh nur den einen gibt
 vector<Physics*> SimulationObject::getPhysicsList(){
 	vector<Physics* > result;
 	result.push_back(&mPhysics);
 	return result;
-}
-
-void SimulationObject::setPhysicsMembers(float mass, Vector3 velocity, Vector3 position){
-	mPhysics.setMass(mass);
-	mPhysics.setVelocity(velocity);
-	mPhysics.setPosition(position);
 }
 
 void SimulationObject::draw(){
@@ -41,6 +46,13 @@ void SimulationObject::update(float d_t){
 	mPhysics.update(d_t);
 }
 
+void SimulationObject::switchIntegrationMode(){
+	vector<Physics* > pl = getPhysicsList();
+	for (unsigned int i = 0 ; i < pl.size(); i++){
+		pl[i]->switchIntegrationMode();
+	}
+}
+
 Rocket::Rocket(float fuel, float fuelPower, Vector3 direction, Vector3 position){
 	mFuel = fuel;
 	mFuelPower = fuelPower;
@@ -48,7 +60,9 @@ Rocket::Rocket(float fuel, float fuelPower, Vector3 direction, Vector3 position)
 	mDirection = direction;
 	mMode = PRELAUNCH;
 					//Rakete ist schwerer je mehr Treibstoff sie besitzt
-    setPhysicsMembers(mFuel+10.0,Vector3(0,0,0),position);
+    mPhysics.setMass(mFuel+10.0);
+    mPhysics.setVelocity(Vector3(0,0,0));
+    mPhysics.setPosition(position);
 }
 
 bool Rocket::isLaunched(){
@@ -236,7 +250,9 @@ void BlackHole::update(float d_t){
 }
 
 BlackHole::BlackHole(float mass,Vector3 position){
-	setPhysicsMembers(mass,Vector3(0,0,0),position);
+	mPhysics.setMass(mass);
+    mPhysics.setVelocity(Vector3(0,0,0));
+    mPhysics.setPosition(position);
 }
 
 void drawAccumulatedForce(SimulationObject* pSim){
@@ -367,6 +383,9 @@ RigidBody* RigidSimulationObject::getRigidBodyPointer(){
 }
 Vector3* RigidSimulationObject::getPositionPointer(){
 	return 	mRigidBody->getPositionPointer();
+}
+Vector3 RigidSimulationObject::getPosition(){
+	return 	mRigidBody->getPosition();
 }
 vector<Physics* > RigidSimulationObject::getPhysicsList(){
 	return mRigidBody->getMassPoints();
@@ -659,9 +678,57 @@ void RigidRocket::drawRocket(){
 }
 
 void RigidRocket::drawTail(){
-
 	glColor3f(1.0, 1.0, 0.0);
 	glTranslatef(0.0, -1.1, 0.0);
 	glRotated(90, 1, 0, 0);
 	glutSolidCone(0.1, 0.2, 6, 6);
+}
+
+ParticleCloud::ParticleCloud(int particleAmount, float maxVelocity, float maxPositionOffset, Vector3 cloudCentrum){
+	setPosition(cloudCentrum);
+	createRandomParticles(particleAmount, maxVelocity, maxPositionOffset,cloudCentrum);
+	mParticleSystem.addForce(new DistancePointForce(maxPositionOffset,0.0001,cloudCentrum));
+}
+
+void ParticleCloud::createRandomParticles(int particleAmount, float maxVelocity, float maxPositionOffset, Vector3 cloudCentrum){
+	mParticleSystem.clearAllParticles();
+	for (int i = 0; i < particleAmount; i++){
+			Vector3 pos = randomVector3(cloudCentrum,(((float)(i+1))/(float)particleAmount)*maxPositionOffset,(((float)(i+1))/(float)particleAmount)*maxPositionOffset,0);	//TODOnoch nur auf X und Y Achse
+			float v = (((float) rand()) / ((float)RAND_MAX)-0.5)*2.0;
+			Vector3 vel = randomVector3(Vector3(0,0,0),1.0,1.0,0.0);
+			vel.normalize();
+			vel*=v*maxVelocity;
+			mParticleSystem.addParticle(new Physics(0.001,vel,pos));
+		}
+}
+
+void ParticleCloud::draw(){
+	glColor3f(0,0,1);
+	glPointSize(5.0);
+	glBegin(GL_POINTS);
+
+	vector<Physics* > particles = mParticleSystem.getParticles();
+	for (unsigned int i = 0; i < particles.size();i++){
+		Vector3 pos = particles[i]->getPosition();
+		glVertex3f(pos.getX(), pos.getY(), pos.getZ());
+	}
+	glEnd();
+}
+
+void ParticleCloud::update(float d_t){
+	mParticleSystem.applyForces(d_t);
+	mParticleSystem.update(d_t);
+}
+
+vector<Physics* > ParticleCloud::getPhysicsList(){
+	return mParticleSystem.getParticles();
+}
+
+ParticleRing::ParticleRing(int particleAmount, float maxVelocity, float maxRadius, float minRadius, Vector3 ringCentrum){
+	setPosition(ringCentrum);
+	ParticleCloud::createRandomParticles(particleAmount, maxVelocity, maxRadius,ringCentrum);
+	//Kraft die außerhalb des Rings nach Innen wirkt
+	mParticleSystem.addForce(new DistancePointForce(maxRadius,0.001,ringCentrum));
+	//Kraft die innerhalb des Rings nach Außen wirkt
+	mParticleSystem.addForce(new DistancePointForce(1.0,-0.001,ringCentrum,minRadius));
 }

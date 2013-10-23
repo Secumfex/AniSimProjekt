@@ -3,6 +3,7 @@
 
 #include "SceneConstraints.h"
 #include "SimulationObjects.h"
+#include "ParticleSystem.h"
 #include "Physics.h"
 #include "Forces.h"
 #include <vector>
@@ -27,6 +28,7 @@ private:
 //TODO das würde ich lieber anders lösen KA
 
 	RigidRocket* mPlayerRocket;
+	ParticleSystem* mParticleSystem;
 
 void applyGlobalForces(float d_t);
 
@@ -60,6 +62,8 @@ public:
 	/*Zeichnet alle Simulations Objekte*/
 	void drawSimulationObjects();
 
+	/*Umschalten zwischen Euler Integration und Runge-Kutta*/
+	void switchIntegrationMode();
 };
 
 #endif

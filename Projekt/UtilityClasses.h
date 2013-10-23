@@ -5,6 +5,8 @@
 #define UTILITYCLASSES_H
 #include "Math.h"
 #include "GL/glut.h"
+#include <stdlib.h>
+using namespace std;
 /*
  * Klasse IntTupel fasst zwei Int-Werte zusammen.
  * Vglbar mit Tupel einer Relation
@@ -35,6 +37,7 @@ public:
 			100) {
 		mTarget = target;
 		mLength = length;
+		mEnabled = false;
 	}
 	vector<Vector3>* getPointsPointer() {
 		return &mPoints;
@@ -70,6 +73,7 @@ public:
 			mLength = length;
 			mInterval = interval;
 			mTimer = 0.0;
+			mEnabled = false;
 		}
 		void trace(float d_t){
 			mTimer += d_t;
@@ -119,6 +123,13 @@ static void drawVector3(Vector3 vector, Vector3 position, Vector3 color){
 		glColor3f(color.getX(),color.getY(),color.getZ());
 		drawVector3(vector,position);
 	glColor4f(currentColor[0],currentColor[1],currentColor[2],currentColor[3]);
+}
+
+static Vector3 randomVector3(Vector3 centrum =  Vector3(0,0,0), double max_x = 1.0,double max_y = 1.0, double max_z = 1.0){
+	double r_x = (((rand() / ((double) RAND_MAX))-0.5)*2.0)*max_x;
+	double r_y = (((rand() / ((double) RAND_MAX))-0.5)*2.0)*max_y;
+	double r_z = (((rand() / ((double) RAND_MAX))-0.5)*2.0)*max_z;
+	return Vector3(centrum.getX()+r_x,centrum.getY()+r_y,centrum.getZ()+r_z);
 }
 
 #endif

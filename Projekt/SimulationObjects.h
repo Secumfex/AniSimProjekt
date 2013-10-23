@@ -7,6 +7,7 @@
 
 #include "RigidBody.h"
 #include "Physics.h"
+#include "ParticleSystem.h"
 #include "UtilityClasses.h"
 
 /**
@@ -22,12 +23,15 @@ public:
 	virtual void update(float d_t);
 	virtual void draw();
 
-	//Setzen der Massepunkt-Membervariablen
-	void setPhysicsMembers(float mass, Vector3 velocity, Vector3 position);
+	virtual void switchIntegrationMode();
 
 	//Liefert den einzigen Massepunkt zurück falls es eh nur den einen gibt
 	virtual vector<Physics* > getPhysicsList();
 	virtual Vector3* getPositionPointer();
+	virtual Vector3 getPosition();
+
+	virtual void setPosition(Vector3 pos);
+
 	Physics* getPhysics();
 };
 
@@ -91,8 +95,9 @@ public:
 	Quaternion rotation = Quaternion(1,0,0,0), Vector3 angularMomentum = Vector3(0,0,0));
 
 	RigidBody* getRigidBodyPointer();
-	Vector3* getPositionPointer();
-	vector<Physics* > getPhysicsList();
+	virtual Vector3* getPositionPointer();
+	virtual Vector3 getPosition();
+	virtual vector<Physics* > getPhysicsList();
 
 	void drawAngularMomentum();
 	void drawAngularVelocity();
@@ -181,6 +186,23 @@ public:
 	virtual void draw();
 };
 
+class ParticleCloud : public SimulationObject{
+protected:
+	ParticleSystem mParticleSystem;
+public:
+	ParticleCloud(int particleAmount = 100, float maxVelocity = 10.0, float maxPositionOffset = 40.0, Vector3 cloudCentrum = Vector3(0,0,0));
+	virtual void createRandomParticles(int particleAmount = 100, float maxVelocity = 1.0, float maxPositionOffset = 10.0, Vector3 cloudCentrum = Vector3(0,0,0));
+
+	virtual vector<Physics* > getPhysicsList();
+
+	virtual void draw();
+	virtual void update(float d_t);
+};
+
+class ParticleRing : public ParticleCloud{
+public:
+	ParticleRing(int particleAmount = 100, float maxVelocity = 10.0,float maxRadius = 40.0, float minRadius = 30.0, Vector3 ringCentrum = Vector3(0,0,0));
+};
 /*Verwandte Funktionen*/
 void drawAccumulatedForce(SimulationObject* pSim);
 

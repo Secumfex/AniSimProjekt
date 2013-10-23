@@ -29,10 +29,10 @@ GLfloat m_right = 0.5;
 GLfloat m_bottom = -0.5;
 GLfloat m_top = 0.5;
 GLfloat m_near = 0.1;
-GLfloat m_far = 120.0;
+GLfloat m_far = 500.0;
 GLfloat bckZ = -m_far + 5.0;
 
-Vector3 camPos(0.0, 5.0, 5.0);
+Vector3 camPos(0.0, 5.0, 50.0);
 Vector3 camLookAt(0.0, 0.0, 0.0);
 Vector3 camUpVector(0.0, 1.0, 0.0);
 
@@ -236,7 +236,7 @@ void mouseMotion(int x, int y){
 
 int main(int argc, char* argv[])
 {
-	
+	srand (time(NULL)); //Für den Fall
 
 	//******************************************************
 	//Hier werden die entsprechenden Übungen eingebunden. 
@@ -253,7 +253,7 @@ int main(int argc, char* argv[])
 	glutCreateWindow(gApplication->getAppTitle().c_str());
 	initGL();
 
-	gCamera.setPosition(Vector3(5.0f, 5.0f, 5.0f));
+	gCamera.setPosition(Vector3(5.0f, 5.0f, 50.0f));
 	gCamera.setLookAt(Vector3(0.0f, 0.0f, 0.0f));
 	
 	//registering callback functions

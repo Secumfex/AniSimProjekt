@@ -94,7 +94,7 @@ void Physics::reflect(Vector3& normal){
 //////////////// RUNGE KUTTA ///////////////////
 inline void Physics::rungeKutta(float d_t){
 //	X[0] und X_dot ohne Zeit-Intervall (bzw. d_t = 1.0)
-	Vector3 idot_0 = mForceAccumulator;	 //ist schon skaliert
+	Vector3 idot_0 = mForceAccumulator;	 //ist schon skaliert auf d_t
 	Vector3 pdot_0 = mVelocity;
 	Vector3 p_0 = getPosition();
 	Vector3 i_0 = getImpulse();

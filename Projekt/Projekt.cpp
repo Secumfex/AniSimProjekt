@@ -17,7 +17,7 @@ void Projekt::init(){
 	mSceneManager.init();
 	mController.setScene(&mSceneManager);
 	mController.setCameraPointer(mCamera);
-	rocketTracer = new TimedPointTracer(mSceneManager.getPlayerRocket()->getPhysics()->getPositionPointer(),1000);
+	rocketTracer = new TimedPointTracer(mSceneManager.getPlayerRocket()->getPositionPointer(),1000);
 	mController.setTracer(rocketTracer);
 	mController.resetObjectPointers();
 	mController.setCollisionsManager(&mCollision);
@@ -56,40 +56,5 @@ void Projekt::update(float d_t){
 //TODO INPUT / OUTPUT Manager
 void Projekt::keyPressed(int key){
 	mController.keyPressed(key);
-//	if (key == ' '){
-//		if(mSceneManager.getPlayerRocket() != NULL){
-//			mSceneManager.getPlayerRocket()->launch();
-//		}
-//	}
-//	if(key == 'r'){
-//		mSceneManager.reset();
-//		if(rocketTracer!= NULL){
-//			rocketTracer = NULL;
-//		}
-//		if (mCamera != NULL){
-//			mCamera->setLookAt(Vector3(0,0,0));
-//			mCamera->setPosition(Vector3(0.0, 5.0, 5.0));
-//			mCamera->setDirection(Vector3(0.0, 0.0, -1.0));
-//		}
-//	}
-//	if(key == 'm'){
-//		mSceneManager.getPlayerRocket()->getPhysics()->switchIntegrationMode();
-//	}
-//	if(key == 't'){
-//
-//	}
-//	if(key == 'c'){
-//		if (mCamera != NULL){
-//			Vector3* rocketPos = mSceneManager.getPlayerRocket()->getPhysics()->getPositionPointer();
-//			mCamera->setLookAtPointer(rocketPos);
-//		}
-//	}
-//	if(key == 'b'){
-//		if (mCamera != NULL){
-//			mCamera->setLookAt(Vector3(0,0,0));
-//			mCamera->setPosition(Vector3(0.0, 5.0, 5.0));
-//			mCamera->setDirection(Vector3(0.0, 0.0, -1.0));
-//		}
-//	}
 }
 

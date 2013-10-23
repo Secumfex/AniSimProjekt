@@ -1,10 +1,3 @@
-/*
- * RigidBody.cpp
- *
- *  Created on: 15.10.2013
- *      Author: Arend
- */
-
 #include "RigidBody.h"
 
 
@@ -112,6 +105,7 @@ void RigidBody::setAngularMomentum(Vector3 angularMomentum){
 
 void RigidBody::setOmega(Vector3 omega){
 	mOmega = omega;
+
 }
 
 void RigidBody::setImpulse(Vector3 impulse){
@@ -148,6 +142,13 @@ void RigidBody::updateLinearForceAndTorque(float d_t){
 		f = mp[i]->getAccumulatedForce();
 
 		t = r.cross(f);
+		if(t.length() > 1.0){
+			t.normalize();
+		}
+		if(f.length() > 10.0){
+			f.normalize();
+			f*=10.0;
+		}
 		forceAcc+=f;
 		torqueAcc+=t;
 
@@ -166,7 +167,6 @@ void RigidBody::clearForceAndTorque(){
 void RigidBody::rotate(Quaternion rot){
 	mQ = rot * mQ;
 	renormalize();
-
 }
 /**
  * Annahme: torque und force wurden für d_t bereits berechnet
@@ -179,6 +179,7 @@ void RigidBody::update(float d_t){
 	//	setPosition(mX+Xdot);
 
 	updateLinearForceAndTorque(d_t);
+//	cout << "torque: " << mTorque.length()<<endl;
 
 	//UpdateRotation
 	Quaternion OmegaQuat(0.0,mOmega);
@@ -221,6 +222,7 @@ void RigidBody::update(float d_t){
 	mIinv = mR * mIbody_inv * R_trans;
 	//Update Omega
 	mOmega = mIinv * mL;
+//	cout<<mOmega.length()<<endl;
 
 	//printState();
 }
@@ -276,6 +278,15 @@ RigidTwoMass::RigidTwoMass(float mass1, float mass2, float distance,Vector3 posi
 					0		,I_yy 	,	0,
 					0		,0		,	I_zz);
 	initValues(total_mass, I_body, position, velocity, rotation, angularMomentum);
+
+
+	mIbody_inv = Matrix3( I_xx	   ,0	    ,	0,
+							0		,1 / I_yy 	,	0,
+							0		,0		, 1 / I_zz);
+	Matrix3 R_trans = mR;
+	R_trans.transpose();
+	mIinv =  mR * mIbody_inv * R_trans;
+
 }
 RelativePhysics* RigidTwoMass::getLeftMassPoint(){
 	return leftMassPoint;
