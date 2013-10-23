@@ -93,15 +93,14 @@ void ElasticCollision::apply_fun(float d_t){
 }
 
 /*ReflectiveCollision Funktionalität*/
-ReflectiveCollision::ReflectiveCollision(Physics* target, Vector3& normal, Vector3 impulse,float loss){
+ReflectiveCollision::ReflectiveCollision(Physics* target, Vector3& normal,float loss){
 	mNormal = normal;
-	mImpulse = impulse;
 	addInfluencedPhysics(target);
 	mTarget = target;
 	mLoss = loss;
 }
 void ReflectiveCollision::apply_fun(float d_t){
-Vector3 imp = mImpulse;
+Vector3 imp = mTarget->getImpulse();
 Vector3 forceAgainstNormal = (imp * (mNormal))*(mNormal);
 Vector3 totalForceAgainstTarget = forceAgainstNormal*(-2.0);
 mTarget->applyForce(totalForceAgainstTarget*(1.0));

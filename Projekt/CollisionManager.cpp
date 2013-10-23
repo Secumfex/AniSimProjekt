@@ -10,7 +10,7 @@
 using namespace std;
 
 CollisionManager::CollisionManager() {
-	mMassPointEpsilon = 0.5;
+	mMassPointEpsilon = 0.4;
 }
 
 CollisionManager::~CollisionManager() {
@@ -67,7 +67,7 @@ void CollisionManager:: collisionCheck(float d_t){
 //				collisionPoint = (*(mRocket->getPositionPointer()) + *(temp[i]->getPositionPointer())) * 0.5;
 			}
 
-			cout << collisionPoint.getY() << endl;
+			//cout << collisionPoint.getY() << endl;
 		}
 	}
 
@@ -75,53 +75,52 @@ void CollisionManager:: collisionCheck(float d_t){
 
 void CollisionManager::collisionCheckAll(){
 	vector<SimulationObject* > temp = mSceneManager->getSimulationObjects();
-	for(unsigned int i = 0; i < temp.size()-1; i++){
+	for(unsigned int i = 0; i < temp.size(); i++){
 		collisionCheckObjectAgainstSceneWalls(temp[i]);
-		for (unsigned int j =i+1; j < temp.size(); j++){
+		for (unsigned int j =0; j < temp.size(); j++){
 			collisionCheckObjectAgainstObject(temp[i],temp[j]);
 		}
 	}
-	collisionCheckObjectAgainstSceneWalls(temp[temp.size()-1]);
 }
 
 void CollisionManager::collisionCheckObjectAgainstSceneWalls(SimulationObject* object){
 	vector<Physics* > temp = object->getPhysicsList();
 	for(unsigned int i = 0; i < temp.size();i++){
-		collisionCheckPhysicsAgainstSceneWalls(temp[i], object->getPhysics()->getImpulse());
+		collisionCheckPhysicsAgainstSceneWalls(temp[i]);
 	}
 }
-void CollisionManager::collisionCheckPhysicsAgainstSceneWalls(Physics* physics, Vector3 impulse){
+void CollisionManager::collisionCheckPhysicsAgainstSceneWalls(Physics* physics){
 	Vector3 n(0,0,0);
 	Vector3 p = physics->getPosition();
 	if (p.getX() > World_max_X) {	//rechts
 		physics->setPosition(World_max_X, p.getY(), p.getZ());
 		n.setX(-1.0);
-		mCollisionForces.push_back(new ReflectiveCollision(physics, n,impulse));
+		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
 	}
 	if (p.getY() > World_max_Y) {	//oben
 		physics->setPosition(p.getX(), World_max_Y, p.getZ());
 		n.setY(-1.0);
-		mCollisionForces.push_back(new ReflectiveCollision(physics, n,impulse));
+		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
 	}
 	if (p.getZ() > World_max_Z) {	//vorne
 		physics->setPosition(p.getX(), p.getY(), World_max_Z);
 		n.setZ(-1.0);
-		mCollisionForces.push_back(new ReflectiveCollision(physics, n,impulse));
+		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
 	}
 	if (p.getX() < World_min_X) {	//links
 		physics->setPosition(World_min_X, p.getY(), p.getZ());
 		n.setX(1.0);
-		mCollisionForces.push_back(new ReflectiveCollision(physics, n,impulse));
+		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
 	}
 	if (p.getY() < World_min_Y) {	//unten
 		physics->setPosition(p.getX(), World_min_Y, p.getZ());
 		n.setY(1.0);
-		mCollisionForces.push_back(new ReflectiveCollision(physics, n,impulse));
+		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
 	}
 	if (p.getZ() < World_min_Z) {	//oben
 		physics->setPosition(p.getX(), p.getY(), World_min_Z);
 		n.setZ(1.0);
-		mCollisionForces.push_back(new ReflectiveCollision(physics, n,impulse));
+		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
 	}
 }
 
@@ -131,7 +130,9 @@ void CollisionManager::collisionCheckObjectAgainstObject(SimulationObject* lhs,S
 	//Alle MassePunkte auf Kollision testen
 	for(unsigned int i = 0; i < lhs_phys.size();i++){
 		for(unsigned int j=0; j < rhs_phys.size();j++){
-			collisionCheckPhysicsAgainstPhysics(lhs_phys[i],rhs_phys[j]);
+			if (lhs_phys[i] != lhs_phys[j]){ //Unterschiedliche Massepunkte
+				collisionCheckPhysicsAgainstPhysics(lhs_phys[i],rhs_phys[j]);
+			}
 		}
 	}
 }
@@ -140,7 +141,7 @@ void CollisionManager::collisionCheckPhysicsAgainstPhysics(Physics* lhs, Physics
 	Vector3 distance = rhs->getPosition() - lhs->getPosition();
 	//Innerhalb der Kollisionsgrenze
 	if (distance.length() < mMassPointEpsilon){
-		float scalar = lhs->getVelocity() * rhs->getVelocity();
+		float scalar = (lhs->getVelocity() * rhs->getVelocity());
 		if (scalar < 0){	//Bewegen sich aufeinander zu --> Kollision
 			mCollisionForces.push_back(new ElasticCollision(lhs,rhs));
 		}

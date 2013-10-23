@@ -108,12 +108,10 @@ private:
 	Vector3 mNormal;
 	//Zu Reflektierender Massepunkt
 	Physics* mTarget;
-	//Impuls des Massepunktes
-	Vector3 mImpulse;
 	float mLoss;
 public:
 	//Zu Reflektierender Massepunkt und Normale an der Reflektiert werden soll
-	ReflectiveCollision(Physics* target, Vector3& normal,Vector3 impulse = Vector3(0,0,0),float loss = 0.01 );
+	ReflectiveCollision(Physics* target, Vector3& normal,float loss =0.01);
 	//Reflektiert bei voller Impulserhaltung den Massepunkt an der Normalen
 	virtual void apply_fun(float d_t);
 };
