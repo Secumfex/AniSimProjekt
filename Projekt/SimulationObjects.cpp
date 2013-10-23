@@ -613,14 +613,21 @@ void ParticleCloud::createRandomParticles(int particleAmount, float maxVelocity,
 }
 
 void ParticleCloud::draw(){
-	glColor3f(0,0,1);
+	glColor3f(0.2,0.1,0.5);
 	glPointSize(5.0);
-	glBegin(GL_POINTS);
+	glBegin(GL_QUADS);
 
 	vector<Physics* > particles = mParticleSystem.getParticles();
 	for (unsigned int i = 0; i < particles.size();i++){
 		Vector3 pos = particles[i]->getPosition();
-		glVertex3f(pos.getX(), pos.getY(), pos.getZ());
+		glVertex3f(pos.getX()+0.10, pos.getY()+0.10, pos.getZ());
+		glVertex3f(pos.getX()-0.10, pos.getY()+0.10, pos.getZ());
+		glVertex3f(pos.getX()-0.10, pos.getY()-0.10, pos.getZ());
+		glVertex3f(pos.getX()+0.10, pos.getY()-0.10, pos.getZ());
+		glVertex3f(pos.getX(), pos.getY()+0.10, pos.getZ()+0.10);
+		glVertex3f(pos.getX(), pos.getY()+0.10, pos.getZ()-0.10);
+		glVertex3f(pos.getX(), pos.getY()-0.10, pos.getZ()-0.10);
+		glVertex3f(pos.getX(), pos.getY()-0.10, pos.getZ()+0.10);
 	}
 	glEnd();
 }
