@@ -114,6 +114,7 @@ private:
 	 mode mMode;
 	 Physics* mTail;
 	 Physics* mHead;
+	 float explosion_time = 3.0;
 	 void drawCrash();
 	 void drawRocket();
 	 void drawTail();
@@ -134,6 +135,9 @@ public:
 
 	 Vector3 getHeadPosition();
 	 Vector3 getTailPosition();
+
+	 Physics* getTail();
+	 Physics* getHead();
 
 	bool isLaunched();
 

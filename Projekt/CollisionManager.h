@@ -13,6 +13,7 @@
 #include "SimulationObjects.h"
 #include "GL/glut.h"
 #include <String.h>
+#include "SceneConstraints.h"
 
 using namespace std;
 
@@ -30,8 +31,6 @@ private:
 	vector<Forces* > mCollisionForces;
 
 	RigidRocket* mRocket;
-	Vector3 collisionPoint;
-	float collisiontime;
 
 //---------------MEMBER FUNCTIONS------------
 public:
@@ -51,7 +50,8 @@ public:
 	void setScene(SceneManager* scene);
 	bool  isCollision ();
 	void collisionCheck(float d_t);
-	void explosion (float d_t);
+	void collisionHoleCheck(float d_t);
+	void collisionWallCheck(float d_t);
 
 };
 

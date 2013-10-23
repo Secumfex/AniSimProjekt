@@ -453,6 +453,14 @@ Vector3 RigidRocket:: getTailPosition(){
 	return mTail->getPosition();
 }
 
+Physics* RigidRocket:: getTail(){
+	return mTail;
+}
+Physics* RigidRocket:: getHead(){
+	return mHead;
+}
+
+
 /*
  * Wenn Modus PRELAUNCH: tue nichts
  * Wenn Modus LAUNCHED : Verbrenne Treibstoff, Beschleunige
@@ -475,12 +483,16 @@ void RigidRocket::update(float d_t){
 
 		RigidSimulationObject::update(d_t); 		//Massepunkte aktualisieren
 
+
 		//Richtung aktualisieren
 		mDirection = mHead->getPosition()-mTail->getPosition();
 		mDirection.normalize();
 
 	} else { //Update vor Start
 		mRigidBody->clearForceAndTorque(); //Acc Force clearen, denn keine Kraft SOLL wirken
+
+		if(mMode == CRASHED)
+			explosion_time-= d_t;
 	}
 }
 void RigidSimulationObject::rotate(Quaternion rot){
@@ -530,6 +542,10 @@ void RigidRocket::draw(){
 
 void RigidRocket::drawCrash(){
 	glPushMatrix();
+
+	glColor3f(1.0, 0.9, 0.0);
+	if(explosion_time > 0)
+	glutSolidSphere(1.3 * (3 - explosion_time) , 8, 8);
 
 	glColor3f(0.2, 0.2, 0.2);
 
@@ -585,6 +601,10 @@ void RigidRocket::drawCrash(){
 		glTranslated(0.0, 0.8, 0.0);
 		glRotated(90, -1, 0, 0);
 		glutSolidCone(0.35, 0.5, 6, 6);
+
+
+
+
 
 		glPopMatrix();
 

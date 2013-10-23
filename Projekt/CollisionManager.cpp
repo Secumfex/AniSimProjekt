@@ -21,7 +21,6 @@ CollisionManager::~CollisionManager() {
 void CollisionManager:: setScene(SceneManager* scene){
 	mSceneManager = scene;
 	mRocket = mSceneManager->getPlayerRocket();
-	collisiontime = 0.0;
 }
 
 bool CollisionManager:: isCollision (){
@@ -29,26 +28,12 @@ bool CollisionManager:: isCollision (){
 }
 
 
-void CollisionManager:: explosion (float d_t){
-
-	collisiontime = collisiontime + d_t;
-
-	if(3.0 > collisiontime){
-
-	glPushMatrix();
-
-	glColor3f(1.0, 0.9, 0.0);
-
-	glTranslatef(collisionPoint.getX(), collisionPoint.getY(), collisionPoint.getZ());
-
-	glutSolidTeapot(1.3 *collisiontime);
-//	glutSolidSphere(1.3 *collisiontime , 4, 4);
-
-	glPopMatrix();
-	}
+void CollisionManager:: collisionCheck(float d_t){
+	collisionHoleCheck(d_t);
+	collisionWallCheck(d_t);
 }
 
-void CollisionManager:: collisionCheck(float d_t){
+void CollisionManager:: collisionHoleCheck(float d_t){
 
 	vector<SimulationObject* > temp = mSceneManager->getSimulationObjects();
 
@@ -63,15 +48,41 @@ void CollisionManager:: collisionCheck(float d_t){
 			Vector3 diff_tail = Vector3(	temp[i]->getPositionPointer()->getX() - mRocket-> getTailPosition().getX(),
 											temp[i]->getPositionPointer()->getY() - mRocket-> getTailPosition().getY(),
 											temp[i]->getPositionPointer()->getZ() - mRocket-> getTailPosition().getZ());
-			if (diff_head.length() < 0.5 || diff_tail.length() < 0.5){
+			if (diff_head.length() < 0.4 || diff_tail.length() < 0.4){
 				mRocket->crash();
-				collisionPoint = (mRocket -> getHeadPosition() + mRocket -> getTailPosition()) * 0.5;
-//				collisionPoint = (*(mRocket->getPositionPointer()) + *(temp[i]->getPositionPointer())) * 0.5;
 			}
-
-			cout << collisionPoint.getY() << endl;
 		}
 	}
+}
+
+void CollisionManager:: collisionWallCheck(float d_t){
+	vector<SimulationObject* > temp = mSceneManager->getSimulationObjects();
+
+	for (unsigned int i = 0; i < temp.size(); i++){
+		if(temp[i] == mRocket){
+			//X
+			if(mRocket -> getPositionPointer() -> getX() >= World_max_X || mRocket -> getPositionPointer() -> getX() <= World_min_X)
+				mRocket -> getPhysics() -> setVelocity(Vector3(	-mRocket -> getPhysics() ->getVelocity().getX(),
+																mRocket -> getPhysics() ->getVelocity().getY(),
+																mRocket -> getPhysics() ->getVelocity().getZ()
+																));
+			//Y
+			if(mRocket -> getPositionPointer() -> getY() >= World_max_Y || mRocket -> getPositionPointer() -> getY() <= World_min_Y)
+				mRocket -> getPhysics() -> setVelocity(Vector3(	mRocket -> getPhysics() ->getVelocity().getX(),
+																-mRocket -> getPhysics() ->getVelocity().getY(),
+																mRocket -> getPhysics() ->getVelocity().getZ()
+																));
+			//Z
+			if(mRocket -> getPositionPointer() -> getZ() >= World_max_Z || mRocket -> getPositionPointer() -> getZ() <= World_min_Z)
+				mRocket -> getPhysics() -> setVelocity(Vector3(	mRocket -> getPhysics() ->getVelocity().getX(),
+																mRocket -> getPhysics() ->getVelocity().getY(),
+																-mRocket -> getPhysics() ->getVelocity().getZ()
+																));
+
+
+	}
+
+}
 
 }
 
