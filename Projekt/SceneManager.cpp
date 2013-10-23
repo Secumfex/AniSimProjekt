@@ -6,11 +6,11 @@ inline void SceneManager::initRocketSimulation(){
 /////////////// Globale Kräfte     /////////////////////////////////////////////////////////////////////////
 
 		//Erdanziehungskraft
-//		SimpleAcceleration* gravity = new SimpleAcceleration(Vector3(0.0,-10.0,0.0));
+//		SimpleForce* gravity = new SimpleAcceleration(Vector3(0.0,-5.0,0.0));
 //		mGlobalForceObjects.push_back(gravity);
 
 		//Anziehungskraft untereinander
-		GravitationalForce* gravitation = new GravitationalForce(1000.0,0.0,1.0);
+		GravitationalForce* gravitation = new GravitationalForce(1000.0,0.0,0.5);
 		mGlobalForceObjects.push_back(gravitation);
 
 		//Drag
@@ -26,7 +26,7 @@ inline void SceneManager::initRocketSimulation(){
 		mSimulationObjects.push_back(black_hole0);
 		mSimulationObjects.push_back(black_hole1);
 
-		mPlayerRocket = new RigidRocket(1.0,10.0,1 ,1);
+		mPlayerRocket = new RigidRocket(2.0,15.0,1 ,1);
 		mPlayerRocket->getRigidBodyPointer()->setPosition(Vector3(.0,20.0,0.0));
 		mSimulationObjects.push_back(mPlayerRocket);
 
@@ -40,7 +40,7 @@ inline void SceneManager::initRocketSimulation(){
 //		SimulationObject* black_hole3 = new BlackHole(1000.0,Vector3(-5.0,-12.0,0.0));
 //		mSimulationObjects.push_back(black_hole3);
 
-		ParticleCloud* pc = new ParticleCloud(200,5.0,20);
+		ParticleCloud* pc = new ParticleCloud(100,5.0,10.0,Vector3(0,0,0.0));
 		pc->forceParticlesToLoop(true);
 		mSimulationObjects.push_back(pc);
 

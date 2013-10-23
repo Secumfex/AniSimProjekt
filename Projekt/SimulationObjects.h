@@ -195,7 +195,7 @@ protected:
 	ParticleSystem mParticleSystem;
 public:
 	ParticleCloud(int particleAmount = 100, float maxVelocity = 10.0, float maxPositionOffset = 40.0, Vector3 cloudCentrum = Vector3(0,0,0));
-	virtual void createRandomParticles(int particleAmount = 100, float maxVelocity = 1.0, float maxPositionOffset = 10.0, Vector3 cloudCentrum = Vector3(0,0,0));
+	virtual void createRandomParticles(int particleAmount = 100, float maxVelocity = 1.0, float maxPositionOffset = 10.0, Vector3 cloudCentrum = Vector3(0,0,0), float minPositionOffset = 0.0);
 
 	virtual vector<Physics* > getPhysicsList();
 

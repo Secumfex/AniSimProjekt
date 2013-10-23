@@ -269,6 +269,10 @@ RigidTwoMass::RigidTwoMass(float mass1, float mass2, float distance,Vector3 posi
    // cout << "com_x = " << com_x<< " , rel_x_m1 = " << rel_x_m1<< " , rel_x_m2 = " << rel_x_m2<<endl;
     leftMassPoint  = new RelativePhysics(mass1,Vector3(0,0,0),mCenterOfMass.getPositionPointer(),Vector3(rel_x_m1,0,0), &mQ);
     rightMassPoint = new RelativePhysics(mass2,Vector3(0,0,0),mCenterOfMass.getPositionPointer(),Vector3(rel_x_m2,0,0), &mQ);
+
+    leftMassPoint->setImpulseOverride(mCenterOfMass.getImpulsePointer());
+    rightMassPoint->setImpulseOverride(mCenterOfMass.getImpulsePointer());
+
     mMassPoints.push_back(leftMassPoint);
 	mMassPoints.push_back(rightMassPoint);
 	float I_xx = 0;

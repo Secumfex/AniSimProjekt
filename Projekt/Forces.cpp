@@ -77,18 +77,27 @@ ElasticCollision::ElasticCollision(Physics* lhs, Physics*rhs,float loss){
 	mLhsNormal.normalize();
 	mRhsNormal = (-1.0)*mLhsNormal;
 }
-void ElasticCollision::apply_fun(float d_t){
+void ElasticCollision::apply_fun(float d_t) {
 	//Bewegen sich von einander weg --> kein Abstoßen nötig
-	if ((mLhs->getVelocity() - mRhs->getVelocity()) * mLhsNormal <= 0){
+	if ((mLhs->getVelocity() - mRhs->getVelocity()) * mLhsNormal <= 0) {
 		return;
-	} 
-	else{
-	 Vector3 forceAgainstRhs = (mLhs->getImpulse() * (mRhsNormal)) * mRhsNormal;
-	 Vector3 forceAgainstLhs = (mRhs->getImpulse() * (mLhsNormal)) * mLhsNormal;
-	 Vector3 totalForceAgainstRhs = forceAgainstRhs - forceAgainstLhs;
-	 Vector3 totalForceAgainstLhs = forceAgainstLhs - forceAgainstRhs;
-	 mLhs->applyForce(totalForceAgainstLhs*(1-mLoss));
-	 mRhs->applyForce(totalForceAgainstRhs*(1-mLoss));
+	} else {
+		mLhs->setImpulse(mLhs->getImpulse() * (1.0 - mLoss));
+		mRhs->setImpulse(mRhs->getImpulse() * (1.0 - mLoss));
+		Vector3 forceAgainstRhs = (mLhs->getImpulse() * (mRhsNormal))
+				* mRhsNormal;
+		Vector3 forceAgainstLhs = (mRhs->getImpulse() * (mLhsNormal))
+				* mLhsNormal;
+		Vector3 totalForceAgainstRhs = forceAgainstRhs - forceAgainstLhs;
+		Vector3 totalForceAgainstLhs = forceAgainstLhs - forceAgainstRhs;
+
+//		cout << "left impulse " << mLhs->getImpulse().length() << ", vel :"
+//				<< mLhs->getVelocity().length() <<", force: " << totalForceAgainstLhs.length()<< endl;
+//		cout << "right impulse " << mRhs->getImpulse().length() << ", vel :"
+//				<< mRhs->getVelocity().length() <<", force: " << totalForceAgainstRhs.length()<< endl;
+
+		mLhs->applyForce(totalForceAgainstLhs * (1.0));
+		mRhs->applyForce(totalForceAgainstRhs * (1.0));
 	}
 }
 
@@ -100,10 +109,13 @@ ReflectiveCollision::ReflectiveCollision(Physics* target, Vector3& normal,float 
 	mLoss = loss;
 }
 void ReflectiveCollision::apply_fun(float d_t){
-Vector3 imp = mTarget->getImpulse();
+	mTarget->setImpulse(mTarget->getImpulse()*(1.0 - mLoss));
+	Vector3 imp = mTarget->getImpulse();
+
 Vector3 forceAgainstNormal = (imp * (mNormal))*(mNormal);
 Vector3 totalForceAgainstTarget = forceAgainstNormal*(-2.0);
-mTarget->applyForce(totalForceAgainstTarget*(1.0-mLoss));
+
+mTarget->applyForce(totalForceAgainstTarget*(1.0));
 }
 
 /*ViscousDrag Funktionalität*/

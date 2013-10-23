@@ -10,7 +10,7 @@
 using namespace std;
 
 CollisionManager::CollisionManager() {
-	mMassPointEpsilon = 0.2;
+	mMassPointEpsilon = 0.20;
 }
 
 CollisionManager::~CollisionManager() {
@@ -106,32 +106,32 @@ void CollisionManager::collisionCheckPhysicsAgainstSceneWalls(Physics* physics){
 	Vector3 n(0,0,0);
 	Vector3 p = physics->getPosition();
 	if (p.getX() > World_max_X) {	//rechts
-		physics->setPosition(World_max_X, p.getY(), p.getZ());
+		physics->setPosition(World_max_X-1.5, p.getY(), p.getZ());
 		n.setX(-1.0);
 		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
 	}
 	if (p.getY() > World_max_Y) {	//oben
-		physics->setPosition(p.getX(), World_max_Y, p.getZ());
+		physics->setPosition(p.getX(), World_max_Y-1.5, p.getZ());
 		n.setY(-1.0);
 		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
 	}
 	if (p.getZ() > World_max_Z) {	//vorne
-		physics->setPosition(p.getX(), p.getY(), World_max_Z);
+		physics->setPosition(p.getX(), p.getY(), World_max_Z-1.5);
 		n.setZ(-1.0);
 		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
 	}
 	if (p.getX() < World_min_X) {	//links
-		physics->setPosition(World_min_X, p.getY(), p.getZ());
+		physics->setPosition(World_min_X+1.5, p.getY(), p.getZ());
 		n.setX(1.0);
 		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
 	}
 	if (p.getY() < World_min_Y) {	//unten
-		physics->setPosition(p.getX(), World_min_Y, p.getZ());
+		physics->setPosition(p.getX(), World_min_Y+1.5, p.getZ());
 		n.setY(1.0);
 		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
 	}
 	if (p.getZ() < World_min_Z) {	//oben
-		physics->setPosition(p.getX(), p.getY(), World_min_Z);
+		physics->setPosition(p.getX(), p.getY(), World_min_Z+1.5);
 		n.setZ(1.0);
 		mCollisionForces.push_back(new ReflectiveCollision(physics, n));
 	}
@@ -154,9 +154,9 @@ void CollisionManager::collisionCheckPhysicsAgainstPhysics(Physics* lhs, Physics
 	Vector3 distance = rhs->getPosition() - lhs->getPosition();
 	//Innerhalb der Kollisionsgrenze
 	if (distance.length() < mMassPointEpsilon){
-		float scalar = (lhs->getVelocity() * rhs->getVelocity());
+		float scalar = (lhs->getImpulse() * rhs->getImpulse());
 		if (scalar < 0){	//Bewegen sich aufeinander zu --> Kollision
-			mCollisionForces.push_back(new ElasticCollision(lhs,rhs));
+			mCollisionForces.push_back(new ElasticCollision(lhs,rhs,0.4));
 		}
 		//sonst nichts zu machen weil sie sich eh von einander weg bewegen
 	}

@@ -77,6 +77,10 @@ Vector3 Physics::getVelocity() const{
 Vector3 Physics::getImpulse() const{
 	return mImpulse;
 }
+Vector3* Physics::getImpulsePointer(){
+	return &mImpulse;
+}
+
 Vector3 Physics::getAccumulatedForce() const{
 	return mForceAccumulator;
 }
@@ -222,6 +226,7 @@ RelativePhysics::RelativePhysics(float mass, Vector3 velocity, Vector3* centerPo
 	setRelativePosition(relativePosition);
 	setRotationPointer(rotation);
 
+	mImpulseOverride = NULL;
 	mIntegrationMode = 1;
 
 }
@@ -255,6 +260,28 @@ void RelativePhysics::setCenterPositionPointer(Vector3* centerPosition){
 }
 Vector3* RelativePhysics::getCenterPositionPointer(){
 	return mCenterPosition;
+}
+
+//Falls ein anderer Impuls zurückgegeben werden soll
+Vector3 RelativePhysics::getImpulse()const{
+	if(mImpulseOverride == NULL){
+		return mImpulse;
+	}
+	else{
+		return *mImpulseOverride;
+	}
+}
+
+void RelativePhysics::setImpulseOverride(Vector3* impPointer){
+	mImpulseOverride = impPointer;
+}
+void RelativePhysics::setImpulse(Vector3 impulse){
+	if(mImpulseOverride != NULL){
+		*mImpulseOverride = impulse;
+	}
+	else{
+		Physics::setImpulse(impulse);
+	}
 }
 //Gibt statt der normalen Position die rotierte um relative position verschobene CenterPosition zurück
 Vector3 RelativePhysics::getPosition() const{

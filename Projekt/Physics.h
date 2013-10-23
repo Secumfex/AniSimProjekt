@@ -60,7 +60,7 @@ class Physics{
 	void clearAccumulatedForce();
 
 	//Setter
-	void setImpulse(Vector3 impulse);
+	virtual void setImpulse(Vector3 impulse);
 	void setVelocity(Vector3 velocity);
 	void setMass(float mass);
 	virtual void setPosition(Vector3 position);
@@ -69,7 +69,8 @@ class Physics{
 	virtual Vector3 getPosition() const;
 	virtual Vector3* getPositionPointer();
 	Vector3 getVelocity() const;
-	Vector3 getImpulse() const;
+	virtual Vector3 getImpulse() const;
+	virtual Vector3* getImpulsePointer();
 	Vector3 getAccumulatedForce() const;
 
 	float getMass() const;
@@ -87,6 +88,7 @@ protected:
 	Vector3* mCenterPosition;	//Position des Zentrum ein Pointer
 	Vector3 mRelativePosition; 	//Relative Position zum Mittelpunkt unrotiert (mPosition)
 	Quaternion* mRotation;		//Pointer zum Rotationsquaternion
+	Vector3* mImpulseOverride;	//Pointer zu einem anderen Impuls
 public:
 	RelativePhysics(float mass = 0.0, Vector3 velocity = Vector3(0,0,0), Vector3* centerPosition = new Vector3(0,0,0), Vector3 relativePosition = Vector3(0,0,0), Quaternion* rotation = new Quaternion(0,0,1,0));
 
@@ -94,6 +96,9 @@ public:
 	Vector3 getPosition() const;
 	Vector3 getRelativePosition() const;
 	Vector3 getCenterPosition() const;
+
+	Vector3  getImpulse() const;
+
 	Vector3* getPositionPointer();
 	Vector3* getCenterPositionPointer();
 	Vector3* getRelativePositionPointer();
@@ -102,6 +107,8 @@ public:
 	void setPosition(Vector3 position);
 	void setPosition(float x, float y, float z);
 	void setCenterPositionPointer(Vector3* centerPosition);
+	void setImpulseOverride(Vector3* impPointer);
+	void setImpulse(Vector3 impulse);
 	void setRelativePosition(Vector3 relativePosition);
 	void setRelativePosition(float x, float y, float z);
 	void setRotationPointer(Quaternion* rotation);
