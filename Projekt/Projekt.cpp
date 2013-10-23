@@ -49,6 +49,8 @@ void Projekt::update(float d_t){
 				mCollision.explosion(d_t);
 	}
 
+	mCollision.collisionCheckAll();
+	mCollision.applyAndEmptyCollisionForces(d_t);
 }
 
 //TODO INPUT / OUTPUT Manager

@@ -55,10 +55,11 @@ void SimpleForce::apply_fun(float d_t){
 }
 
 /*ElasticCollision Funktionalität*/
-ElasticCollision::ElasticCollision(Physics* lhs, Physics*rhs){
+ElasticCollision::ElasticCollision(Physics* lhs, Physics*rhs,float loss){
 	addPhysicsPair(lhs,rhs);
 	mRhs = rhs;
 	mLhs = lhs;
+	mLoss = loss;
 	mLhsNormal = (rhs->getPosition()-lhs->getPosition());
 	mLhsNormal.normalize();
 	mRhsNormal = (-1.0)*mLhsNormal;
@@ -73,21 +74,22 @@ void ElasticCollision::apply_fun(float d_t){
 	 Vector3 forceAgainstLhs = (mRhs->getImpulse() * (mLhsNormal)) * mLhsNormal;
 	 Vector3 totalForceAgainstRhs = forceAgainstRhs - forceAgainstLhs;
 	 Vector3 totalForceAgainstLhs = forceAgainstLhs - forceAgainstRhs;
-	 mLhs->applyForce(totalForceAgainstLhs);
-	 mRhs->applyForce(totalForceAgainstRhs);
+	 mLhs->applyForce(totalForceAgainstLhs*(1-mLoss));
+	 mRhs->applyForce(totalForceAgainstRhs*(1-mLoss));
 	}
 }
 
 /*ReflectiveCollision Funktionalität*/
-ReflectiveCollision::ReflectiveCollision(Physics* target, Vector3& normal){
+ReflectiveCollision::ReflectiveCollision(Physics* target, Vector3& normal, float loss){
 	mNormal = normal;
 	addInfluencedPhysics(target);
 	mTarget = target;
+	mLoss = loss;
 }
 void ReflectiveCollision::apply_fun(float d_t){
 	Vector3 v = mTarget->getVelocity();
 	Vector3 newDirection = -2*((v*mNormal)*mNormal) + v;
-	mTarget->setVelocity(newDirection);
+	mTarget->setVelocity(newDirection*(1-mLoss));
 }
 
 /*ViscousDrag Funktionalität*/

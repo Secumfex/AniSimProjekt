@@ -12,9 +12,6 @@
 
 using namespace std;
 
-//Forwarding Declaration von Physics, weil kein gegenseitiger include möglich ist (OOP Logik)
-class Physics;
-
 /**
  * Klasse Force:
  * Kraft-Klasse. Umfasst vor allem aber nicht nur Kraftdarstellungen als Vektor.
@@ -86,13 +83,14 @@ class ElasticCollision : public BinaryForce{
 private:
 	Physics* mLhs;
 	Physics* mRhs;
+	float mLoss;
 
 	//Normale berechnet durch Positionsdifferenz
 	Vector3 mLhsNormal;
 	//Normale berechnet durch Positionsdifferenz
 	Vector3 mRhsNormal;
 public:
-	ElasticCollision(Physics* lhs, Physics* rhs);
+	ElasticCollision(Physics* lhs, Physics* rhs, float loss = 0.01);
 	virtual void apply_fun(float d_t);
 };
 
@@ -103,9 +101,10 @@ private:
 	Vector3 mNormal;
 	//Zu Reflektierender Massepunkt
 	Physics* mTarget;
+	float mLoss;
 public:
 	//Zu Reflektierender Massepunkt und Normale an der Reflektiert werden soll
-	ReflectiveCollision(Physics* target, Vector3& normal);
+	ReflectiveCollision(Physics* target, Vector3& normal,float loss = 0.01);
 	//Reflektiert bei voller Impulserhaltung den Massepunkt an der Normalen
 	virtual void apply_fun(float d_t);
 };

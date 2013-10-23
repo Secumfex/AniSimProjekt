@@ -8,7 +8,6 @@
 using namespace std;
 
 //Forwarding Declaration von Forces, da Include nicht möglich
-class Forces;
 
 /*Klasse Physics aka. Massepunkt
  * Status zu jeder Zeit bestimmt durch:

@@ -13,6 +13,8 @@
 #include "SimulationObjects.h"
 #include "GL/glut.h"
 #include <String.h>
+#include "Forces.h"
+#include <vector>
 
 using namespace std;
 
@@ -27,7 +29,10 @@ public:
 //---------------MEMBER VARIABLES------------
 private:
 	SceneManager* mSceneManager;
-	vector<Forces* > mCollisionForces;
+	vector<Force* > mCollisionForces;
+
+	//Ab welcher Nähe wird eine Kraft registriert
+	float mMassPointEpsilon;
 
 	RigidRocket* mRocket;
 	Vector3 collisionPoint;
@@ -40,12 +45,15 @@ public:
 	//Teste alles gegen Alles
 	void collisionCheckAll();
 
-	//Teste
-	bool testObjectToObject();
-
-
+	//Teste SimualtionObject gegen SimulationObject
+	void collisionCheckObjectAgainstObject(SimulationObject* lhs, SimulationObject* rhs);
+	//Teste SimulationObject gegen Waend
+	void collisionCheckObjectAgainstSceneWalls(SimulationObject* object);
+	void collisionCheckPhysicsAgainstSceneWalls(Physics* physics);
+	//Teste Massepunkt gegen Massepunkt
+	void collisionCheckPhysicsAgainstPhysics(Physics* lhs, Physics* rhs);
 	//Wende alle Gefundenen CollisionsKräfte an und leere den KraftVektor
-	void applyAndEmptyCollisionForces();
+	void applyAndEmptyCollisionForces(float d_t);
 
 
 	void setScene(SceneManager* scene);
