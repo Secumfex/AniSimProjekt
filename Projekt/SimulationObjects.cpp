@@ -400,6 +400,8 @@ void RigidSimulationObject::drawAngularVelocity(){
 
 
 RigidRocket::RigidRocket(float fuel, float fuelPower, float mass_tail, float mass_head,  Vector3 position, float scale){
+	explosion_time = 3.0;
+
 	mFuel = fuel;
 	mFuelPower = fuelPower;
 

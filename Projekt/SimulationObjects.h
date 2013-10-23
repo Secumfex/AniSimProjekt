@@ -114,7 +114,7 @@ private:
 	 mode mMode;
 	 Physics* mTail;
 	 Physics* mHead;
-	 float explosion_time = 3.0;
+	 float explosion_time;
 	 void drawCrash();
 	 void drawRocket();
 	 void drawTail();
