@@ -76,8 +76,10 @@ void CollisionManager:: collisionCheck(float d_t){
 void CollisionManager::collisionCheckAll(){
 	vector<SimulationObject* > temp = mSceneManager->getSimulationObjects();
 	for(unsigned int i = 0; i < temp.size(); i++){
+		cout<<"checking against wall :" <<i <<endl;
 		collisionCheckObjectAgainstSceneWalls(temp[i]);
 		for (unsigned int j =0; j < temp.size(); j++){
+			cout<<"checking against each other :" <<i<<", " <<j <<endl;
 			collisionCheckObjectAgainstObject(temp[i],temp[j]);
 		}
 	}
@@ -130,7 +132,7 @@ void CollisionManager::collisionCheckObjectAgainstObject(SimulationObject* lhs,S
 	//Alle MassePunkte auf Kollision testen
 	for(unsigned int i = 0; i < lhs_phys.size();i++){
 		for(unsigned int j=0; j < rhs_phys.size();j++){
-			if (lhs_phys[i] != lhs_phys[j]){ //Unterschiedliche Massepunkte
+			if (lhs_phys[i] != rhs_phys[j]){ //Unterschiedliche Massepunkte
 				collisionCheckPhysicsAgainstPhysics(lhs_phys[i],rhs_phys[j]);
 			}
 		}
