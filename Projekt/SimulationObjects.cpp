@@ -709,17 +709,15 @@ void RigidRocket::drawTail(){
 ParticleCloud::ParticleCloud(int particleAmount, float maxVelocity, float maxPositionOffset, Vector3 cloudCentrum){
 	setPosition(cloudCentrum);
 	createRandomParticles(particleAmount, maxVelocity, maxPositionOffset,cloudCentrum);
-	mParticleSystem.addForce(new DistancePointForce(maxPositionOffset,0.01,cloudCentrum));
+	mParticleSystem.addForce(new DistancePointForce(maxPositionOffset*1.5,0.01,cloudCentrum));
 }
 
 void ParticleCloud::createRandomParticles(int particleAmount, float maxVelocity, float maxPositionOffset, Vector3 cloudCentrum, float minPositionOffset){
 	mParticleSystem.clearAllParticles();
 	for (int i = 0; i < particleAmount; i++){
-			Vector3 pos = randomVector3(cloudCentrum,(((float)(i+1))/(float)particleAmount)*maxPositionOffset,(((float)(i+1))/(float)particleAmount)*maxPositionOffset,0.0,0.0,0.0,0.0);	//TODOnoch nur auf X und Y Achse
+			Vector3 pos = randomVector3(cloudCentrum,(((float)(i+1))/(float)particleAmount)*maxPositionOffset,(((float)(i+1))/(float)particleAmount)*maxPositionOffset,0.0,5.0);	//TODOnoch nur auf X und Y Achse
 			float v = (((float) rand()) / ((float)RAND_MAX)-0.5)*2.0;
-			Vector3 vel = randomVector3(Vector3(0,0,0),1.0,1.0,0.0);
-			vel.normalize();
-			vel*=v*maxVelocity;
+			Vector3 vel = randomVector3(Vector3(0,0,0),maxVelocity,maxVelocity,0.0,maxVelocity*0.8);
 			mParticleSystem.addParticle(new Physics(0.1,vel,pos));
 		}
 }

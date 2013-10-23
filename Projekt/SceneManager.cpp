@@ -40,7 +40,7 @@ inline void SceneManager::initRocketSimulation(){
 //		SimulationObject* black_hole3 = new BlackHole(1000.0,Vector3(-5.0,-12.0,0.0));
 //		mSimulationObjects.push_back(black_hole3);
 
-		ParticleCloud* pc = new ParticleCloud(100,5.0,10.0,Vector3(0,0,0.0));
+		ParticleCloud* pc = new ParticleCloud(200,6.0,10.0,Vector3(9.0,9.0,0.0));
 		pc->forceParticlesToLoop(true);
 		mSimulationObjects.push_back(pc);
 

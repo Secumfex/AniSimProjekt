@@ -125,14 +125,19 @@ static void drawVector3(Vector3 vector, Vector3 position, Vector3 color){
 	glColor4f(currentColor[0],currentColor[1],currentColor[2],currentColor[3]);
 }
 
-static Vector3 randomVector3(Vector3 centrum =  Vector3(0,0,0), double max_x = 1.0,double max_y = 1.0, double max_z = 1.0, double min_x = 0.0,double min_y = 0.0,double min_z = 0.0){
-	double 	r_x = (((rand() / ((double) RAND_MAX))-0.5)*2.0)*(max_x-min_x); //zwischen 0 und max_x-min_x;
-		    r_x += r_x < 0 ? -min_x : min_x;
-	double	r_y = (((rand() / ((double) RAND_MAX))-0.5)*2.0)*(max_y-min_y); //zwischen 0 und max_y
-		   	r_y += r_y < 0 ? -min_y : min_y;
-	double  r_z = (((rand() / ((double) RAND_MAX))-0.5)*2.0)*(max_z-min_z); //zwischen 0 und max_z
-			r_z += r_z < 0 ? -min_z : min_z;
-	return Vector3(centrum.getX()+r_x,centrum.getY()+r_y,centrum.getZ()+r_z);
+static Vector3 randomVector3(Vector3 centrum =  Vector3(0,0,0), double max_x = 1.0,double max_y = 1.0, double max_z = 1.0, double min_dist=0.0){
+	double 	r_x = (((rand() / ((double) RAND_MAX))-0.5)*2.0)*(max_x-min_dist); //zwischen 0 und max_x;
+	double	r_y = (((rand() / ((double) RAND_MAX))-0.5)*2.0)*(max_y-min_dist); //zwischen 0 und max_y
+	double  r_z = (((rand() / ((double) RAND_MAX))-0.5)*2.0)*(max_z); //zwischen 0 und max_z
+	Vector3 r(r_x,r_y,r_z);
+	r.debugPrintToCerr();
+	Vector3 d = r;
+	d.normalize();
+	//d.debugPrintToCerr();
+	d*=min_dist;
+	r+=d;
+
+	return Vector3(centrum.getX()+r.getX(),centrum.getY()+r.getY(),centrum.getZ()+r.getZ());
 }
 
 #endif
