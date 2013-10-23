@@ -103,7 +103,7 @@ void ReflectiveCollision::apply_fun(float d_t){
 Vector3 imp = mTarget->getImpulse();
 Vector3 forceAgainstNormal = (imp * (mNormal))*(mNormal);
 Vector3 totalForceAgainstTarget = forceAgainstNormal*(-2.0);
-mTarget->applyForce(totalForceAgainstTarget*(1.0));
+mTarget->applyForce(totalForceAgainstTarget*(1.0-mLoss));
 }
 
 /*ViscousDrag Funktionalität*/

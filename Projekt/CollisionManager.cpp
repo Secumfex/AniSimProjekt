@@ -10,7 +10,7 @@
 using namespace std;
 
 CollisionManager::CollisionManager() {
-	mMassPointEpsilon = 0.4;
+	mMassPointEpsilon = 0.2;
 }
 
 CollisionManager::~CollisionManager() {
@@ -76,10 +76,10 @@ void CollisionManager:: collisionCheck(float d_t){
 void CollisionManager::collisionCheckAll(){
 	vector<SimulationObject* > temp = mSceneManager->getSimulationObjects();
 	for(unsigned int i = 0; i < temp.size(); i++){
-		cout<<"checking against wall :" <<i <<endl;
+		//cout<<"checking against wall :" <<i <<endl;
 		collisionCheckObjectAgainstSceneWalls(temp[i]);
 		for (unsigned int j =0; j < temp.size(); j++){
-			cout<<"checking against each other :" <<i<<", " <<j <<endl;
+			//cout<<"checking against each other :" <<i<<", " <<j <<endl;
 			collisionCheckObjectAgainstObject(temp[i],temp[j]);
 		}
 	}
