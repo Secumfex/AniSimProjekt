@@ -10,7 +10,7 @@
 using namespace std;
 
 CollisionManager::CollisionManager() {
-	mMassPointEpsilon = 0.40;
+	mMassPointEpsilon = 0.4;
 }
 
 CollisionManager::~CollisionManager() {
@@ -89,9 +89,14 @@ void CollisionManager::collisionCheckAll(){
 	for(unsigned int i = 0; i < temp.size(); i++){
 		//cout<<"checking against wall :" <<i <<endl;
 		collisionCheckObjectAgainstSceneWalls(temp[i]);
-		for (unsigned int j =0; j < temp.size(); j++){
-			//cout<<"checking against each other :" <<i<<", " <<j <<endl;
-			collisionCheckObjectAgainstObject(temp[i],temp[j]);
+		for (unsigned int j =i; j < temp.size(); j++){
+			if (temp[i] != temp[j]){
+				//cout<<"checking against each other :" <<i<<", " <<j <<endl;
+				collisionCheckObjectAgainstObject(temp[i], temp[j]);
+			}else {
+				collisionCheckObjectAgainstItself (temp[i]);
+				//cout<<"checking against itself :" <<i<<", " <<j <<endl;
+			}
 		}
 	}
 }
@@ -141,21 +146,36 @@ void CollisionManager::collisionCheckObjectAgainstObject(SimulationObject* lhs,S
 	vector<Physics* > lhs_phys = lhs->getPhysicsList();
 	vector<Physics* > rhs_phys = rhs->getPhysicsList();
 	//Alle MassePunkte auf Kollision testen
-	for(unsigned int i = 0; i < lhs_phys.size()-1;i++){
-		for(unsigned int j=i+1; j < rhs_phys.size();j++){
-			if (lhs_phys[i] != rhs_phys[j]){ //Unterschiedliche Massepunkte
-				collisionCheckPhysicsAgainstPhysics(lhs_phys[i],rhs_phys[j]);
+	for(unsigned int i = 0; i < lhs_phys.size();i++){
+		for(unsigned int j=0; j < rhs_phys.size();j++){
+			if (lhs_phys[i] != rhs_phys[j]) { //Unterschiedliche Massepunkte
+				collisionCheckPhysicsAgainstPhysics(lhs_phys[i], rhs_phys[j]);
 			}
 		}
 	}
 }
 
+void CollisionManager::collisionCheckObjectAgainstItself(SimulationObject* target){
+	vector<Physics* > phys = target->getPhysicsList();
+	//Alle MassePunkte auf Kollision testen
+	for(unsigned int i = 0; i < phys.size()-1;i++){
+		for(unsigned int j=i+1; j < phys.size();j++){
+			if (phys[i] != phys[j]){ //Unterschiedliche Massepunkte
+				collisionCheckPhysicsAgainstPhysics(phys[i],phys[j]);
+				//cout<<"checking: "<<i<<","<<j<<endl;
+			}
+		}
+	}
+}
+
+
 void CollisionManager::collisionCheckPhysicsAgainstPhysics(Physics* lhs, Physics* rhs){
 	Vector3 distance = rhs->getPosition() - lhs->getPosition();
 	//Innerhalb der Kollisionsgrenze
 	if (distance.length() < mMassPointEpsilon){
-		float scalar = (lhs->getImpulse() * rhs->getImpulse());
+		float scalar = (lhs->getVelocity() * rhs->getVelocity());
 		if (scalar < 0){	//Bewegen sich aufeinander zu --> Kollision
+			//cout<<"collision."<<endl;
 			mCollisionForces.push_back(new ElasticCollision(lhs,rhs,0.1));
 		}
 		//sonst nichts zu machen weil sie sich eh von einander weg bewegen

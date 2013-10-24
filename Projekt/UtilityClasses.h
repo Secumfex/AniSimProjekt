@@ -130,7 +130,7 @@ static Vector3 randomVector3(Vector3 centrum =  Vector3(0,0,0), double max_x = 1
 	double	r_y = (((rand() / ((double) RAND_MAX))-0.5)*2.0)*(max_y-min_dist); //zwischen 0 und max_y
 	double  r_z = (((rand() / ((double) RAND_MAX))-0.5)*2.0)*(max_z); //zwischen 0 und max_z
 	Vector3 r(r_x,r_y,r_z);
-	r.debugPrintToCerr();
+	//r.debugPrintToCerr();
 	Vector3 d = r;
 	d.normalize();
 	//d.debugPrintToCerr();

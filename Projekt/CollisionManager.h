@@ -46,9 +46,12 @@ public:
 	void collisionCheckAll();
 
 	//Teste SimualtionObject gegen SimulationObject
+	void collisionCheckObjectAgainstItself(SimulationObject* target);
+	//Teste SimualtionObject gegen sich selbst
 	void collisionCheckObjectAgainstObject(SimulationObject* lhs, SimulationObject* rhs);
 	//Teste SimulationObject gegen Waend
 	void collisionCheckObjectAgainstSceneWalls(SimulationObject* object);
+
 	void collisionCheckPhysicsAgainstSceneWalls(Physics* physics);
 	//Teste Massepunkt gegen Massepunkt
 	void collisionCheckPhysicsAgainstPhysics(Physics* lhs, Physics* rhs);
